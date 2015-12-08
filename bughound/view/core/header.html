@@ -1,0 +1,43 @@
+<!--[if IE]>
+<div style="text-align:center;background:black;color:#fff">别用IE</div>
+<![endif]-->
+<header class="mod_header">
+    <div class="mod_header_wrap clearfix">
+        <div class="logo">
+            <div class="logo_wrap">
+                <div class="logo_wrap_img"><img src="public/img/logo.png" alt="JDC前端需求提交平台"></div>
+                <div class="logo_wrap_tit">
+                    <div class="cn">需求提交平台</div>
+                    <!--<div class="en">UED-FD Task</div> -->
+                </div>
+            </div>
+        </div>
+        <div class="nav">
+            <a href="javascript:;" class="nav_cancel" ng-show="navBar" ng-click="hideNav()">
+                X
+            </a>
+            <a href="javascript:;" class="nav_show" ng-show="!navBar" ng-click="hideNav()">
+                <span class="nav_show_icon"></span>
+            </a>
+            <ul class="nav_navbar list-inline" ng-show="navBar">
+                <!-- <li ng-click="hideNav()" ng-show="!Session.isGuest()" class="nav_navbar_schedule {{navidx=='schedule' && 'active' }}"><a ui-sref="schedule">排期</a></li> -->
+                <li ng-click="hideNav()" ng-show="!Session.isGuest()" class="{{navidx=='gallery' && 'active' }}"><a ui-sref="gallery">广场</a></li>
+                <li ng-click="hideNav()" ng-show="!Session.isGuest()" class="{{navidx=='apply' && 'active' }}"><a ui-sref="apply">申请</a></li>
+                <li ng-click="hideNav()" ng-show="!Session.isGuest() && Session.isAdmin()" class="isAdminAudited {{navidx=='audited' && 'active' }}"><a ui-sref="audited">待审</a><i class="num">{{notAuditedNum}}</i></li>
+
+                <li ng-if="!Session.isGuest()" class="nav_navbar_mine {{ (navidx=='profile'  || navidx=='myapply') && 'active' }}">
+                    <a href="javascript:;"  ng-click="hideMine()" class="nav_navbar_mine_link">{{Session.userName}}</a>
+                    <div class="nav_navbar_detail" ng-show="mine">
+                        <a ng-click="hideMineBar()" ng-if="!Session.isGuest()" class="{{navidx=='profile' && 'active' }}" ui-sref="profile">个人信息</a>
+                        <a ng-click="hideMineBar()" ng-if="!Session.isGuest()" class="{{navidx=='myapply' && 'active' }}" ui-sref="myapply">我的需求</a>
+                        <a ng-click="hideMineBar();logout()" ng-if="!Session.isGuest()" href="">退出</a>
+                    </div>
+                </li>
+
+                <li ng-click="navBar = !navBar" ng-show="Session.isGuest()" class="{{navidx=='login' && 'active' }}"><a ui-sref="login">登录/注册</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<!-- $scope提供 navidx-->

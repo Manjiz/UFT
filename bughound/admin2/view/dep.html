@@ -1,0 +1,103 @@
+<!-- {{checked}} -->
+<table class="ui compact celled definition table">
+  <thead>
+    <tr>
+      	<th></th>
+      	<th>id</th>
+      	<th>部门名称</th>
+      	<th>部门类型</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="x in dataList | slice : (currentPage - 1) * itemsPerPage : currentPage * itemsPerPage" ng-show="!dataFormat[x.id].dontShow">
+      	<td class="collapsing">
+      	  	<div class="ui fitted slider checkbox">
+      	  	  	<input type="checkbox" ng-model="checked[x.id]"><label></label>
+      	  	</div>
+      	</td>
+      	<td><div ng-bind="x.id"></div></td>
+      	<td>
+      		<div ng-bind="x.name" ng-hide="checked[x.id]" ng-click="checked[x.id]=true"></div>
+      		<div class="ui fluid input" ng-show="checked[x.id]"><input type="text" ng-model="dataFormat[x.id].name"></div>
+      	</td>
+      	<td>
+      		<div ng-bind="x.depType" ng-hide="checked[x.id]" ng-click="checked[x.id]=true"></div>
+      		<div class="ui fluid input" ng-show="checked[x.id]"><input type="text" ng-model="dataFormat[x.id].depType"></div>
+      	</td>
+    </tr>
+  </tbody>
+  <tfoot class="full-width">
+    <tr>
+      	<th></th>
+      	<th colspan="3">
+      	  	<div class="ui right floated mini primary labeled icon button" ng-click="popAddItem()">
+      	  	  	<i class="user icon"></i> 添加部门
+      	  	</div>
+      	  	<div class="ui olive mini button" ng-click="updateItems()">修改</div>
+      	  	<div class="ui red mini button" ng-click="delItems()">删除</div>
+      	</th>
+    </tr>
+    <tr ng-show="pages>1">
+        <th colspan="4">
+            <div class="ui right floated pagination menu">
+                <a class="icon item" ng-click="changePage(currentPage-1 > 0 ? currentPage-1 : 1)"><i class="left chevron icon"></i></a>
+                <a class="item" ng-show="pages>5 && currentPage>3" ng-click="changePage(currentPage-5 > 0 ? currentPage-5 : 1)">...</a>
+                <a class="item {{currentPage==$index+1 ? 'active' : ''}}" 
+                    ng-repeat="x in pagination track by $index"
+                    ng-show="pages<=5 || ((currentPage-$index-1<=2) && (currentPage-$index-1>=-2)) || (currentPage<3 && $index+1<=5) || (currentPage>pages-2 && $index+1>=pages-4)"
+                    ng-click="changePage($index+1)">{{$index+1}}
+                </a>
+                <a class="item" ng-show="pages>5 && currentPage<pages-2" ng-click="changePage(currentPage+5 <= pages ? currentPage+5 : pages)">...</a>
+                <a class="icon item" ng-click="changePage(currentPage+1 <= pages ? currentPage+1 : pages)"><i class="right chevron icon"></i></a>
+            </div>
+        </th>
+    </tr>
+  </tfoot>
+</table>
+
+<div class="ui small standard modal additem">
+    <div class="content">
+        <form class="ui form" style="overflow:hidden;">
+            <div class="field">
+              <label>部门名称</label>
+              <input type="text" ng-model="addName">
+            </div>
+            <div class="field">
+              <label>部门类型</label>
+              <input type="text" ng-model="addDeptype">
+            </div>
+            <button class="ui right floated green button" type="submit" ng-click="confirmAdd()">添加</button>
+        </form>
+    </div>
+</div>
+<div class="ui page dimmer addsucc">
+    <div class="content">
+        <h3 class="ui inverted icon header">
+            <i class="heart icon"></i>添加成功！
+        </h3>
+    </div>
+</div>
+<div class="ui page dimmer addfail">
+    <div class="content">
+        <h3 class="ui inverted icon header">
+            <i class="heartbeat icon"></i>添加失败！
+        </h3>
+    </div>
+</div>
+
+<div class="ui small basic modal confirmdel">
+	<div class="ui icon header">
+		<i class="remove user icon"></i>警告
+	</div>
+	<div class="content" style="text-align:center;">
+		<p>您即将删除这些部门，你要通过手动操作数据库才能恢复这些部门，确认继续?</p>
+	</div>
+	<div class="actions">
+		<div class="ui red basic inverted button" ng-click="cancelDelItems()">
+		  	<i class="remove icon"></i>不
+		</div>
+		<div class="ui green basic inverted button" ng-click="confirmDelItems()">
+		  	<i class="checkmark icon"></i>是
+		</div>
+	</div>
+</div>

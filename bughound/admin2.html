@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html ng-app="uftadmin">
+<head>
+<meta charset="UTF-8">
+<title>UFT 管理平台</title>
+<link rel="stylesheet" href="admin2/lib/semantic.min.css">
+<style>
+/*滚动条*/
+    ::-webkit-scrollbar {width:12px;height:12px}
+    ::-webkit-scrollbar-button:horizontal {display:none}
+    ::-webkit-scrollbar-track:horizontal {background:#ccc;border-radius:5px;}
+    ::-webkit-scrollbar-track-piece:horizontal {background:#ccc;border-radius:5px;}
+    ::-webkit-scrollbar-thumb:horizontal {background:#8E8E8E;border-radius:5px;}
+    ::-webkit-scrollbar-thumb:horizontal:hover {background:#3B3B3B}
+    ::-webkit-scrollbar-corner:horizontal {background:#535353}
+    ::-webkit-scrollbar-resizer:horizontal {background:#FF6E00}
+</style>
+</head>
+<body ng-controller="uftadminMain">
+
+<div class="ui top attached demo menu">
+    <a class="item"><i class="sidebar icon"></i>菜单</a>
+</div>
+<div class="ui bottom attached segment pushable">
+    <div class="ui inverted labeled icon left inline vertical sidebar menu">
+        <a class="item"><i class="mini home icon"></i>主页</a>
+        <a class="item" ui-sref="user"><i class="mini users icon"></i>用户管理</a>
+        <a class="item" ui-sref="dep"><i class="mini sitemap icon"></i>部门管理</a>
+        <a class="item" ui-sref="dtype"><i class="mini tasks icon"></i>需求类型</a>
+        <a class="item" ui-sref="business"><i class="mini tags icon"></i>业务管理</a>
+        <a class="item" ui-sref="demand"><i class="mini tags icon"></i>需求管理</a>
+    </div>
+    <div class="pusher">
+        <div class="ui basic segment" ui-view>
+            <!-- HERE -->
+        </div>
+    </div>
+</div>
+
+<script src="admin2/lib/jquery-2.1.4.min.js"></script>
+<script src="admin2/lib/semantic.min.js"></script>
+<script src="admin2/lib/angular.min.js"></script>
+<script src="admin2/lib/angular-ui-router.js"></script><!--NG 路由插件-->
+<script src="admin2/state/stateUser.js"></script>
+<script src="admin2/state/stateDep.js"></script>
+<script src="admin2/state/stateDtype.js"></script>
+<script src="admin2/state/stateBusiness.js"></script>
+<script src="admin2/state/stateDemand.js"></script>
+<script>
+'use strict';
+
+// using context
+$('.ui.sidebar').sidebar({context: $('.bottom.segment')}).sidebar('attach events', '.menu .item');
+
+angular.module('uftadmin', [
+    'ui.router'
+], angular.noop)
+
+.filter('slice', function () {
+    return function (inputArr, start, end) {
+        var resultArr = [];
+
+        if (!angular.isArray(inputArr)) { return inputArr; }
+        if (start < 0) { start = 0; }
+        if (end > inputArr.length) { end = inputArr.length; }
+
+        for (var i = start; i < end; ++i) {
+            resultArr.push(inputArr[i]);
+        }
+        return resultArr;
+    };
+})
+
+.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+    $urlRouterProvider.otherwise('user');  //无效路由
+
+    $stateProvider
+        .state('user', stateUser)
+        .state('dep', stateDep)
+        .state('dtype', stateDtype)
+        .state('business', stateBusiness)
+        .state('demand', stateDemand);
+})
+
+.controller('uftadminMain', function($scope) {
+
+});
+</script>
+</body>
+</html>

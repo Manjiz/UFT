@@ -1,0 +1,95 @@
+<style>@import url(public/css/app/schedule.css);</style>
+
+<div class="schedule">
+    <h2 class="schedule_tit">周排期表</h2>
+    <div class="schedule_ctrl">
+        <select class="schedule_ctrl_sdep" kendo-drop-down-list k-options="depSelectOpts" k-ng-model="m_showThisDep" k-value-primitive="true"></select>
+        <div class="schedule_ctrl_cweek">
+            <div class="schedule_ctrl_cweek_btn" ng-click="changeWeek(-1)"></div>
+            <div class="schedule_ctrl_cweek_msg">{{ weekStep==0 ? '本周' : (weekStep>0 ? '后'+weekStep+'周' : '前'+(-weekStep)+'周') }}</div>
+            <div class="schedule_ctrl_cweek_btn" ng-click="changeWeek(1)"></div>
+        </div>
+    </div>
+    <div class="schedule_tbwrap">
+        <table class="schedule_tbwrap_tb">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="{{(wStart+86400000*0==today) ? 'today' : ''}}">周日 <span>{{ wStart | date: 'MM/dd' }}</span></th>
+                    <th class="{{(wStart+86400000*1==today) ? 'today' : ''}}">周一 <span>{{ wStart+86400000*1 | date: 'MM/dd' }}</span></th>
+                    <th class="{{(wStart+86400000*2==today) ? 'today' : ''}}">周二 <span>{{ wStart+86400000*2 | date: 'MM/dd' }}</span></th>
+                    <th class="{{(wStart+86400000*3==today) ? 'today' : ''}}">周三 <span>{{ wStart+86400000*3 | date: 'MM/dd' }}</span></th>
+                    <th class="{{(wStart+86400000*4==today) ? 'today' : ''}}">周四 <span>{{ wStart+86400000*4 | date: 'MM/dd' }}</span></th>
+                    <th class="{{(wStart+86400000*5==today) ? 'today' : ''}}">周五 <span>{{ wStart+86400000*5 | date: 'MM/dd' }}</span></th>
+                    <th class="{{(wStart+86400000*6==today) ? 'today' : ''}}">周六 <span>{{ wStart+86400000*6 | date: 'MM/dd' }}</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in dschedule | filter:{depID:m_showThisDep, showMeInSchedule:1}">
+
+                    <td>
+                        <div class="author">
+                            <span class="avatar"><img ng-src="{{x.avatar || 'public/img/avatar.jpg'}}" alt=""></span>
+                            <span class="name">{{x.name}}</span>
+                        </div>
+                    </td>
+                    <td class="sday" ng-repeat="tt in repeatTable track by $index" data-day="{{$index*86400000 + wStart}}" data-assignee="{{x.erp}}" kendo-dropTarget k-dragenter="onDragEnter" k-dragleave="onDragLeave" k-drop="onDrop" style="position:relative;cursor:pointer;">
+                        <div class="sday_sitem" style="margin-top:{{x.blocks[x.wee[$index][0]].pilefloor*(taskHeight+20)-10*(x.blocks[x.wee[$index][0]].pilefloor-1)}}px;">
+
+
+                            <div class="sday_sitem_task" ng-repeat="y in x.wee[$index]" style="margin:10px 0;box-sizing:content-box;z-index:2;position:relative;width:{{x.blocks[y].weekdays.length*100}}%;height:{{taskHeight-2}}px;padding-right:{{(x.blocks[y].weekdays.length-1)*20}}px;" 
+                                data-id="{{x.blocks[y].id}}" 
+                                data-day="{{$parent.$index*86400000 + wStart}}" 
+                                data-assignee="{{x.erp}}" 
+                                kendo-draggable 
+                                k-dragstart="onDragStart" 
+                                k-hint="draggableHint" 
+                                k-dragend="onDragEnd" 
+                                ng-dblclick="changeSchedule(x.blocks[y].id, x.blocks[y].demandID, x.blocks[y].demandName, x.blocks[y].submitter, x.blocks[y].dictator, x.blocks[y].assignee, x.blocks[y].startDate, x.blocks[y].days)">
+                                <div class="sday_sitem_task_tt">{{x.blocks[y].demandName}}</div>
+                                <div class="sday_sitem_task_info ">- {{x.blocks[y].dictator}}</div>
+                            </div>
+
+                            <div style="z-index:1;position:absolute;top:0;left:0;width:100%;height:100%;" ui-sref="apply({erp:x.erp, date:$index*86400000 + wStart, uname:x.name })"></div>
+
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="cdayspop" ng-show="isShowCdays">
+    <div class="cdayspop_tit">需求概览<div class="close" ng-click="isShowCdays=false"></div></div>
+    <div class="cdayspop_main">
+        <dl>
+            <dt><label>需求名称:</label></dt>
+            <dd>
+                <div class="cdayspop_main_name">{{waitUpdateScheduleName}}({{waitUpdateScheduleDid}})</div>
+            </dd>
+        </dl>
+        <dl>
+            <dt><label>关系人:</label></dt>
+            <dd>
+                <div class="sp_relativeperson"><div>PM: {{waitUpdateSchedulePM}}</div><div>执行人: {{waitUpdateScheduleAssignee}}</div></div>
+            </dd>
+        </dl>
+        <dl>
+            <dt><label>排期起始:</label></dt>
+            <dd>
+                <!-- <input type="date"> -->
+                <input kendo-date-picker="startDate" k-ng-model="waitUpdateScheduleStartdate" k-options="datePickerOpts" onkeydown="javascript:this.blur()">
+            </dd>
+        </dl>
+        <dl>
+            <dt><label>排期天数:</label></dt>
+            <dd><input type="number" class="inp-text" ng-model="waitUpdateScheduledays" ng-pattern="/[0-9]/" onkeydown="javascript:this.blur()"></dd>
+        </dl>
+        <p class="cdayspop_main_btn">
+            <button class="btn btn-normal" ng-click="updateSchedule()">更新</button>
+            <button class="btn btn-normal" ui-sref="detail({did:waitUpdateScheduleDid })">详情</button>
+        </p>
+    </div>
+</div>

@@ -1,0 +1,105 @@
+<style>@import url(public/css/app/profile.css);</style>
+
+<div class="flash {{flashType ? (flashType=='warn' ? 'warn' : 'success') : ''}}">
+    <div class="flash_container">
+        <div class="flash_container_text">{{flashText}}</div>
+        <div class="flash_container_close" ng-click="flashType=''"></div>
+    </div>
+</div>
+
+<div class="mod_cont">
+    <div class="mod_cont_fullmain">
+        <div class="profile">
+            <nav class="profile_nav">
+                <ul class="list-unstyled">
+                    <!-- <li>个人资料</li> -->
+                    <li class="active">帐号设置</li>
+                    <!-- <li>待定</li> -->
+                </ul>
+            </nav>
+
+            <div class="profile_main">
+                <div class="profile_main_wrap">
+                    <div class="profile_main_tit">用户信息</div>
+                    <form class="profile_main_wrap_cont" name="updateUserForm" ng-submit="updateUser(updateUserForm.$valid)" novalidate>
+                        <dl>
+                            <dt>头像</dt>
+                            <dd class="clearfix">
+                                <img class="avatar" ng-src="{{myavatar || 'public/img/avatar.jpg'}}" alt="">
+                                <div class="avatar_upload">
+                                    <div class="avatar_upload_btn">
+                                        <button class="btn btn-normal">上传头像</button>
+                                        <input type="file" name="avatar" ng-model="avatarfile" cropper-source="avatar" cropper-file-types="jpg,jpeg,png" onchange="angular.element(this).scope().avatarChange(this.files)">
+                                    </div>
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt><label>ERP</label></dt>
+                            <dd><div style="padding-left:13px;">{{uerp}}</div></dd>
+                        </dl>
+                        <dl>
+                            <dt><label for="uname">姓名</label></dt>
+                            <dd><input name="uname" class="inp-text" type="text" ng-model="uname" required ng-required="true"></dd>
+                        </dl>
+                        <dl>
+                            <dt><label for="uemail">邮箱</label></dt>
+                            <dd><input name="uemail" class="inp-text" type="text" ng-model="uemail" required ng-required="true"></dd>
+                        </dl>
+                        <!-- <dl>
+                            <dt><label for="udep">部门</label></dt>
+                            <dd>
+                                <select kendo-drop-down-list k-options="depSelectOpts" ng-model="selectedDep"></select>
+                            </dd>
+                        </dl> -->
+                        <p>
+                            <input name="hehe" class="updatepwd" ng-click="updateUser" ng-disabled="updatePwdForm.$invalid" type="submit" value="更新信息">
+                        </p>
+                    </form>
+                </div>
+
+                <!-- <div class="profile_main_wrap">
+                    <div class="profile_main_tit">密码设置</div>
+                    <form class="profile_main_wrap_cont" name="updatePwdForm" ng-submit="updatePwd(updatePwdForm.$valid)" novalidate>
+                        <dl>
+                            <dt><label for="oldpwd">旧密码 / 临时密码</label></dt>
+                            <dd><input name="oldpwd" class="inp-text" type="text" ng-model="oldpwd" ng-minlength="6" required ng-required="true"></dd>
+                        </dl>
+                        <dl>
+                            <dt><label for="newpwd">新密码</label></dt>
+                            <dd><input name="newpwd" class="newpwd inp-text" type="text" ng-model="newpwd" ng-minlength="6" ng-maxlength="8" required ng-required="true"></dd>
+                        </dl>
+                        <dl>
+                            <dt><label for="confirmnewpwd">确认新密码</label></dt>
+                            <dd><input name="confirmnewpwd" class="confirmnewpwd {{isSame ? '' : 'notsame'}} inp-text" type="text" ng-model="confirmnewpwd" ng-minlength="6" ng-maxlength="8" required ng-required="true" ng-keyup="isSame = confirmnewpwd==newpwd"></dd>
+                        </dl>
+
+                        <p>
+                            <input name="hehe" class="updatepwd" ng-click="updatePwd" ng-disabled="updatePwdForm.$invalid" type="submit" value="更新密码">
+                            <a href="#">忘记密码*暂未支持</a>
+                        </p>
+                    </form>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="crop {{isShowCrop && 'active'}}">
+    <div class="crop_container">
+        <h2 class="crop_container_tit">裁切图片<div ng-click="closeCrop()"></div></h2>
+        <div class="crop_container_stage" cropper="avatar" cropper-context="cropContext">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+        </div>
+        <!-- <div class="crop_container_preview" cropper-preview="avatar">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+        </div> -->
+        <input type="hidden" name="x" value="{{cropContext.left}}"/>
+        <input type="hidden" name="y" value="{{cropContext.top}}"/>
+        <input type="hidden" name="w" value="{{cropContext.width}}"/>
+        <input type="hidden" name="h" value="{{cropContext.height}}"/>
+        <div class="crop_container_handle">
+            <button class="btn btn-normal" ng-click="updateAvatar()">确定</button>
+        </div>
+    </div>
+</div>

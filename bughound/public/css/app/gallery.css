@@ -1,0 +1,34 @@
+@charset "UTF-8";
+
+/* -----需求列表----- */
+.dlist {}
+    .dlist_search {margin-bottom:20px;}
+        .dlist_search input {width: 250px;padding:6px 12px;height:35px;line-height: 35px;}
+    .dlist_it {padding:10px 0;border-bottom:1px solid #ebebeb;overflow:hidden;}
+        .dlist_it_state {float:left;}
+            .dlist_it_state_mark {width:50px;height:50px;background:#ebebeb;text-align:center;line-height:50px;font-size:12px;color:#fff;}
+            .dlist_it_state_mark.mark0 {background:#E12228;}
+            .dlist_it_state_mark.mark1, .dlist_it_state_mark.mark2, .dlist_it_state_mark.mark3 {background:#6190e8;}
+            .dlist_it_state_mark.mark4 {background:#808B87;}
+            .dlist_it_state_timeline {display:inline-block; width:100%;font-size:12px;border-top:1px solid #ebebeb;vertical-align:middle;background:#eee;}
+                    .dlist_it_state_timeline::before {content:'';display:inline-block;width:18px;height:18px;background:url(../../img/clock.png);background-size:100% auto;vertical-align:middle;}
+                    .dlist_it_state_timeline span {vertical-align:middle;}
+        .dlist_it_cont {margin-left:70px;}
+            .dlist_it_cont_info {margin-bottom:5px;color:#999;}
+            .dlist_it_cont_main {margin:0;font-size:16px;line-height:1.2;}
+                .dlist_it_cont_main a {color:#333;font-weight: normal;}
+            .dlist_it_cont_tag {display:inline-block;margin-top:5px;font-size:12px;vertical-align:middle;color:#fff;overflow:hidden;}
+                    .dlist_it_cont_tag_business {float:left;padding:0px 5px;border-top-left-radius:3px;border-bottom-left-radius:3px;background:burlywood;}
+                    .dlist_it_cont_tag_dtype {float:left;padding:0px 5px;background:#aaa;}
+    .dlist_turnpage {text-align:center;}
+        .pagination {display:inline-block;padding:0;border-radius:4px;}
+            .pagination > li {float:left;margin-left:-1px;border:1px solid #ddd;list-style:none;overflow:hidden;}
+            .pagination > li:first-child {margin-left:0;border-top-left-radius:4px;border-bottom-left-radius:4px;}
+            .pagination > li:last-child {border-top-right-radius:4px;border-bottom-right-radius:4px;}
+            .pagination > li.active {border-color:#E12228;}
+            .pagination > li.active:hover {border-color:#E12228;}
+                .pagination > li > a {display:block;width:30px;height:30px;line-height:30px;text-align:center;color:#E12228;text-decoration:none;background:#fff;}
+                .pagination > li > a:hover {background: #f0f0f0;}
+                .pagination > .active > a {color:#fff;cursor:default;background:#E12228;}
+                .pagination > .active > a:hover {color:#fff;cursor:default;background:#E12228;}
+                .pagination > .disabled > a {pointer-events:none;cursor:default;}

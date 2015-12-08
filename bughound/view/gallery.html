@@ -1,0 +1,58 @@
+<style>@import url(public/css/app/gallery.css);</style>
+
+<div class="mod_cont">
+    <div class="mod_cont_main">
+        <div class="mod_cont_main_wrap dlist">
+            <div class="dlist_search"><input type="text" class="inp-text" placeholder="搜索：需求名称" ng-model="q"></div>
+            <section class="dlist_it" ng-repeat="x in rows | reverse | filter: {name:q} | orderBy: f : rev | slice : (currentPage - 1) * itemsPerPage : currentPage * itemsPerPage">
+                <div class="dlist_it_state">
+                    <div class="dlist_it_state_mark mark{{x.state}}">{{x.stateName}}</div>
+                    <div class="dlist_it_state_timeline" title="预期剩余时间" ng-if="x.state!=4"><span>{{x.executeDays}}</span></div>
+                </div>
+                <div class="dlist_it_cont">
+                    <div class="dlist_it_cont_info">{{x.submitterName}}&nbsp;&nbsp;&nbsp;{{x.submitDate}}提交</div>
+                    <h2 class="dlist_it_cont_main">
+                        <a ui-sref="detail({ did: {{x.demandID}} })">{{x.name}}</a>
+                    </h2>
+                    <div class="dlist_it_cont_tag">
+                        <span class="dlist_it_cont_tag_business">{{x.business}}</span>
+                        <span class="dlist_it_cont_tag_dtype">{{x.dtype}}</span>
+                    </div>
+                    <!-- <div style="font-size:12px;">编号{{x.demandID}}</div> -->
+                    <!-- <div style="margin-top:5px;">{{x.executor}}</div> -->
+                </div>
+            </section>
+            <div class="dlist_turnpage">
+                <pagination ng-show="(rows | filter: {name:q}).length>itemsPerPage"
+                    total-items="(rows | filter: {name:q}).length" 
+                    ng-model="currentPage" 
+                    class="pagination-sm" 
+                    boundary-links="true" 
+                    rotate="false" 
+                    num-pages="numPages"
+                    items-per-page="itemsPerPage"
+                    max-size="10"
+                    previous-text="‹"
+                    next-text="›"
+                    first-text="«"
+                    last-text="»"></pagination>
+            </div>
+        </div>
+    </div>
+
+    <div class="mod_cont_aside">
+        <div class="mod_cont_aside_wrap">
+            <!-- <div class="o2" style="display:block;margin-bottom:10px;text-align:center;overflow: hidden;"><img src="public/img/rank.jpg" alt="rank" style="width:100%;"></div> -->
+            <h2 style="text-align:center;">需求提交榜</h2>
+            <ol class="list-unstyled">
+                <li ng-repeat="x in topSubmitterList" style="overflow:hidden;border-bottom:1px dashed #ddd;">
+                    <div style="float:left;">{{x.submitterName}}</div>
+                    <div style="float:right;">{{x.count}}</div>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+</div>
+
+        

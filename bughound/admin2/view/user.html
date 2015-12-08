@@ -1,0 +1,120 @@
+<!-- {{checked}} -->
+<div>
+    <div class="ui mini dropdown labeled icon button selectshowdep">
+      <i class="filter icon"></i>
+      <span class="text">{{depList[0].name}}</span>
+      <div class="menu">
+        <div class="ui icon search input">
+          <i class="search icon"></i>
+          <input type="text" placeholder="Search deps...">
+        </div>
+        <div class="divider"></div>
+        <div class="header">
+          <i class="tags icon"></i>
+          清单
+        </div>
+        <div class="scrolling menu">
+          <div class="item" ng-repeat="x in depList" ng-click="changeShowThisDep(x.id)">
+            {{x.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<table class="ui compact celled definition table">
+  <thead>
+    <tr>
+      	<th></th>
+      	<th>ERP</th>
+      	<th>姓名</th>
+      	<th>邮箱</th>
+      	<th>部门</th>
+        <th>管理员</th>
+        <th>排期表显示</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="x in dataList | filter:{depID:showThisDep} | slice : (currentPage - 1) * itemsPerPage : currentPage * itemsPerPage" ng-show="!dataFormat[x.erp].dontShow">
+      	<td class="collapsing">
+      	  	<div class="ui fitted slider checkbox">
+      	  	  	<input type="checkbox" name="checkuser" ng-model="checked[x.erp]"><label></label>
+      	  	</div>
+      	</td>
+      	<td><div ng-bind="x.erp"></div></td>
+      	<td>
+      		<div ng-bind="x.name" ng-hide="checked[x.erp]" ng-click="checked[x.erp]=true"></div>
+      		<div class="ui fluid input" ng-show="checked[x.erp]"><input type="text" ng-model="dataFormat[x.erp].name"></div>
+      	</td>
+      	<td>
+      		<div ng-bind="x.email" ng-hide="checked[x.erp]" ng-click="checked[x.erp]=true"></div>
+      		<div class="ui fluid input" ng-show="checked[x.erp]"><input type="text" ng-model="dataFormat[x.erp].email"></div>
+      	</td>
+      	<td>
+      		<div ng-bind="depFormat[dataFormat[x.erp].depID].name" ng-hide="checked[x.erp]" ng-click="checked[x.erp]=true"></div>
+            <div ng-show="checked[x.erp]">
+                <select class="ui fluid dropdown modifyitem" ng-model="dataFormat[x.erp].depID" ng-options="item.id as item.name for item in depList"></select>
+            </div>
+		</td>
+      	<td>
+      		<div ng-hide="checked[x.erp]" ng-click="checked[x.erp]=true">
+                <div style="{{x.isAdmin ? 'display:inline-block;padding:1px 10px;border-radius:5px;background:burlywood;color:#fff;' : 'display:inline-block;padding:1px 10px;border-radius:5px;'}}">{{x.isAdmin==1 ? '是' : '否'}}</div>
+            </div>
+            <div ng-show="checked[x.erp]">
+                <select class="ui fluid dropdown modifyitem" ng-model="dataFormat[x.erp].isAdmin" ng-options="item.id as item.name for item in {{[{id:1,name:'是'}, {id:0,name:'否'}]}}"></select>
+            </div>
+      	</td>
+        <td class="center aligned">
+            <div class="ui compact segment">
+                <div class="ui fitted checkbox">
+                    <input type="checkbox" ng-disabled="!checked[x.erp]" ng-checked="x.showMeInSchedule" ng-true-value="1" ng-false-value="0" ng-model="dataFormat[x.erp].showMeInSchedule">
+                    <label></label>
+                </div>
+            </div>
+        </td>
+    </tr>
+  </tbody>
+  <tfoot class="full-width">
+    <tr>
+      	<th></th>
+      	<th colspan="6">
+      	  	<!-- <div class="ui right floated mini primary labeled icon button" ng-click="popAddUser()">
+      	  	  	<i class="user icon"></i> 添加用户
+      	  	</div> -->
+      	  	<div class="ui olive mini button" ng-click="updateItems()">修改</div>
+      	  	<div class="ui red mini button" ng-click="delItems()">删除</div>
+      	</th>
+    </tr>
+    <tr ng-show="pages>1">
+        <th colspan="7">
+            <div class="ui right floated pagination menu">
+                <a class="icon item" ng-click="changePage(currentPage-1 > 0 ? currentPage-1 : 1)"><i class="left chevron icon"></i></a>
+                <a class="item" ng-show="pages>5 && currentPage>3" ng-click="changePage(currentPage-5 > 0 ? currentPage-5 : 1)">...</a>
+                <a class="item {{currentPage==$index+1 ? 'active' : ''}}" 
+                    ng-repeat="x in pagination track by $index"
+                    ng-show="pages<=5 || ((currentPage-$index-1<=2) && (currentPage-$index-1>=-2)) || (currentPage<3 && $index+1<=5) || (currentPage>pages-2 && $index+1>=pages-4)"
+                    ng-click="changePage($index+1)">{{$index+1}}
+                </a>
+                <a class="item" ng-show="pages>5 && currentPage<pages-2" ng-click="changePage(currentPage+5 <= pages ? currentPage+5 : pages)">...</a>
+                <a class="icon item" ng-click="changePage(currentPage+1 <= pages ? currentPage+1 : pages)"><i class="right chevron icon"></i></a>
+            </div>
+        </th>
+    </tr>
+  </tfoot>
+</table>
+
+<div class="ui small basic modal confirmdel">
+	<div class="ui icon header">
+		<i class="remove user icon"></i>警告
+	</div>
+	<div class="content" style="text-align:center;">
+		<p>您即将删除这些用户，你要通过手动操作数据库才能恢复这些用户，确认继续?</p>
+	</div>
+	<div class="actions">
+		<div class="ui red basic inverted button" ng-click="cancelDelItems()">
+		  	<i class="remove icon"></i>不
+		</div>
+		<div class="ui green basic inverted button" ng-click="confirmDelItems()">
+		  	<i class="checkmark icon"></i>是
+		</div>
+	</div>
+</div>

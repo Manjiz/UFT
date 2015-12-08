@@ -1,0 +1,23 @@
+<style>@import url(public/css/app/piecemeal-findback.css);</style>
+
+<div class="mod_cont">
+    <div class="mod_cont_fullmain">
+
+        <form ng-if="!issucc" name="findback" class="findback" novalidate>
+            <div class="form_inp">
+                <label>ERP帐号 / 邮箱地址</label>
+                <input name="account" ng-model="$parent.account" class="inp-text" type="text" placeholder="" required>
+            </div>
+            <div class="form_inp">
+                <label>新密码</label>
+                <input name="newpwd" ng-model="$parent.newpwd" ng-minlength="6" ng-maxlength="8" class="inp-text" type="text" placeholder="" required>
+            </div>
+            <a class="findback_go btn btn-large" ng-click="go(findback.$valid)" href="">前往邮箱确认</a>
+        </form>
+
+        <div ng-if="issucc" class="findsucc">
+            密码修改成功！
+        </div>
+        
+    </div>
+</div>

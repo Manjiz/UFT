@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html ng-app="myapp">
+<head>
+<meta charset="utf-8" />
+<title>JDC需求提报平台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="icon" href="public/img/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="public/img/favicon.ico" type="image/x-icon" />
+
+<link rel="stylesheet" href="public/css/normalize.css" />
+<link rel="stylesheet" href="public/css/common.css" />
+    <link rel="stylesheet" href="public/css/kendo/kendo.common-material.min.css">
+    <link rel="stylesheet" href="public/css/kendo/kendo.rtl.min.css">
+    <link rel="stylesheet" href="public/css/kendo/kendo.material.min.css">
+    <link rel="stylesheet" href="public/css/kendo/kendo.material.mobile.min.css">
+<link rel="stylesheet" href="public/js/lib/image-cropper/cropper.css" /><!--图片裁切-->
+</head>
+<body ng-controller="customersCtrl">
+
+<div class="pse_wrap">
+    <!--# S 引入头部 -->
+    <div ng-include src="'view/core/header.html'"></div> 
+    <!--# E 引入头部 -->
+    
+    <!--# S UI-VIEW -->
+    <div ui-view style="padding-bottom:30px;overflow:hidden;"> </div>
+    <!--# E UI-VIEW -->
+</div>
+
+<!--# S 引导 -->
+<div class="mod_guid">
+    <a class="mod_guid_backtop" href="javascript:void(0)">回顶部</a>
+    <div class="mod_guid_qrcode">
+        <a class="mod_guid_qrcode_thumb" href="/app#qrcode"><span></span></a>
+        <img class="mod_guid_qrcode_pic" alt="UFT 前端需求提交平台" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEXr6+thkOgRGyM+AAABCUlEQVQ4y53TsZHEIAwF0D9DoHAb0KzaIKOlDZ2ZjPBackYbeGiCgPE/fAXAeX/EC/6gQML/Y2S0COmBnEvhEiOP4iEL7TVWVnbPvBZGvpFKJdYak7kG3z1kLiOTbjVrIOcakdE8dDyeia2mgh7gF3p1YNOg/uRc+nGNTe+OLLRjs1apKGEuRzaLZMFbngi77tbcAX/mufRljWRTKTKXY5faiu9y+bmMNbLx/kOeSIGdyehYFsLHosUegDMv9NKNrEfHhbnsxyUXuycvP9eIWOPonfmJjEwd95YXmevvHhJkTOYX2msqUkCWsFTsACxbeyqjyy4bF4KLTK5peIe5jIzWSrDj8lN9m18EH/zMN3SZnQAAAABJRU5ErkJggg==">
+        <p class="mod_guid_qrcode_txt">扫扫访问 UFT</p>
+    </div>
+</div>
+<!--# E 引导 -->
+
+<!--# S 引入尾部 -->
+<div ng-include src="'view/core/footer.html'"></div> 
+<!--# E 引入尾部 -->
+
+<!-- <div login-dialog ng-include="'view/login.html'" ng-show="isPopupLogin"></div> -->
+
+<!-- <script id="tpl" type="text/x-template">
+<img src="dummy.png" title="{{title}}"/>
+</script> -->
+
+<!--<script src="http://weinre.qiang.it/target/target-script-min.js#taizhen"></script> 微信debug -->
+<!-- <script type="text/javascript" src="http://tajs.qq.com/stats?sId=53467417" charset="UTF-8"></script>页面统计 -->
+
+<script src="public/js/lib/jquery-1.10.2.js"></script>
+<script src="public/js/lib/angular.min.js"></script>
+<script src="public/js/lib/plugins/angular-ui-router.js"></script><!--NG 路由插件-->
+<script src="public/js/lib/md5.js"></script>
+<!-- kendo customly build - autocomplete dropdownlist datepicker slider draganddrop || upload angular   [kendo-mobile-switch] -->
+<script src="public/js/lib/plugins/kendo.custom.min.js"></script>
+<script src="public/js/lib/plugins/kendo.upload.min.js"></script>
+<script src="public/js/lib/plugins/kendo.angular.min.js"></script>
+<!-- <script src="http://kendo.cdn.telerik.com/2015.3.1111/js/kendo.all.min.js"></script> -->
+<script src="public/js/lib/plugins/ui-bootstrap-tpls-0.13.4.min.js"></script><!--NGUIBT 翻页插件-->
+<script type="text/javascript" src="public/js/lib/pagedown/Markdown.Converter.js"></script><!-- pagedown 编辑器 -->
+<script type="text/javascript" src="public/js/lib/pagedown/Markdown.Sanitizer.js"></script><!-- pagedown 编辑器 -->
+<script type="text/javascript" src="public/js/lib/pagedown/Markdown.Editor.js"></script><!-- pagedown 编辑器 -->
+
+<script src="public/js/lib/image-cropper/cropper.js"></script><!-- 图片裁切 -->
+
+<script src="public/js/lib/ua-parser.min.js"></script>
+<script src="public/js/common.js"></script>
+<!-- STATE -->
+<script src="state/stateLogin.js"></script>
+<script src="state/stateApply.js"></script>
+<script src="state/stateMyapply.js"></script>
+<script src="state/stateGallery.js"></script>
+<script src="state/stateSchedule.js"></script>
+<script src="state/stateAudited.js"></script>
+<script src="state/stateDetail.js"></script>
+<script src="state/stateProfile.js"></script>
+<script src="state/statePiecemealFindback.js"></script>
+
+<script>
+$.noConflict();
+var _conf = conf();
+angular.module('myapp', [
+    'ui.router',
+    'kendo.directives',
+    'ui.bootstrap',
+    'cropper'
+], angular.noop)
+
+.filter('reverse', function() {
+    return function(items) {
+        if(items) {
+            return items.slice().reverse();
+        } else {
+            return [];
+        }
+    }
+})
+.filter('slice', function () {
+    return function (inputArr, start, end) {
+        var resultArr = [];
+
+        if (!angular.isArray(inputArr)) { return inputArr; }
+        if (start < 0) { start = 0; }
+        if (end > inputArr.length) { end = inputArr.length; }
+
+        for (var i = start; i < end; ++i) {
+            resultArr.push(inputArr[i]);
+        }
+        return resultArr;
+    };
+})
+
+// 暂存数据（避免频繁请求）
+.service('datalump', function() {
+    return {
+        userList: null,
+        depList: null,
+        dtypeList: null,
+        businessList: null
+    }
+})
+
+.config(function($stateProvider, $urlRouterProvider, USER_ROLES) {
+    $urlRouterProvider.otherwise('login');
+
+    $stateProvider
+        .state('login', {
+            url:'/login',
+            templateUrl: 'view/login.html',
+            data: { acceptRoles: [USER_ROLES.guest] },
+            controller: loginState
+        })
+        .state('apply', {
+            url:'/apply?erp&date&uname',
+            templateUrl: 'view/apply.html',
+            data: { acceptRoles: [USER_ROLES.normal, USER_ROLES.admin] },
+            controller: applyState
+        })
+        .state('myapply', {
+            url:'/myapply',
+            templateUrl: 'view/myapply.html',
+            data: { acceptRoles: [USER_ROLES.normal, USER_ROLES.admin] },
+            controller: myapplyState
+        })
+        .state('gallery', {
+            url:'/gallery',
+            templateUrl: 'view/gallery.html',
+            data: { acceptRoles: [USER_ROLES.all] },
+            controller: galleryState
+        })
+        // .state('schedule', {
+        //     url:'/schedule',
+        //     templateUrl: 'view/schedule.html',
+        //     data: { acceptRoles: [USER_ROLES.normal, USER_ROLES.admin] },
+        //     controller: scheduleState
+        // })
+        .state('audited', {
+            url:'/audited',
+            templateUrl: 'view/audited.html',
+            data: { acceptRoles: [USER_ROLES.admin] },
+            controller: auditedState
+        })
+        .state('detail', {
+            url:'/detail/:did',
+            templateUrl: 'view/detail.html',
+            data: { acceptRoles: [USER_ROLES.all] },
+            controller: detailState
+        })
+        .state('profile', {
+            url:'/profile',
+            templateUrl: 'view/profile.html',
+            data: { acceptRoles: [USER_ROLES.normal, USER_ROLES.admin] },
+            controller: profileState
+        })
+        // .state('piecemeal-findback', {
+        //     url: '/piecemeal-findback/:issucc?',
+        //     templateUrl: 'view/piecemeal-findback.html',
+        //     data: { acceptRoles: [USER_ROLES.guest] },
+        //     controller: piecemealFindbackState
+        // });
+})
+
+// S ---拦截器---
+.config(function ($httpProvider) {
+    $httpProvider.interceptors.push(['$injector', function ($injector) {
+            return $injector.get('AuthInterceptor');
+        }
+    ]);
+})
+.factory('AuthInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
+    return {
+        responseError: function (response) { 
+            $rootScope.$broadcast({
+                401: AUTH_EVENTS.notAuthenticated,
+                403: AUTH_EVENTS.notAuthorized,
+                419: AUTH_EVENTS.sessionTimeout,
+                440: AUTH_EVENTS.sessionTimeout
+            }[response.status], response);
+            return $q.reject(response);
+        }
+    };
+})
+// .directive('loginDialog', function (AUTH_EVENTS) {
+//     return {
+//         restrict: 'A',
+//         // template: '<div ng-if="!showLoginDialog" ng-include="\'view/login.html\'">',
+//         link: function (scope) {
+//             var showDialog = function () {
+//                 console.log('show login dialog')
+//                 scope.$root.isPopupLogin = true;
+//             };
+//             scope.$root.isPopupLogin = false;
+//             scope.$on(AUTH_EVENTS.notAuthenticated, showDialog);
+//             scope.$on(AUTH_EVENTS.sessionTimeout, showDialog)
+//         }
+//     };
+// })
+// E ---拦截器---
+
+// S ---登录控制---
+.constant('AUTH_EVENTS', {
+    loginSuccess: 'auth-login-success',
+    loginFailed: 'auth-login-failed',
+    logoutSuccess: 'auth-logout-success',
+    notAuthenticated: 'auth-not-authenticated',
+    notAuthorized: 'auth-not-authorized'
+})
+.constant('USER_ROLES', {
+    all: '*',
+    admin: 'admin',
+    normal: 'normal',
+    guest: 'guest'
+})
+.service('Session', function(USER_ROLES) {
+    // 判断是否已经获取信息
+    this.isInit = false;
+    // 初始角色
+    this.userRole = 'guest';
+
+    this.create = function(userErp, userName, userRole) {
+        this.isInit = true;
+
+        this.userErp = userErp;
+        this.userName = userName;
+        this.userRole = userRole;
+    }
+    this.destory = function() {
+        this.userErp = undefined;
+        this.userName = undefined;
+        this.userRole = 'guest';
+    }
+
+    this.isAdmin = function() { return this.userRole===USER_ROLES.admin; }
+    this.isGuest = function() { return this.userRole===USER_ROLES.guest; }
+    this.isNormal = function() { return this.userRole!==USER_ROLES.guest && this.userRole!==USER_ROLES.admin && this.userRole!==USER_ROLES.all; }
+
+    return this;
+})
+.factory('AuthService', function($http, Session, USER_ROLES) {
+    var authService = {};
+
+    authService.login = function(credentials) {
+        return $http.post('api/user/login', credentials).then(function(res) {console.log(res)
+            var role = USER_ROLES.guest;
+            if(res.data.isAdmin) {
+                role = USER_ROLES.admin;
+            } else {
+                role = USER_ROLES.normal;
+            }
+            Session.create(res.data.erp, res.data.name, role);
+            return res.data;
+        });
+    }
+
+    // 是否登录
+    authService.isLogined = function() {
+        return !!Session.userErp;
+    }
+
+    // 是否符合页面的准许访问角色
+    authService.isAuthorized = function(acceptRoles) {
+        console.log(acceptRoles, Session.userRole)
+        if(!angular.isArray(acceptRoles)) {
+            acceptRoles = [acceptRoles];
+        }
+        return acceptRoles.indexOf(USER_ROLES.all)!==-1 || acceptRoles.indexOf(Session.userRole)!==-1;
+    }
+
+    return authService;
+})
+.run(function($rootScope, $http, $state, AUTH_EVENTS, AuthService, Session, USER_ROLES) {
+    var GetAuthInfo = $http.get('api/auth').then(function(res) {
+        var role;
+        if(res.data.erp && !res.data.isAdmin) {
+            role = USER_ROLES.normal;
+        } else if(res.data.isAdmin) {
+            role = USER_ROLES.admin;
+        } else {
+            role = USER_ROLES.guest;
+        }
+        Session.create(res.data.erp, res.data.name, role);
+    });
+
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState) {
+        var acceptRoles = toState.data.acceptRoles;
+        var isInit = Session.isInit;
+        if(!isInit) {
+            event.preventDefault();
+            GetAuthInfo.then(function() {
+                $state.go(toState.name, toParams);
+            });
+        } else {
+            if (!AuthService.isAuthorized(acceptRoles)) {
+                event.preventDefault();
+                if (AuthService.isLogined()) {
+                    $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
+                    // 即 已登录 + 第一个打开的页面是登录页
+                    if(toState.name=='login' && !fromState.name) {
+                        $state.go('apply');
+                    }
+                } else {
+                    $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+                    $state.go('login');
+                }
+            }
+        }
+    });
+    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+        $rootScope.navidx = toState.name;
+        // notAuditedNum
+        $http.get('api/demand/getnotauditedcount').success(function(data) {
+            $rootScope.notAuditedNum = data['COUNT(*)'];
+        });
+    });
+
+    // 比如 服务器重启时清除本地信息（结合拦截器）
+    $rootScope.$on(AUTH_EVENTS.notAuthenticated, function(event, d) {
+        Session.destory();
+    });
+})
+// E ---登录控制---
+
+.controller('customersCtrl', function($scope, $http, $state, Session) {
+    $scope.Session = Session;
+    
+    $scope.navBar = false;
+    $scope.mine = false;
+    $scope.mineBar = false;
+
+    // S 导航栏显示
+    // $scope.showNavSchedule = !!Session.isGuest();
+    // E 导航栏显示
+
+    $scope.hideNav = function () {
+        $scope.navBar = !$scope.navBar;
+        if($scope.mine){
+            $scope.mine = !$scope.mine;
+        }
+    };
+    $scope.hideMine = function () {
+        $scope.mine = !$scope.mine;
+    };
+    $scope.hideMineBar = function () {
+        $scope.mine = !$scope.mine;
+        $scope.navBar = !$scope.navBar;
+    };
+    // $scope.notAuditedNum = 0;
+
+    $scope.logout = function() {
+        $http.get('api/user/logout').then(function(res) {
+            if(res.status==200) {
+                Session.destory();
+                $state.go('login');
+            }
+        });
+    }
+});
+
+/*------------------------
+  页侧引导
+ ------------------------*/
+window.onscroll = function(event) {
+    var y = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+    if(y>600) {
+        document.querySelector('.mod_guid_backtop').style.display = 'block';
+    } else {
+        document.querySelector('.mod_guid_backtop').style.display = 'none';
+    }
+}
+document.querySelector('.mod_guid_backtop').addEventListener('click', function() {
+    var y = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop,
+        i = y-50;
+    window.scroll(0, i);
+    var timer = setInterval(function() {
+        i = i-50;
+        if(i<=0) {
+            window.scroll(0, 0);
+            clearInterval(timer);
+        } else {
+            window.scroll(0, i);
+        }
+    }, 10)
+}, false)
+
+/*------------------------
+  预加载
+ ------------------------*/
+;(function() {
+    var res = [
+            'public/img/checkbox.png',
+            'public/img/checkboxdisabled.png',
+            'public/img/checked.png',
+            'public/img/clock.png',
+            'public/img/dbusiness.png',
+            'public/img/dexecutedate.png',
+            'public/img/dexecutor.png',
+            'public/img/dname.png',
+            'public/img/dtype.png',
+            'public/img/editor@2x.png',
+            'public/img/favicon.ico',
+            'public/img/error.png',
+            'public/img/ico_eye.png',
+            'public/img/ico_eye2.png',
+            'public/img/login_show.png',
+            'public/img/logo.png',
+            'public/img/radio.png',
+            'public/img/radio_checked.png',
+            'public/img/succ.png',
+            'public/img/success.png',
+            'public/img/white.jpg',
+            'public/images/o2.jpg',
+            'public/css/kendo/Material/loading.gif',
+            'public/css/kendo/Material/slider-h.gif',
+            'public/css/kendo/Material/slider-v.gif',
+            'public/css/kendo/Material/sprite.png',
+            'public/css/kendo/Material/sprite_2x.png'
+        ],
+        idx = 0;
+    
+    load();
+    function load() {
+        if(idx < res.length) {
+            var img = new Image();
+            img.src = res[idx];
+            img.onload = function() {
+                idx++;
+                if(idx == res.length) {
+                    // pageReady;
+                } else {
+                    load();
+                }
+            }
+        }
+    }
+})();
+</script>
+</body>
+</html>
