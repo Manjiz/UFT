@@ -1,0 +1,35 @@
+<style>@import url(public/css/app/audited.css);</style>
+
+    <div class="container">
+        <div class="myapply">
+            <article ng-repeat="x in rows | reverse | slice : (currentPage - 1) * itemsPerPage : currentPage * itemsPerPage" class="kuang">
+                <div class="kuang_hd">
+                    <div class="kuang_hd_left">需求编号：<span>{{x.demandID}}</span></div>
+                    <div class="kuang_hd_right">{{x.submitDate}}</div>
+                </div>
+                <div class="kuang_cont" ui-sref="detail({ did: {{x.demandID}} })"><!--ng-click="jumpTo(x.demandID)"-->
+                    <div class="kuang_cont_info">
+                        <div><span class="dtype">{{x.dtype}}</span><span>{{x.business}}</span></div>
+                        <h3 class="dname">{{x.name}}</h3>
+                        <div>提交人：{{x.submitter}} 执行人：{{x.executor}}</div>
+                    </div>
+                </div>
+            </article>
+            <div class="turnpage clearfix" ng-show="totalItems>itemsPerPage">
+                <pagination 
+                    total-items="totalItems" 
+                    ng-model="currentPage" 
+                    class="pagination-sm" 
+                    boundary-links="true" 
+                    rotate="false" 
+                    num-pages="numPages"
+                    items-per-page="itemsPerPage"
+                    max-size="10"
+                    previous-text="‹"
+                    next-text="›"
+                    first-text="«"
+                    last-text="»"
+                ></pagination>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,65 @@
+@charset "UTF-8";
+
+/* -----排期表----- */
+.schedule {padding:10px;}
+    .schedule_tit {text-align:center;font-size:22px;font-weight:bold;}
+    .schedule_ctrl {margin-bottom:10px;}
+        .schedule_ctrl_sdep {height:30px;}
+            /*Kendo.DropdownList*/
+            .schedule_ctrl_sdep .k-dropdown-wrap {border:1px solid #ccc;}
+            .schedule_ctrl_sdep .k-dropdown-wrap.k-state-border-down {padding-bottom:0px;}
+            .schedule_ctrl_sdep .k-dropdown-wrap .k-input {padding:0;height:28px;line-height:28px;}
+            .schedule_ctrl_sdep .k-dropdown-wrap .k-select {height:28px;line-height:28px;}
+        .schedule_ctrl_cweek {display:inline-block;height:30px;line-height:28px;border:1px solid #ccc;border-radius:3px;vertical-align:middle;overflow:hidden;}
+            .schedule_ctrl_cweek_msg {float:left;width:50px;height:100%;text-align:center;}
+            .schedule_ctrl_cweek_btn {float:left;padding:6px;width:30px;height:100%; background:url('../kendo/Material/sprite.png') no-repeat content-box;cursor:pointer;}
+            .schedule_ctrl_cweek_btn:first-child {border-right:1px solid #ccc; background-position:0 -48px;}
+            .schedule_ctrl_cweek_btn:last-child {border-left:1px solid #ccc; background-position:0 -16px;}
+    .schedule_tbwrap {width:100%;border:1px solid #ccc;overflow-x:auto;}
+        .schedule_tbwrap_tb {width:100%;min-width:767px;}
+            .schedule_tbwrap_tb thead tr {border-bottom:2px solid #ccc;text-align:center;background:#e3e3e3;}
+                .schedule_tbwrap_tb thead th {height: 30px;line-height: 30px;text-align:center;}
+                    .schedule_tbwrap_tb thead th span {font-weight:normal;color:#aaa;}
+            .schedule_tbwrap_tb tbody tr {min-height:64px;border-bottom:1px solid #ccc;}
+            .schedule_tbwrap_tb tbody tr:last-child {border-bottom:none;}
+                .schedule_tbwrap_tb tbody td {width:12%;height:50px;text-align:center;border-left:1px solid #ccc;border-right:1px solid #ccc;vertical-align: middle;}
+                .schedule_tbwrap_tb tbody td:first-child {width:16%;border-left:none;border-right:2px solid #ccc;background:#e3e3e3;}
+                .schedule_tbwrap_tb tbody td:last-child {border-right:none;}
+                .schedule_tbwrap_tb tbody td.busy {background:#e12228;color:#fff;}
+                    .schedule_tbwrap_tb tbody td .infowrap {cursor:pointer;}
+                        .schedule_tbwrap_tb tbody td .infowrap_dname {font-weight:bold;}
+                        .schedule_tbwrap_tb tbody td .infowrap_dictator {color:#bbb;}
+                    .schedule_tbwrap_tb tbody td .emptywrap {margin:0;width:100%;height:100%;cursor:normal;}
+                    .schedule_tbwrap_tb tbody td .emptywrap:hover {background:#e8e8e8;}
+/* -----需求列表----- */
+.dlist {}
+    .dlist_search {margin-bottom:20px;}
+        .dlist_search input {padding:6px 12px;height:35px;}
+    .dlist_it {padding:10px 0;border-bottom:1px solid #dedede;overflow:hidden;}
+        .dlist_it_state {float:left;}
+            .dlist_it_state_mark {width:40px;height:40px;background:#ccc;text-align:center;line-height:40px;font-size:12px;color:#fff;}
+            .dlist_it_state_mark.mark0 {background:#AD3A37;}
+            .dlist_it_state_mark.mark1, .dlist_it_state_mark.mark2, .dlist_it_state_mark.mark3 {background:#6190e8;}
+            .dlist_it_state_mark.mark4 {background:#808B87;}
+            .dlist_it_state_timeline {display:inline-block; width:100%;font-size:12px;border-top:1px solid #ccc;vertical-align:middle;background:#eee;}
+                    .dlist_it_state_timeline::before {content:'';display:inline-block;width:18px;height:18px;background:url(../../img/clock.png);background-size:100% auto;vertical-align:middle;}
+                    .dlist_it_state_timeline span {vertical-align:middle;}
+        .dlist_it_cont {margin-left:60px;}
+            .dlist_it_cont_info {margin-bottom:5px;color:#999;}
+            .dlist_it_cont_main {margin:0;font-size:16px;line-height:1.2;}
+                .dlist_it_cont_main a {color:#333;}
+            .dlist_it_cont_tag {display:inline-block;margin-top:5px;font-size:12px;vertical-align:middle;color:#fff;overflow:hidden;}
+                    .dlist_it_cont_tag_business {float:left;padding:0px 5px;border-top-left-radius:3px;border-bottom-left-radius:3px;background:burlywood;}
+                    .dlist_it_cont_tag_dtype {float:left;padding:0px 5px;background:#aaa;}
+    .dlist_turnpage {text-align:center;}
+        .pagination {display:inline-block;padding:0;border-radius:4px;}
+            .pagination > li {float:left;margin-left:-1px;border:1px solid #ddd;list-style:none;overflow:hidden;}
+            .pagination > li:first-child {margin-left:0;border-top-left-radius:4px;border-bottom-left-radius:4px;}
+            .pagination > li:last-child {border-top-right-radius:4px;border-bottom-right-radius:4px;}
+            .pagination > li.active {border-color:#6190e8;}
+            .pagination > li.active:hover {border-color:#6190e8;}
+                .pagination > li > a {display:block;width:30px;height:30px;line-height:30px;text-align:center;color:#6190e8;text-decoration:none;background:#fff;}
+                .pagination > li > a:hover {color:#23527c;background:#eee;border-color:#ddd;}
+                .pagination > .active > a {color:#fff;cursor:default;background:#6190e8;}
+                .pagination > .active > a:hover {color:#fff;cursor:default;background:#6190e8;}
+                .pagination > .disabled > a {pointer-events:none;cursor:default;}

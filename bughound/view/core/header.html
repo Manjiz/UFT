@@ -1,0 +1,30 @@
+<!--[if IE]>
+<div style="text-align:center;background:black;color:#fff">别用IE</div>
+<![endif]-->
+<header class="mod_header">
+    <div class="mod_header_wrap clearfix">
+        <div class="logo">
+            <div class="logo_wrap">
+                <div class="logo_wrap_img"><img src="public/img/logo.png" alt="JDC前端需求提交平台"></div>
+                <div class="logo_wrap_tit">
+                    <div class="cn">凹凸需求提交平台</div>
+                    <div class="en">UED-FD Task</div>
+                </div>
+            </div>
+        </div>
+        <div class="nav">
+            <ul class="nav_navbar list-inline">
+                <li class="{{navidx=='gallery' && 'active' }}"><a ui-sref="gallery">广场</a></li>
+                <li ng-show="!SessionService.isAnonymus" class="{{navidx=='myapply' && 'active' }}"><a ui-sref="myapply">我的</a></li>
+                <li ng-show="!SessionService.isAnonymus" class="{{navidx=='apply' && 'active' }}"><a ui-sref="apply">申请</a></li>
+                <li ng-show="!SessionService.isAnonymus && SessionService.session.isAdmin" class="isAdminAudited {{navidx=='audited' && 'active' }}"><a ui-sref="audited">待审</a><i class="num">{{notAuditedNum}}</i></li>
+                <li ng-show="!SessionService.isAnonymus" class="{{navidx=='profile' && 'active' }}"><a class="profile" ui-sref="profile">{{profile}}</a></li>
+                <li ng-show="!SessionService.isAnonymus"><a href="api/user/logout">退出</a></li>
+
+                <li ng-show="SessionService.isAnonymus" class="{{navidx=='login' && 'active' }}"><a ui-sref="login">登录</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<!-- $scope提供 navidx-->

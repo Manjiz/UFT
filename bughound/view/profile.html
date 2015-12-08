@@ -1,0 +1,125 @@
+<style>
+.flash {padding:15px;-webkit-transition:0.5s ease;transition:0.5s ease; margin-top:-52px;}
+.flash.warn, .flash.success {margin-top:0px;}
+.flash.warn {border-bottom:1px solid #D2B2B2;background:#FCDEDE;color:#911;}
+.flash.success {border-bottom:1px solid #BAC6D3;background:#E2EEF9;color:#246;}
+    .flash_container {margin:0 auto;padding:0 20px;max-width:1050px;overflow:hidden;}
+        .flash_container_text {float:left;}
+        .flash_container_close {position:relative;float:right;width:21px;height:21px;cursor:pointer;}
+            .flash_container_close::before, .flash_container_close::after {content:'';position:absolute;top:50%;margin-top:-1px;left:4px;width:13px;height:2px;background:#911;opacity:0.7;}
+            .flash_container_close:hover::before, .flash_container_close:hover::after {opacity:1;}
+            .flash_container_close::before {-webkit-transform:rotate(45deg);transform:rotate(45deg);}
+            .flash_container_close::after {-webkit-transform:rotate(-45deg);transform:rotate(-45deg);}
+
+.profile {overflow:hidden;}
+    .profile_nav {float:left;width:25%;padding:0 10px;}
+        .profile_nav ul {margin:0;min-width:37px;border:1px solid #ccc;border-radius:3px;overflow:hidden;}
+            .profile_nav li {padding:8px 10px;border-bottom:1px solid #ddd;background:#fbfbfb;cursor:pointer;}
+            .profile_nav li:last-child {border-bottom:none;}
+            .profile_nav li:hover {background:#f8f8f8;}
+            .profile_nav li.active {border-left:2px solid #e12228;background:#fff;}
+    .profile_main {float:right;width:75%;padding:0 10px;}
+        .profile_main_wrap {margin-bottom:30px;border:1px solid #ccc;border-radius:3px;overflow:hidden;}
+            .profile_main_tit {padding:8px 10px;border-bottom:1px solid #ccc;background:#F5F5F5;}
+            .profile_main_wrap_cont {padding:10px 10px;}
+                .profile_main_wrap_cont dl {position:relative;margin:0 0 15px 0;padding:0;border:none;}
+                    .profile_main_wrap_cont dl dt {display:inline-block;margin-bottom:5px;font-weight:bold;color:#666;}
+                    .profile_main_wrap_cont dl dd {margin:0;}
+                        .profile_main_wrap_cont input {padding:6px 12px;width:300px;height:35px;}
+                /*sp: user info*/
+                        .profile_main_wrap_cont dl dd .avatar {float:left;width:70px;height:70px;border-radius:3px;}
+                        .profile_main_wrap_cont dl dd .avatar_upload {margin-left:90px;}
+                            .profile_main_wrap_cont dl dd .avatar_upload button {background:#e12228;color:#fafafa;}
+                            .profile_main_wrap_cont dl dd .avatar_upload button:hover {background:#d12228;}
+                /*sp: update pwd*/
+                        .profile_main_wrap_cont input.newpwd.ng-invalid:not(.ng-invalid-required) {background:url(public/img/error.png) no-repeat right 8px center;}
+                        .profile_main_wrap_cont input.newpwd.ng-valid {background:url(public/img/success.png) no-repeat right 8px center;}
+                        .profile_main_wrap_cont input.confirmnewpwd.notsame:not(.ng-invalid-required) {background:url(public/img/error.png) no-repeat right 8px center;}
+                        .profile_main_wrap_cont input.confirmnewpwd.ng-valid:not(.notsame):not(.ng-invalid-required) {background:url(public/img/success.png) no-repeat right 8px center;}
+                    .profile_main_wrap_cont p .updatepwd {display:inline-block;width:100px;border:1px solid transparent;border-radius:3px;background:#e12228;color:#fff;}
+                    .profile_main_wrap_cont p .updatepwd:hover {background:#d12228;}
+                    .profile_main_wrap_cont p .updatepwd:disabled {background:#e1aaa8;}
+</style>
+
+<div class="flash {{flashType ? (flashType=='warn' ? 'warn' : 'success') : ''}}">
+    <div class="flash_container">
+        <div class="flash_container_text">{{flashText}}</div>
+        <div class="flash_container_close" ng-click="flashType=''"></div>
+    </div>
+</div>
+
+<div class="mod_cont">
+    <div class="mod_cont_fullmain">
+        <div class="profile">
+            <nav class="profile_nav">
+                <ul class="list-unstyled">
+                    <li>个人资料</li>
+                    <li class="active">帐号设置</li>
+                    <li>待定</li>
+                </ul>
+            </nav>
+
+            <div class="profile_main">
+                <!-- <div class="profile_main_wrap">
+                    <div class="profile_main_tit">用户信息</div>
+                    <div class="profile_main_wrap_cont">
+                        <dl>
+                            <dt>头像</dt>
+                            <dd class="clearfix">
+                                <img class="avatar" src="https://avatars1.githubusercontent.com/u/13447336?v=3&u=cdbbc9f5c90ed9e4c8bdd7e9fe1fde26017878fa&s=140" alt="">
+                                <div class="avatar_upload">
+                                    <button class="btn btn-normal">上传图片</button>
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>姓名</dt>
+                            <dd>张太振</dd>
+                        </dl>
+                        <dl>
+                            <dt>ERP</dt>
+                            <dd>zhangtaizhen</dd>
+                        </dl>
+                        <dl>
+                            <dt>部门</dt>
+                            <dd>用户体验设计部</dd>
+                        </dl>
+                    </div>
+                </div> -->
+
+                <div class="profile_main_wrap">
+                    <div class="profile_main_tit">密码设置</div>
+                    <form class="profile_main_wrap_cont" name="updatePwdForm" ng-submit="updatePwd(updatePwdForm.$valid)" novalidate>
+                        <dl>
+                            <dt><label for="oldpwd">旧密码 / 临时密码</label></dt>
+                            <dd><input name="oldpwd" class="inp-text" type="text" ng-model="oldpwd" ng-minlength="6" required ng-required="true"></dd>
+                        </dl>
+                        <dl>
+                            <dt><label for="newpwd">新密码</label></dt>
+                            <dd><input name="newpwd" class="newpwd inp-text" type="text" ng-model="newpwd" ng-minlength="6" ng-maxlength="8" required ng-required="true"></dd>
+                        </dl>
+                        <dl>
+                            <dt><label for="confirmnewpwd">确认新密码</label></dt>
+                            <dd><input name="confirmnewpwd" class="confirmnewpwd {{isSame ? '' : 'notsame'}} inp-text" type="text" ng-model="confirmnewpwd" ng-minlength="6" ng-maxlength="8" required ng-required="true" ng-keyup="isSame = confirmnewpwd==newpwd"></dd>
+                        </dl>
+
+                        <p>
+                            <input name="hehe" class="updatepwd" ng-click="updatePwd" ng-disabled="updatePwdForm.$invalid" type="submit" value="更新密码">
+                            <a href="#">忘记密码*暂未支持</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="mod_mask">
+    <div class="mod_mask_wrap">
+        <div class="mod_mask_wrap_cont">
+            <div class="mod_mask_wrap_cont_msg">哈哈</div>
+        </div>
+    </div>
+    <!--[if lt IE 8]><span></span><![endif]-->
+</div>

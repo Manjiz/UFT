@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8" />
+<title>JDC需求提报平台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="icon" href="public/img/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="public/img/favicon.ico" type="image/x-icon" />
+
+<link rel="stylesheet" type="text/css" href="public/css/normalize.css" />
+<link rel="stylesheet" type="text/css" href="public/css/common.css" />
+<!-- <link rel="stylesheet" href="css/login.css"> -->
+<style>
+.container {border:none;}
+	.container a {text-decoration:underline;color:#E12228}
+
+.bangsucc {text-align:center;}
+	.bangsucc .tit {font-size:20px;color:#E12228;}
+	.bangsucc .cont {padding-top:20px;}
+.checksucc {text-align:center;}
+	.checksucc .tit {font-size:20px;color:#E12228;}
+	.checksucc .cont {padding-top:20px;}
+.checkfail {text-align:center;}
+	.checkfail .tit {font-size:20px;color:#E12228;}
+	.checkfail .cont {padding-top:20px;}
+</style>
+</head>
+
+<div class="pse_wrap">
+	<header class="mod_header">
+		<div class="mod_header_wrap clear">
+			<div class="logo">
+				<div class="logo_wrap">
+					<div class="logo_wrap_img"><img src="public/img/logo.png" alt="JDC前端需求提交平台"></div>
+					<div class="logo_wrap_tit">
+						<div class="cn">前端需求提交平台</div>
+						<div class="en">UED-FD Task</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+	
+	<div class="container">
+		
+		<!-- 绑定成功 S -->
+		<div class="bangsucc" style="display:none;">
+			<div class="tit">等待验证</div>
+			<div class="cont">已经发送邮件到您的邮箱，请<a href="//mail.jd.com">立即登录</a>验证您的身份，完成注册。</div>
+		</div>
+		<!-- 绑定成功 E -->
+		<!-- 验证成功 S -->
+		<div class="checksucc" style="display:none;">
+			<div class="tit">验证成功</div>
+			<div class="cont">您的帐号邮箱已通过验证，现在您可以<a href="login.html">登录</a>了。</div>
+			<div class="jump"><span>5</span>秒后跳转，点击<a href="/#/login">立即跳转</a></div>
+		</div>
+		<!-- 验证成功 E -->
+		<!-- 验证失败 S -->
+		<div class="checkfail" style="display:none;">
+			<div class="tit">验证失败</div>
+			<div class="cont">链接已失效，请重新<a href="login.html">注册</a>！</div>
+		</div>
+		<!-- 验证失败 E -->
+
+		<!-- 找回密码-continue S -->
+		<div class="findback_continue" style="display:none;">
+			<div>请到您的邮箱验证您的身份以继续下一步操作。</div>
+		</div>
+		<!-- 找回密码-continue E -->
+		<!-- 找回密码-succ S -->
+		<div class="findback_succ" style="display:none;">
+			<div>您已更改密码，请到邮箱查看新密码。</div>
+		</div>
+		<!-- 找回密码-succ E -->
+	
+	</div>
+
+	<div class="mod_mask">
+		<div class="mod_mask_wrap">
+			<div class="mod_mask_wrap_cont">
+				<div class="mod_mask_wrap_cont_msg">哈哈</div>
+			</div>
+		</div>
+		<!--[if lt IE 8]><span></span><![endif]-->
+	</div>
+</div>
+
+<footer class="mod_footer">
+    <div class="mod_footer_cont">
+        Copyright &copy; 京东多终端开发部 版权所有
+    </div>
+    <!--[if lt IE 8]><span></span><![endif]-->
+</footer>
+
+<script src="public/js/app/common.js"></script>
+<script>
+var type = location.href.match(/#(\w*)/)[1];
+document.querySelector('.'+type).style.display = 'block';
+if(type==='checksucc') {
+	var seconds = 4;
+	(function jump() {
+		setTimeout(function() {
+			document.querySelector('.checksucc .jump span').innerHTML = seconds;
+			if(seconds==0) {
+				location.href = '/#/login';
+			}
+			jump(--seconds);
+		}, 1000)
+	})()
+}
+</script>

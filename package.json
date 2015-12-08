@@ -1,0 +1,32 @@
+{
+  "name": "uft",
+  "version": "1.0.0",
+  "description": "UED-FD Task",
+  "main": "server.js",
+  "dependencies": {
+    "async": "^1.4.2",
+    "express-session": "^1.11.3",
+    "express": "^4.13.3",
+    "multer": "^1.0.3",
+    "morgan": "^1.6.1",
+    "mysql": "^2.2.0",
+    "nodemailer": "^1.4.0",
+    "node-schedule": "^0.5.0",
+    "body-parser": "^1.13.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/o2team/UFT.git"
+  },
+  "author": "Manjiz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/o2team/UFT/issues"
+  },
+  "homepage": "https://github.com/o2team/UFT#readme"
+}

@@ -1,0 +1,162 @@
+<style>@import url(public/css/app/detail.css);</style>
+
+<div class="tophd">
+    <div class="tophd_cont">
+        <div class="tophd_cont_main">
+            <ol class="tophd_cont_main_breadcrumb">
+                <li><a ui-sref="gallery">广场</a></li>
+                <li>需求详情</li>
+                <li class="along">{{business}}</li>
+                <li class="along">{{dtype}}</li>
+            </ol>
+            <h1 class="tophd_cont_main_tit">{{name}}</h1>
+            <h2 class="tophd_cont_main_vicetit">编号{{demandid}}</h2>
+            <div class="tophd_cont_main_author">
+                <a href="#">
+                    <div class="avatar">
+                        <img src="http://p3.gexing.com/touxiang/2012/5/11/201251101057506.jpg" alt="">
+                    </div>
+                    <strong data-erp="{{submitter}}">{{submitterName}}</strong>
+                </a>
+                {{submitDate}} · {{priority}}
+            </div>
+        </div>
+        <div class="tophd_cont_aside">
+            <div class="tophd_cont_aside_wrap">
+                <div>{{stateName}}</div>
+                <div>预期执行人：<span id="executor" data-erp="{{executor}}">{{executorName}}</span></div>
+                <div>排期时间：<span>{{startDate | date:'yyyy/MM/dd'}} - {{endDate | date:'yyyy/MM/dd'}}</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mod_cont">
+    <div class="mod_cont_fullmain">
+        <div class="mod_cont_main_wrap">
+
+            <section class="blocks">
+                <!-- <h2 class="blocks_tit">描述</h2> -->
+                <div ng-if="!description" style="text-align:center;color:#ccc;">这家伙这么懒，什么都没说就提需求了！</div>
+                <div>{{description}}</div>
+            </section>
+
+            <section class="blocks files">
+                <h2 class="blocks_tit">附件</h2>
+                <div ng-if="files.length<=0" style="text-align:center;color:#ccc;">没有附件</div>
+                <ul class="files_list list-unstyled clearfix" id="files">
+                    <li ng-repeat="x in files" title="{{x.originalname}}"><a href="attachment/{{x.filename}}/{{x.originalname}}">{{x.originalname}}</a></li>
+                </ul>
+                <input type="file" name="file" kendo-upload k-options="uploadOpts" ng-show="!SessionService.isAnonymus">
+            </section>
+
+            <section class="blocks solvemsg">
+                <h2 class="blocks_tit">动态</h2>
+                <div ng-if="solveMsg.length<=0" style="text-align:center;color:#ccc;">并没有动态哦~</div>
+                <article class="solvemsg_item" ng-repeat="x in solveMsg">
+                    <div class="solvemsg_item_vote">
+                        <button class="solvemsg_item_vote_btn" style="display:none;"></button>
+                        <span class="solvemsg_item_vote_num" style="display:none;">12</span>
+                    </div>
+                    <div class="solvemsg_item_cont">
+                        <p class="solvemsg_item_cont_info">
+                            <a class="solvemsg_item_cont_info_muted" href="#">
+                                <span>#</span>
+                                <span>{{$index+1}}</span>
+                            </a>
+                            <span>&nbsp;</span>
+                            <a class="solvemsg_item_cont_info_uname" href="">
+                                <strong>{{x.uerp}}</strong>
+                            </a>
+                            <span>&nbsp;·&nbsp;</span>
+                            <span class="solvemsg_item_cont_info_date">{{x.date | date:'yyyy/MM/dd'}}</span>
+                            <a class="solvemsg_item_cont_info_reply" href="" style="display:none;">回复</a><a class="solvemsg_item_cont_info_right" href="" style="display:none;">举报</a>
+                        </p>
+                        <span class="solvemsg_item_cont_re" style="display:none;">
+                            <span>回复 </span>
+                            <a href=""></a>
+                            <span>：</span>
+                        </span>
+                        <div class="solvemsg_item_cont_fmt">
+                            <span class="handletag tag_{{x.type}}">{{x.typeName}}</span>
+                            <div style="display:inline-block" ng-bind-html="x.cont"><!-- cont here --></div>
+                        </div>
+                        <div class="solvemsg_item_cont_files" ng-if="x.files.length>0">附件：<a ng-repeat="y in x.files" href="attachment/{{y.filename}}/{{y.originalname}}">{{y.originalname}}</a></div>
+                    </div>
+                </article>
+            </section>
+
+            <section class="blocks handler" ng-show="state!=0 && !SessionService.isAnonymus">
+                <h2 class="blocks_tit">处理</h2>
+                <!-- S: PageDown 编辑器 -->
+                <div class="editor editMode" id="editor">
+                    <div class="editor-toolbar" id="wmd-button-bar-desc"></div>
+                    <div class="wmd">
+                        <textarea ng-model="applyDesc" class="wmd-input" id="wmd-input-desc"></textarea>
+                        <div class="wmd-preview">
+                            <div class="wmd-preview-cont" id="wmd-preview-desc"></div>    
+                        </div>
+                    </div>
+                    <div class="editor-resize">调整高度</div>
+                </div>
+                <!-- 、E: PageDown 编辑器 -->
+                <div class="handler_btnwrap">
+                    <div class="radio_wrap">
+                        <label ng-click="isEnableSmbtn = true"><input type="radio" name="state" class="solving" disabled value="solving"><span class="pseuradio"></span><span>处理中</span></label>
+                        <label ng-click="isEnableSmbtn = true"><input type="radio" name="state" class="solved" disabled value="solved"><span class="pseuradio"></span><span>待确认</span></label>
+                        <label ng-click="isEnableSmbtn = true"><input type="radio" name="state" class="closed" disabled value="closed"><span class="pseuradio"></span><span>确认</span></label>
+                        <label ng-click="isEnableSmbtn = true"><input type="radio" name="state" class="reopen" disabled value="reopen"><span class="pseuradio"></span><span>重启</span></label>
+                    </div>
+                    <button class="handler_btnwrap_smbtn btn btn-large {{isEnableSmbtn || 'disabled'}}" ng-disabled="!isEnableSmbtn" ng-click="smbtn()">确认提交</button>
+                </div>
+            </section>
+
+            <section class="blocks audit" ng-show="state==0 && !SessionService.isAnonymus">
+                <h2 class="blocks_tit">处理</h2>
+                <input class="audit_user" kendo-auto-complete="" ng-model="userObjSelected" k-options="userObjSelectedOpts">
+                <div style="margin-top:10px;text-align:center;">
+                    切换日历排期：<input kendo-mobile-switch type="checkbox" ng-model="isUseCalendar" k-on-label="'ON'" k-off-label="'OFF'" />
+                </div>
+                <div ng-show="isUseCalendar==true" style="margin:10px 0 30px;text-align:center;">
+                    Start: <input onkeydown="javascript:this.blur()" 
+                        kendo-date-picker="test"
+                        ng-model="startDate"
+                        k-max="maxDate"
+                        k-rebind="maxDate"
+                        k-options="startDatepickerOptions"
+                        k-on-change="startChange()"
+                    />
+                    End: <input onkeydown="javascript:this.blur()" 
+                        kendo-date-picker
+                        ng-model="endDate"
+                        k-min="minDate"
+                        k-rebind="minDate"
+                        k-options="endDatepickerOptions"
+                        k-on-change="endChange()"
+                    />
+                </div>
+                <div ng-show="isUseCalendar==false" style="margin:15px 0 30px;text-align:center;">
+                    <div kendo-range-slider="slider" k-options="rangeSliderOpts" k-ng-model="scedule" style="width:500px">
+                        <input />
+                        <input />
+                    </div>
+                </div>
+                <button style="display:block;margin:0 auto;width:200px;height:50px;background:#e12228;border:none;border-radius:3px;color:#fff;cursor:pointer;" ng-click="btnAudited()" ng-show="isAdmin==true">点击审核</button>
+                <div style="text-align:center;" ng-show="isAdmin==false">需求尚未审核，快提醒管理员审核哟~</div>
+            </section>
+        </div>
+    </div>
+    <!-- <div class="mod_cont_aside">
+        <div class="mod_cont_aside_wrap">
+            <a class="o2" href="https://github.com/o2team" style="display:block;margin-bottom:10px;height:150px;border:1px solid #dedede;text-align:center;background:#6190E8;"><img src="public/images/o2.jpg" alt="o2team" style="height:100%;"></a>
+        </div>
+    </div> -->
+</div>
+
+<div class="mod_mask">
+    <div class="mod_mask_wrap">
+        <div class="mod_mask_wrap_cont">
+            <div class="mod_mask_wrap_cont_msg">哈哈</div>
+        </div>
+    </div>
+    <!--[if lt IE 8]><span></span><![endif]-->
+</div>

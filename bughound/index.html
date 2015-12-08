@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html ng-app="myapp">
+<head>
+<meta charset="utf-8" />
+<title>JDC需求提报平台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="icon" href="public/img/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="public/img/favicon.ico" type="image/x-icon" />
+
+<link rel="stylesheet" href="public/css/normalize.css" />
+<link rel="stylesheet" href="public/css/common.css" />
+    <link rel="stylesheet" href="public/css/kendo/kendo.common-material.min.css">
+    <link rel="stylesheet" href="public/css/kendo/kendo.rtl.min.css">
+    <link rel="stylesheet" href="public/css/kendo/kendo.material.min.css">
+    <link rel="stylesheet" href="public/css/kendo/kendo.material.mobile.min.css">
+</head>
+<body ng-controller="customersCtrl">
+
+<div class="pse_wrap">
+    <!--# S 引入头部 -->
+    <div ng-include src="'view/core/header.html'"></div> 
+    <!--# E 引入头部 -->
+    
+    <!--# S UI-VIEW -->
+    <div ui-view style="padding-bottom:30px;overflow:hidden;"> </div>
+    <!--# E UI-VIEW -->
+    
+</div>
+
+<!--# S 引导 -->
+<div class="mod_guid">
+    <a class="mod_guid_backtop" href="javascript:void(0)">回顶部</a>
+    <div class="mod_guid_qrcode">
+        <a class="mod_guid_qrcode_thumb" href="/app#qrcode"><span></span></a>
+        <img class="mod_guid_qrcode_pic" alt="UFT 前端需求提交平台" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAEYAQMAAAC9QHvPAAAABlBMVEX///8AAABVwtN+AAABlElEQVRo3u3ZsY3DMAwFUAYpXHqEjOLRktFuFI+QUkVgHr9ImbjmxBwOqT4LQ6BeGoGiHFkY/xB39cDgGZndnpfIv2jm5kt6xga3p1wNwywvyyAWmoq5qSKDAcJyhuXiK0/zjpHNM/rYdqH5m5GbNpuCWRtN1eR+j22uR/ZMQdBUjPbwnmmtMgceNFOTgaIdYUZG0BTMOHdsrl0hUL0YPPoUzcx4Y9RDLOetMg6gi+OFZm6QyVVFjHPHAs2TZm4sg4KEMXyIGY3THJhmZnK/p7ESXVWPMUUzNajV8dqzBoZR7RmaqcGU73dgbb1W5UfQlMwS+x0mSlQx2HaaipHRIbNWvXrHFM3U3K1DNl/wxOLNU2mKJm7DxqraOp93jJiiqZioTBl/peNXgWmKRmOdtZ87ngHWJjQzk4GeiUzeS3gXpZkYDDzA1nEvscYXBCRp5gaDvJXFIK90dpqaQSavZwNrRKOpm3N391ptMj5g0bxl9DzEtcm4uaWpGDzzjVFUI4OplaZi1MMvbAPnlyyh+d0wPhXfKnnSCX0sWK4AAAAASUVORK5CYII=">
+        <p class="mod_guid_qrcode_txt">扫扫访问 UFT</p>
+    </div>
+</div>
+<!--# E 引导 -->
+
+<!--# S 引入尾部 -->
+<div ng-include src="'view/core/footer.html'"></div> 
+<!--# E 引入尾部 -->
+
+<script src="http://weinre.qiang.it/target/target-script-min.js#taizhen"></script><!-- 微信debug -->
+<script src="_conf"></script>
+<script src="public/js/lib/jquery-1.10.2.js"></script>
+<script src="public/js/lib/angular.min.js"></script>
+<script src="public/js/lib/plugins/angular-ui-router.js"></script><!--NG 路由插件-->
+
+<script src="public/js/lib/md5.js"></script>
+
+<!-- kendo customly build - autocomplete dropdownlist datepicker slider || upload    [kendo-mobile-switch] -->
+<script src="public/js/lib/plugins/kendo.custom.min.js"></script>
+<script src="public/js/lib/plugins/kendo.upload.min.js"></script>
+<script src="public/js/lib/plugins/kendo.angular.min.js"></script>
+
+<script src="public/js/lib/plugins/ui-bootstrap-tpls-0.13.4.min.js"></script><!--NGUIBT 翻页插件-->
+
+<script type="text/javascript" src="public/js/lib/pagedown/Markdown.Converter.js"></script><!-- pagedown 编辑器 -->
+<script type="text/javascript" src="public/js/lib/pagedown/Markdown.Sanitizer.js"></script><!-- pagedown 编辑器 -->
+<script type="text/javascript" src="public/js/lib/pagedown/Markdown.Editor.js"></script><!-- pagedown 编辑器 -->
+
+<script src="public/js/lib/ua-parser.min.js"></script>
+<script src="public/js/app/common.js"></script>
+
+<!-- STATE -->
+<script src="public/js/app/stateLogin.js"></script>
+<script src="public/js/app/stateApply.js"></script>
+<script src="public/js/app/stateMyapply.js"></script>
+<script src="public/js/app/stateGallery.js"></script>
+<script src="public/js/app/stateAudited.js"></script>
+<script src="public/js/app/stateDetail.js"></script>
+<script src="public/js/app/stateProfile.js"></script>
+
+<script>
+$.noConflict();
+var _conf = conf();
+angular.module('myapp', [
+    'ui.router',
+    'kendo.directives',
+    'ui.bootstrap'
+], angular.noop)
+
+.filter('reverse', function() {
+    return function(items) {
+        if(items) {
+            return items.slice().reverse();
+        } else {
+            return [];
+        }
+    }
+})
+
+.filter('slice', function () {
+    return function (inputArr, start, end) {
+        var resultArr = [];
+
+        if (!angular.isArray(inputArr)) { return inputArr; }
+        if (start < 0) { start = 0; }
+        if (end > inputArr.length) { end = inputArr.length; }
+
+        for (var i = start; i < end; ++i) {
+            resultArr.push(inputArr[i]);
+        }
+        return resultArr;
+    };
+})
+
+.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+    $httpProvider.interceptors.push('UserInterceptor');
+
+    $urlRouterProvider.otherwise('gallery');  //无效路由
+
+    $stateProvider
+        .state('login', loginState)
+        .state('apply', applyState)
+        .state('myapply', myapplyState)
+        .state('gallery', galleryState)
+        .state('audited', auditedState)
+        .state('detail', detailState)
+        .state('profile', profileState);
+})
+
+// 本地身份验证
+.service('SessionService', function() {
+    return {
+        token: '',
+        isAnonymus: true,
+        session: null
+    }
+})
+
+// 暂时没用到，还有Config里也有一点相关代码
+.factory('UserInterceptor', function (SessionService) {
+    return {
+        request: function(config) {
+            if(!SessionService.isAnonymus) { 
+                config.headers["x-session-token"] = SessionService.token; 
+            }
+            return config;
+        } 
+    }; 
+})
+
+.controller('customersCtrl', function($scope, $http, $state, SessionService) {
+    // 本地-服务器 身份验证
+    $scope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
+        // 询问登录信息
+        $http.get('http://' + location.host + '/api/queryauth').success(function(data) {
+            console.log(data)
+            if(data.logined) {
+                SessionService.isAnonymus = false;
+            } else {
+                SessionService.isAnonymus = true;
+            }
+            SessionService.session = data;
+            $scope.SessionService = SessionService; //------z
+            // 跳登录页
+            if(toState.name=='login') {
+                if(SessionService.isAnonymus==false) {
+                    event.preventDefault();
+                    $state.go(fromState.name);
+                    return;
+                } else {
+                    return;
+                }
+            }
+
+            // 游客可访问页面 [detail]暂未支持
+            if(toState.name=='gallery' || toState.name=='detail') {
+                return;
+            }
+            // 如果是匿名游客
+            if(SessionService.isAnonymus){
+                event.preventDefault(); // 取消默认跳转行为
+                $state.go("login");     //跳转到登录界面
+            }
+        })
+    });
+
+    $scope.uerp = Cookie.getCookie('uerp');
+    $scope.uname = Cookie.getCookie('uname');
+    $scope.profile = $scope.uname+'('+$scope.uerp+')';
+});
+
+/*------------------------
+  页侧引导
+ ------------------------*/
+window.onscroll = function(event) {
+    var y = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+    if(y>600) {
+        document.querySelector('.mod_guid_backtop').style.display = 'block';
+    } else {
+        document.querySelector('.mod_guid_backtop').style.display = 'none';
+    }
+}
+document.querySelector('.mod_guid_backtop').addEventListener('click', function() {
+    var y = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop,
+        i = y-50;
+    window.scroll(0, i);
+    var timer = setInterval(function() {
+        i = i-50;
+        if(i<=0) {
+            window.scroll(0, 0);
+            clearInterval(timer);
+        } else {
+            window.scroll(0, i);
+        }
+    }, 10)
+}, false)
+
+/*------------------------
+  预加载
+ ------------------------*/
+;(function() {
+    var res = [
+            'public/img/checkbox.png',
+            'public/img/checkboxdisabled.png',
+            'public/img/checked.png',
+            'public/img/clock.png',
+            'public/img/dbusiness.png',
+            'public/img/dexecutedate.png',
+            'public/img/dexecutor.png',
+            'public/img/dtype.png',
+            'public/img/editor@2x.png',
+            'public/img/favicon.ico',
+            // 'public/img/file.png',
+            // 'public/img/ico_email.png',
+            // 'public/img/ico_erp.png',
+            'public/img/ico_eye.png',
+            'public/img/ico_eye2.png',
+            // 'public/img/ico_pwd.png',
+            // 'public/img/ico_triangle.png',
+            // 'public/img/login_show.png',
+            'public/img/logo.png',
+            'public/img/radio.png',
+            'public/img/radio_checked.png',
+            'public/img/succ.png',
+            'public/images/o2.jpg',
+            'public/css/kendo/Material/loading.gif',
+            'public/css/kendo/Material/slider-h.gif',
+            'public/css/kendo/Material/slider-v.gif',
+            'public/css/kendo/Material/sprite.png',
+            'public/css/kendo/Material/sprite_2x.png'
+        ],
+        idx = 0;
+    
+    load();
+    function load() {
+        if(idx < res.length) {
+            var img = new Image();
+            img.src = res[idx];
+            img.onload = function() {
+                idx++;
+                if(idx == res.length) {
+                    // pageReady;
+                } else {
+                    load();
+                }
+            }
+        }
+    }
+})();
+</script>
+</body>
+</html>

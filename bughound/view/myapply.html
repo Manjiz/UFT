@@ -1,0 +1,46 @@
+<style>@import url(public/css/app/myapply.css);</style>
+
+    <div class="mainbar">
+        <ul class="mainbar_{{idx}} list-inline">
+            <li ng-click="mainbar(0)">未审核</li>
+            <li ng-click="mainbar(1)">未处理</li>
+            <li ng-click="mainbar(2)">处理中</li>
+            <li ng-click="mainbar(3)">待确认</li>
+            <li ng-click="mainbar(4)">已确认</li>
+        </ul>
+    </div>
+    
+    <div class="container">
+        <div class="myapply">
+            <article ng-repeat="x in rows | reverse | slice : (currentPage - 1) * itemsPerPage : currentPage * itemsPerPage" class="kuang">
+                <div class="kuang_hd">
+                    <div class="kuang_hd_left">需求编号：<span>{{x.demandID}}</span></div>
+                    <div class="kuang_hd_right">{{x.submitDate}}</div>
+                </div>
+                <div class="kuang_cont" ui-sref="detail({ did: {{x.demandID}} })"><!--ng-click="jumpTo(x.demandID)"-->
+                    <div class="kuang_cont_info">
+                        <div><span class="dtype">{{x.dtype}}</span><span>{{x.business}}</span></div>
+                        <h3 class="dname">{{x.name}}</h3>
+                        <div>提交人：{{x.submitter}} 执行人：{{x.executor}}</div>
+                    </div>
+                </div>
+            </article>
+            <div class="turnpage clearfix" ng-show="rows.length>itemsPerPage">
+                <pagination 
+                    total-items="rows.length" 
+                    ng-model="currentPage" 
+                    class="pagination-sm" 
+                    boundary-links="true" 
+                    rotate="false" 
+                    num-pages="numPages"
+                    items-per-page="itemsPerPage"
+                    max-size="10"
+                    previous-text="‹"
+                    next-text="›"
+                    first-text="«"
+                    last-text="»"
+                ></pagination>
+            </div>
+        </div>
+    </div>
+</div>

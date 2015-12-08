@@ -1,0 +1,9 @@
+ref:
+	<link rel="stylesheet" href="//kendo.cdn.telerik.com/2015.3.930/styles/kendo.common-material.min.css">
+    <link rel="stylesheet" href="//kendo.cdn.telerik.com/2015.3.930/styles/kendo.rtl.min.css">
+    <link rel="stylesheet" href="//kendo.cdn.telerik.com/2015.3.930/styles/kendo.material.min.css">
+    <link rel="stylesheet" href="//kendo.cdn.telerik.com/2015.3.930/styles/kendo.material.mobile.min.css">
+
+<script src="http://kendo.cdn.telerik.com/2015.3.930/js/kendo.all.min.js"></script>
+//
+<script src="http://kendo.cdn.telerik.com/2015.3.930/js/kendo.datepicker.min.js"></script>

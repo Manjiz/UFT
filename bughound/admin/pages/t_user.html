@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>用户管理 - UFT 2015</title>
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="../bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+    .btn-additem {float:right;background: skyblue;border: 1px solid black;border-radius: 3px;}
+    .btn-newitem {  color: #fff;background-color: #5cb85c;border-color: #4cae4c;}
+    .btn-success {display:none;}
+    .u_name input {display:none;}
+    .u_erp input {display:none;}
+    .u_email input {display:none;}
+    .u_depid select {display:none;}
+    .u_isAdmin select {display:none;}
+    </style>
+</head>
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">UFT 2015</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> 个人资料</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> 设置</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> 注销</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="#"><i class="fa fa-dashboard fa-fw"></i> 后台首页</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> 系统管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="t_business.html">业务分类</a>
+                                </li>
+                                <li>
+                                    <a href="t_dtype.html">需求分类</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-wrench fa-fw"></i> 用户管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level in">
+                                <li>
+                                    <a href="t_dep.html">部门列表</a>
+                                </li>
+                                <li style="background: skyblue;">
+                                    <a href="#">用户列表</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-table fa-fw"></i> 统计数据</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">业务管理</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            业务管理
+                            <button class="btn-additem">新增用户</button>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="dataTable_wrapper">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>姓名</th>
+                                            <th>ERP</th>
+                                            <th>邮箱</th>
+                                            <th>所属部门ID</th>
+                                            <th>管理员</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- <tr class="odd">
+                                            <td>Trident</td>
+                                            <td>Internet Explorer 4.0</td>
+                                            <td>Win 95+</td>
+                                            <td class="center">4</td>
+                                        </tr>
+                                        <tr class="even">
+                                            <td>Trident</td>
+                                            <td>Internet Explorer 5.0</td>
+                                            <td>Win 95+</td>
+                                            <td class="center">5</td>
+                                        </tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
+    <script src="../bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+    <script src="../dist/js/sb-admin-2.js"></script>
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+    $(document).ready(function() {
+        var depoptions = '';
+
+        $('.btn-additem').on('click', function() {
+            $('#dataTables-example tbody').append('<tr><td></td><td><input class="new_name" type="text"></td><td><input class="new_erp" type="text" /></td><td><input class="new_email" type="text" /></td><td><select class="new_depid">'+depoptions+'</select></td><td><button class="btn btn-xs btn-newitem">保存</button></td></tr>');
+        })
+        $('#dataTables-example tbody').on('click', '.btn-newitem', function() {
+            var self = $(this),
+                name = $(this).parents('tr').find('.new_name').val(),
+                erp = $(this).parents('tr').find('.new_erp').val(),
+                email = $(this).parents('tr').find('.new_email').val(),
+                depid = $(this).parents('tr').find('.new_depid').val(),
+                password = prompt('请输入该用户的密码：');
+            if(name && erp && email && password) {
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://' + location.host + '/api/user/add',
+                    data: {name:name, erp:erp, email:email, depID:depid, password:password},
+                    success: function(data) {
+                        if(data.state=='success') {
+                            alert(data.msg);
+                            location.reload();
+                        }
+                    }
+                });
+            } else {
+                alert('用户名/ERP/email/密码 不能为空');
+            }
+        });
+        $('#dataTables-example tbody').on('click', '.btn-success', function() {
+            var self = $(this),
+                id = $(this).parents('tr').children().first().text(),
+                preName = $(this).parents('tr').find('.u_name span').text(),
+                preErp = $(this).parents('tr').find('.u_erp span').text(),
+                preEmail = $(this).parents('tr').find('.u_email span').text(),
+                preDepid = $(this).parents('tr').find('.u_depid span').text(),
+                preIsAdmin = $(this).parents('tr').find('.u_isAdmin span').text(),
+                name = $(this).parents('tr').find('.u_name input').val(),
+                erp = $(this).parents('tr').find('.u_erp input').val(),
+                email = $(this).parents('tr').find('.u_email input').val(),
+                depid = $(this).parents('tr').find('.u_depid select').val();
+                isAdmin = $(this).parents('tr').find('.u_isAdmin select').val();
+            if( name && erp && email && (preName!=name || preErp!=erp || preEmail!=email || preDepid!=depid || preIsAdmin!=isAdmin) ) {
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://' + location.host + '/api/user/update',
+                    data: {id:id, name:name, erp:erp, email:email, depID:depid, isAdmin:isAdmin},
+                    success: function(data) {
+                        if(data.state=='success') {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            }
+            self.siblings('.btn-primary').show();    //显示修改按钮
+            self.hide(); //隐藏保存按钮
+            self.parents('tr').find('.u_name input').hide().siblings('span').show().text(name);
+            self.parents('tr').find('.u_erp input').hide().siblings('span').show().text(erp);
+            self.parents('tr').find('.u_email input').hide().siblings('span').show().text(email);
+            self.parents('tr').find('.u_depid select').hide().siblings('span').show().text(depid);
+            self.parents('tr').find('.u_isAdmin select').hide().siblings('span').show().text(isAdmin);
+        });
+        $('#dataTables-example tbody').on('click', '.btn-primary', function() {
+            var depid = $(this).parents('tr').find('.u_depid span').text()
+                isAdmin = $(this).parents('tr').find('.u_isAdmin span').text();
+            $(this).siblings('.btn-success').show();    //显示保存按钮
+            $(this).hide(); //隐藏修改按钮
+            $(this).parents('tr').find('.u_name span').hide().siblings('input').show(); //显示输入框
+            $(this).parents('tr').find('.u_erp span').hide().siblings('input').show(); //显示输入框
+            $(this).parents('tr').find('.u_email span').hide().siblings('input').show(); //显示输入框
+            $(this).parents('tr').find('.u_depid span').hide().siblings('select').show();    //显示下拉框
+            $(this).parents('tr').find('.u_isAdmin span').hide().siblings('select').show();    //显示下拉框
+            if(depid) {
+                $(this).parents('tr').find('.u_depid select').val(depid);
+            }
+            if(isAdmin) {
+                $(this).parents('tr').find('.u_isAdmin select').val(isAdmin);   
+            } else {
+                $(this).parents('tr').find('.u_isAdmin select').val(0);
+            }
+        });
+        $('#dataTables-example tbody').on('click', '.btn-danger', function() {
+            var id = $(this).parents('tr').children().first().text();
+            $.ajax({
+                type: 'GET',
+                url: 'http://' + location.host + '/api/user/del',
+                data: {id:id},
+                success: function(data) {
+                    if(data.state=='success') {
+                        alert(data.msg);
+                        location.reload();
+                    }
+                }
+            });
+        });
+        $.ajax({
+            type: 'GET',
+            url: 'http://' + location.host + '/api/dep/list',
+            success: function(data) {
+                var deplist =  '<option value="">请选择……</option>';
+                JSON.parse(data).forEach(function(e,i,arr){
+                    deplist = deplist + '<option value="'+e.id+'">'+e.name+'</option>';
+                })
+                depoptions = deplist;
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://' + location.host + '/api/user/list',
+                    success: function(data) {
+                        var rows = JSON.parse(data),
+                            tbody = document.querySelector('#dataTables-example tbody');
+                        rows.forEach(function(e,i,arr) {
+                            $(tbody).append('<tr><td>'+e.id+'</td><td class="u_name"><span>'+e.name+'</span><input type="text" value="'+e.name+'"></td><td class="u_erp"><span>'+e.erp+'</span><input type="text" value="'+e.erp+'"></td><td class="u_email"><span>'+e.email+'</span><input type="text" value="'+e.email+'"></td><td class="u_depid"><span>'+(e.depID || '')+'</span><select>'+deplist+'</select></td><td class="u_isAdmin"><span>'+e.isAdmin+'</span><select><option value="0">否</option><option value="1">是</option></select></td><td><button class="btn btn-success btn-xs">保存</button> <button class="btn btn-primary btn-xs">修改</button> <button class="btn btn-danger btn-xs">删除</button></td></tr>')
+                        });
+                        $('#dataTables-example').DataTable({
+                            responsive: true
+                        });          
+                    }
+                });
+            }
+        })
+    });
+    </script>
+
+</body>
+</html>
