@@ -77,9 +77,6 @@
 
 ## 阶段优化
 
-* [151102](https://github.com/o2team/UFT/blob/master/Rs151102.md)
-* [151208](https://github.com/o2team/UFT/blob/master/Rs151208.md)
-
 **CheckList**
 
 - [ ] 广场游客用户和非管理员用户不能看到未审核需求
