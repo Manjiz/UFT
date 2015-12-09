@@ -14,10 +14,37 @@ var profileState = {
 
 
             $rootScope.navidx = 'profile';
+            $scope.isShowCrop = false;
+            $scope.cropContext = {};
 
+            $scope.avatarChange = function(files) {
+                $scope.isShowCrop = true;
+
+                var fd = new FormData();
+                fd.append('file', files[0]);
+                $http.post('http://' + location.host + '/api/upload', fd, {
+                    withCredentials: true,
+                    headers: {'Content-Type': undefined },
+                    transformRequest: angular.identity
+                }).success(function(data) {
+                    $scope.uploadedAvatar = data.filename;
+                });
+            }
+            $scope.closeCrop = function() {
+                $scope.isShowCrop = false;
+                jQuery('input[name=avatar]').val('');
+            }
+            $scope.updateAvatar = function() {console.log(234)
+                $http.post('http://' + location.host + '/api/user/updateavatar', {
+                    avatar: $scope.uploadedAvatar,
+                    cropContext: $scope.cropContext
+                }).success(function(data) {
+
+                })
+            }
             $scope.updatePwd = function(isValid) {
                 if(isValid) {
-                    if($scope.newpwd==$scope.confirmnewpwd) {console.log(3)
+                    if($scope.newpwd==$scope.confirmnewpwd) {
                         $http.post('http://' + location.host + '/api/user/updatepwd', {
                             oldpwd: $scope.oldpwd,
                             newpwd: $scope.newpwd

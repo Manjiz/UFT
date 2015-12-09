@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="public/css/kendo/kendo.rtl.min.css">
     <link rel="stylesheet" href="public/css/kendo/kendo.material.min.css">
     <link rel="stylesheet" href="public/css/kendo/kendo.material.mobile.min.css">
+<link rel="stylesheet" href="public/js/lib/image-cropper/cropper.css" /><!--图片裁切-->
 </head>
 <body ng-controller="customersCtrl">
 
@@ -64,6 +65,8 @@
 <script type="text/javascript" src="public/js/lib/pagedown/Markdown.Sanitizer.js"></script><!-- pagedown 编辑器 -->
 <script type="text/javascript" src="public/js/lib/pagedown/Markdown.Editor.js"></script><!-- pagedown 编辑器 -->
 
+<script src="public/js/lib/image-cropper/cropper.js"></script><!-- 图片裁切 -->
+
 <script src="public/js/lib/ua-parser.min.js"></script>
 <script src="public/js/app/common.js"></script>
 
@@ -82,7 +85,8 @@ var _conf = conf();
 angular.module('myapp', [
     'ui.router',
     'kendo.directives',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'cropper'
 ], angular.noop)
 
 .filter('reverse', function() {

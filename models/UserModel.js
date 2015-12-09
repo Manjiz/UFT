@@ -6,7 +6,8 @@
 	async = require('async'),
 	fs = require('fs'),
 
-	nodemailer = require('nodemailer');
+	nodemailer = require('nodemailer'),
+	nodeimg = require('images');
 
 // 邮箱配置
 var transporter = nodemailer.createTransport(_confServer.nodemailer);
@@ -93,6 +94,16 @@ exports.UserModel = {
 			} else {
 				res.json({state:'fail', msg:'密码不符合要求'})
 			}
+		});
+	},
+	updateAvatar: function(req, res) {
+		pool.getConnection(function(err, conn) {
+			var avatar = req.body.avatar,
+				cropContext = req.body.cropContext;
+			//% upload/avatar 不存在时新建目录 %
+			nodeimg(nodeimg('temp/'+avatar), cropContext.left, cropContext.top, cropContext.width, cropContext.height).resize(100,100).save('upload/avatar/'+avatar);
+			// 保存到数据库的路径 'upload/avatar/'+avatar
+			
 		});
 	}
 }

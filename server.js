@@ -5,7 +5,7 @@
 	schedule = require('node-schedule'),
 	session = require('express-session'),
 	multer = require('multer'),
-	morgan = require('morgan'),
+	morgan = require('morgan');
 
 	uploader = multer({ 
 		// dest:'temp/'
@@ -244,6 +244,8 @@ app.get('/attachment/:filename/:originalname', function(req, res, next) {
 	// 找回密码
 	app.get('/api/user/findback/:erp/:random?', function(req, res) { _userModel.findBack(req, res) });
 	app.post('/api/user/updatepwd', function(req, res) { _userModel.updatePwd(req, res) });
+	// 更新头像
+	app.post('/api/user/updateavatar', function(req, res) { _userModel.updateAvatar(req, res) });
 //-----schedule-----
 	// 通过受理人查找排期
 	app.get('/api/schedule/getbyassignee', function(req, res) { _scheduleModel.getByAssignee(req, res) });
