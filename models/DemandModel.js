@@ -23,7 +23,7 @@ exports.DemandModel = {
 	 * ======================================================
 	 */
 	add: function(req, res) {
-		var submitter = req.session.loginederp,	//申请人
+		var submitter = req.session.erp,	//申请人
 			demandID = new Date().toISOString().replace(/(\s)|T|(\..+)|:|-/g, ''),	//---20150918 064419
 			dtype = req.query.dtype,			//需求类型
 			business = req.query.business,		//业务名称
@@ -73,7 +73,7 @@ exports.DemandModel = {
   								}
   							});
   							// src.on('error', function(err) {  });
-  							filesForMySql.push({filename:e.filename, originalname: e.originalname, mimetype: e.mimetype, uerp:req.session.loginederp});
+  							filesForMySql.push({filename:e.filename, originalname: e.originalname, mimetype: e.mimetype, uerp:req.session.erp});
 						})
 						filesForMySql.forEach(function(e, i, arr) {
 							conn.query('INSERT INTO demandfiles (filename, demandid, originalname, mimetype, uerp, date) VALUES (?,?,?,?,?,?)', [
@@ -168,7 +168,7 @@ exports.DemandModel = {
 	 * ======================================================
 	 */
 	getMyDemands: function(req, res) {
-		var uerp = req.session.loginederp,
+		var uerp = req.session.erp,
 			state = req.params.state;
 		if(state) {
 			pool.getConnection(function(err, conn) {
@@ -261,7 +261,7 @@ exports.DemandModel = {
 	 */
 	audited: function(req, res) {
 		var demandid = req.body.demandID,
-			handler = req.session.loginederp,
+			handler = req.session.erp,
 			assignee = req.body.assignee,
 			startDate = req.body.startDate,
 			endDate = req.body.endDate;
@@ -296,7 +296,7 @@ exports.DemandModel = {
 	 */
 	changeState: function(req, res) {
 		var demandid = req.query.demandID,
-			handler = req.session.loginederp,
+			handler = req.session.erp,
 			type = req.query.type,
 			solveMsg = req.query.solveMsg,
 			designated = req.query.designated,
@@ -310,7 +310,7 @@ exports.DemandModel = {
 			src.pipe(dest);
   			src.on('end', function() { });
   			src.on('error', function(err) {  });
-  			filesForMySql.push({filename:e.filename, originalname: e.originalname, mimetype: e.mimetype, uerp:req.session.loginederp});
+  			filesForMySql.push({filename:e.filename, originalname: e.originalname, mimetype: e.mimetype, uerp:req.session.erp});
 		})
 		if(filesForMySql.length>0 && demandid && type) {
 			pool.getConnection(function(err, conn) {

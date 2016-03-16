@@ -46,12 +46,14 @@
 <div ng-include src="'view/core/footer.html'"></div> 
 <!--# E 引入尾部 -->
 
+<!-- <div login-dialog ng-include="'view/login.html'" ng-show="isPopupLogin"></div> -->
+
 <script id="tpl" type="text/x-template">
 <img src="dummy.png" title="{{title}}"/>
 </script>
 
 <!--<script src="http://weinre.qiang.it/target/target-script-min.js#taizhen"></script> 微信debug -->
-<script type="text/javascript" src="http://tajs.qq.com/stats?sId=53467417" charset="UTF-8"></script><!-- 页面统计 -->
+<!-- <script type="text/javascript" src="http://tajs.qq.com/stats?sId=53467417" charset="UTF-8"></script>页面统计 -->
 
 <script src="public/js/lib/jquery-1.10.2.js"></script>
 <script src="public/js/lib/angular.min.js"></script>
@@ -98,7 +100,6 @@ angular.module('myapp', [
         }
     }
 })
-
 .filter('slice', function () {
     return function (inputArr, start, end) {
         var resultArr = [];
@@ -114,31 +115,6 @@ angular.module('myapp', [
     };
 })
 
-.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
-    $httpProvider.interceptors.push('UserInterceptor');
-
-    $urlRouterProvider.otherwise('schedule');  //无效路由
-
-    $stateProvider
-        .state('login', loginState)
-        .state('apply', applyState)
-        .state('myapply', myapplyState)
-        .state('gallery', galleryState)
-        .state('schedule', scheduleState)
-        .state('audited', auditedState)
-        .state('detail', detailState)
-        .state('profile', profileState);
-})
-
-// 本地身份验证
-.service('SessionService', function() {
-    return {
-        token: '',
-        isAnonymus: true,
-        session: null
-    }
-})
-
 // 数据包
 .service('datalump', function() {
     return {
@@ -149,19 +125,218 @@ angular.module('myapp', [
     }
 })
 
-// 暂时没用到，还有Config里也有一点相关代码
-.factory('UserInterceptor', function (SessionService) {
-    return {
-        request: function(config) {
-            if(!SessionService.isAnonymus) { 
-                config.headers["x-session-token"] = SessionService.token; 
-            }
-            return config;
-        } 
-    }; 
+.config(function($stateProvider, $urlRouterProvider, $httpProvider, USER_ROLES) {
+    $urlRouterProvider.otherwise('login');  //无效路由
+
+    $stateProvider
+        .state('login', {
+            url:'/login',
+            templateUrl: 'view/login.html',
+            data: { acceptRoles: [USER_ROLES.guest] },
+            controller: loginState
+        })
+        .state('apply', {
+            url:'/apply?erp&date&uname',
+            templateUrl: 'view/apply.html',
+            data: { acceptRoles: [USER_ROLES.normal, USER_ROLES.admin] },
+            controller: applyState
+        })
+        .state('myapply', {
+            url:'/myapply',
+            templateUrl: 'view/myapply.html',
+            data: { acceptRoles: [USER_ROLES.normal, USER_ROLES.admin] },
+            controller: myapplyState
+        })
+        .state('gallery', {
+            url:'/gallery',
+            templateUrl: 'view/gallery.html',
+            data: { acceptRoles: [USER_ROLES.all] },
+            controller: galleryState
+        })
+        .state('schedule', {
+            url:'/schedule',
+            templateUrl: 'view/schedule.html',
+            data: { acceptRoles: [USER_ROLES.normal, USER_ROLES.admin] },
+            controller: scheduleState
+        })
+        .state('audited', {
+            url:'/audited',
+            templateUrl: 'view/audited.html',
+            data: { acceptRoles: [USER_ROLES.admin] },
+            controller: auditedState
+        })
+        .state('detail', {
+            url:'/detail/:did',
+            templateUrl: 'view/detail.html',
+            data: { acceptRoles: [USER_ROLES.all] },
+            controller: detailState
+        })
+        .state('profile', {
+            url:'/profile',
+            templateUrl: 'view/profile.html',
+            data: { acceptRoles: [USER_ROLES.normal, USER_ROLES.admin] },
+            controller: profileState
+        });
 })
 
-.controller('customersCtrl', function($scope, $http, $state, SessionService) {
+// S ---拦截器---
+.config(function ($httpProvider) {
+    $httpProvider.interceptors.push(['$injector', function ($injector) {
+            return $injector.get('AuthInterceptor');
+        }
+    ]);
+})
+.factory('AuthInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
+    return {
+        responseError: function (response) { 
+            $rootScope.$broadcast({
+                401: AUTH_EVENTS.notAuthenticated,
+                403: AUTH_EVENTS.notAuthorized,
+                419: AUTH_EVENTS.sessionTimeout,
+                440: AUTH_EVENTS.sessionTimeout
+            }[response.status], response);
+            return $q.reject(response);
+        }
+    };
+})
+// .directive('loginDialog', function (AUTH_EVENTS) {
+//     return {
+//         restrict: 'A',
+//         // template: '<div ng-if="!showLoginDialog" ng-include="\'view/login.html\'">',
+//         link: function (scope) {
+//             var showDialog = function () {
+//                 console.log('show login dialog')
+//                 scope.$root.isPopupLogin = true;
+//             };
+//             scope.$root.isPopupLogin = false;
+//             scope.$on(AUTH_EVENTS.notAuthenticated, showDialog);
+//             scope.$on(AUTH_EVENTS.sessionTimeout, showDialog)
+//         }
+//     };
+// })
+// E ---拦截器---
+
+// S ---登录控制---
+.constant('AUTH_EVENTS', {
+    loginSuccess: 'auth-login-success',
+    loginFailed: 'auth-login-failed',
+    logoutSuccess: 'auth-logout-success',
+    notAuthenticated: 'auth-not-authenticated',
+    notAuthorized: 'auth-not-authorized'
+})
+.constant('USER_ROLES', {
+    all: '*',
+    admin: 'admin',
+    normal: 'normal',
+    guest: 'guest'
+})
+.service('Session', function(USER_ROLES) {
+    // 判断是否已经获取信息
+    this.isInit = false;
+    // 初始角色
+    this.userRole = 'guest';
+
+    this.create = function(userErp, userName, userRole) {
+        this.isInit = true;
+
+        this.userErp = userErp;
+        this.userName = userName;
+        this.userRole = userRole;
+    }
+    this.destory = function() {
+        this.userErp = undefined;
+        this.userName = undefined;
+        this.userRole = 'guest';
+    }
+
+    this.isAdmin = function() { return this.userRole===USER_ROLES.admin; }
+    this.isGuest = function() { return this.userRole===USER_ROLES.guest; }
+    this.isNormal = function() { return this.userRole!==USER_ROLES.guest && this.userRole!==USER_ROLES.admin && this.userRole!==USER_ROLES.all; }
+
+    return this;
+})
+.factory('AuthService', function($http, Session, USER_ROLES) {
+    var authService = {};
+
+    authService.login = function(credentials) {
+        return $http.post('api/user/login', credentials).then(function(res) {
+            var role = USER_ROLES.guest;
+            if(res.data.isAdmin) {
+                role = USER_ROLES.admin;
+            } else {
+                role = USER_ROLES.normal;
+            }
+            Session.create(res.data.erp, res.data.name, role);
+            return res.data;
+        });
+    }
+
+    // 是否登录
+    authService.isLogined = function() {
+        return !!Session.userErp;
+    }
+
+    // 是否符合页面的准许访问角色
+    authService.isAuthorized = function(acceptRoles) {
+        console.log(acceptRoles, Session.userRole)
+        if(!angular.isArray(acceptRoles)) {
+            acceptRoles = [acceptRoles];
+        }
+        return acceptRoles.indexOf(USER_ROLES.all)!==-1 || acceptRoles.indexOf(Session.userRole)!==-1;
+    }
+
+    return authService;
+})
+.run(function($rootScope, $http, $state, AUTH_EVENTS, AuthService, Session, USER_ROLES) {
+    var GetAuthInfo = $http.get('api/auth').then(function(res) {
+        var role;
+        if(res.data.erp && !res.data.isAdmin) {
+            role = USER_ROLES.normal;
+        } else if(res.data.isAdmin) {
+            role = USER_ROLES.admin;
+        } else {
+            role = USER_ROLES.guest;
+        }
+        Session.create(res.data.erp, res.data.name, role);
+    });
+
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState) {
+        var acceptRoles = toState.data.acceptRoles;
+        var isInit = Session.isInit;
+        if(!isInit) {
+            event.preventDefault();
+            GetAuthInfo.then(function() {
+                $state.go(toState.name, toParams);
+            });
+        } else {
+            if (!AuthService.isAuthorized(acceptRoles)) {
+                event.preventDefault();
+                if (AuthService.isLogined()) {
+                    $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
+                    // 即 已登录 + 第一个打开的页面是登录页
+                    if(toState.name=='login' && !fromState.name) {
+                        $state.go('apply');
+                    }
+                } else {
+                    $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+                    $state.go('login');
+                }
+            }
+        }
+    });
+    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+        $rootScope.navidx = toState.name;
+    });
+
+    // 比如 服务器重启时清除本地信息（结合拦截器）
+    $rootScope.$on(AUTH_EVENTS.notAuthenticated, function(event, d) {
+        Session.destory();
+    });
+})
+// E ---登录控制---
+
+.controller('customersCtrl', function($scope, $http, $state, Session) {
+    $scope.Session = Session;
     $scope.navBar = false;
     $scope.mine = false;
     $scope.mineBar = false;
@@ -179,57 +354,6 @@ angular.module('myapp', [
         $scope.navBar = !$scope.navBar;
     };
     $scope.notAuditedNum = 0;
-    // 本地-服务器 身份验证
-     $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-        $scope.navidx = toState.name;
-        // 询问登录信息
-        $http.get('api/queryauth').success(function(data) {
-            if(data.loginederp) {
-                SessionService.isAnonymus = false;
-            } else {
-                SessionService.isAnonymus = true;
-            }
-            SessionService.session = data;
-            $scope.SessionService = SessionService; //------z
-
-            // 广播
-            $scope.$broadcast('authdone', SessionService.session.loginederp, SessionService.session.isAdmin);
-
-            $scope.uerp = Cookie.getCookie('uerp');
-            $scope.uname = decodeURI(escape(Cookie.getCookie('uname')));
-            $scope.profile = $scope.uname+'('+$scope.uerp+')';
-
-            if(SessionService.session.isAdmin) {
-                $http.get('api/demand/getnotauditedcount').success(function(data) {
-                    $scope.notAuditedNum = data['COUNT(*)'];
-                })
-            }
-
-            // 跳登录页
-            if(toState.name=='login') {
-                if(SessionService.isAnonymus==false) {
-                    event.preventDefault();
-                    $state.go(fromState.name || 'schedule');
-                    return;
-                } else {
-                   return;
-                }
-            }
-            if( (toState.name=='gallery' || toState.name=='audited') && !SessionService.session.isAdmin) {
-                event.preventDefault();
-                $state.go(fromState.name || 'schedule');
-            }
-            
-            // 如果是匿名游客
-            if(SessionService.isAnonymus){
-                event.preventDefault(); // 取消默认跳转行为
-                $state.go("login");     //跳转到登录界面
-            }
-        }).error(function(data, status, headers, config) {
-            alert('Jump to temporary 500 page');
-            // location.href = 'http://www.jd.com';
-        })
-     });
 });
 
 /*------------------------
@@ -313,8 +437,6 @@ document.querySelector('.mod_guid_backtop').addEventListener('click', function()
         }
     }
 })();
-
-// Cookie.setCookie('erp1.jd.com', 'BCCB7FDE7E47BAA1CC698F2D78A47636BCCED5C1B962CD58B604464F93221B5078DFB825F116D7849B12467B6CEEECB12FA9F697773F4F6FA3516CE04FA74E3BDDCF0836C31BAB8C0CC3F4F4295A97F3');
 </script>
 </body>
 </html>

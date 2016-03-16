@@ -3,7 +3,7 @@
 .mod_cont_fullmain {overflow:hidden;}
 
 .form {float:right;padding:20px 10px;width:100%;}
-.form.signin { display: none; }
+.form.signin {}
     .form_tit {margin:0 0 20px 0;font-size:18px;font-weight:normal;color:#777;}
     .form_inp {position:relative;margin-bottom:15px;}
         .form_inp label {display:inline-block;margin-bottom:5px;font-weight:bold;}
@@ -15,12 +15,10 @@
         /*sp:Rember pwd*/
         .signin .remember {padding:10px 0;}
             .signin .remember input[type="checkbox"] {display:none;}
-            .signin .remember label span {vertical-align:middle;}
-            .signin .remember label span:nth-child(2) {margin-left:5px;}
-            .signin .remember input[type="checkbox"] + label .pseucheckbox {display:inline-block;width:17px;height:17px;background:url(../../img/checkbox.png) center center no-repeat;color:#b3b3b3;vertical-align:middle;}
-            .signin .remember input[type="checkbox"]:checked + label .pseucheckbox {background:url(../../img/checked.png) center center no-repeat;}
+            .signin .remember label span {margin-right:5px;vertical-align:middle;}
+            .signin .remember input[type="checkbox"] + span {display:inline-block;width:17px;height:17px;background:url(../../img/checkbox.png) center center no-repeat;color:#b3b3b3;vertical-align:middle;}
+            .signin .remember input[type="checkbox"]:checked + span {background:url(../../img/checked.png) center center no-repeat;}
             .signin .remember a {float:right;text-decoration:underline;color:#b3b3b3;}
-            .signin_bind { display: block;margin-top: -36px;text-align: right;text-decoration:underline;color:#b3b3b3; }
         .form_btn {margin: 10px 0 0 0;display:block;width:100%;height: 40px;line-height: 40px;background:#E12228;color:#fff;font-size: 16px;}
         .form_btn:hover {background: #DC1218;}
     .loginlogo { display: none; }
@@ -36,3 +34,21 @@
 
 /**/
 .k-dropdown .k-dropdown-wrap {border-color:#ccc;background:#fff;}
+
+
+
+/*公共主容器*/
+/*.mod_cont {margin:20px auto 0;padding: 20px 10px;max-width:1050px;overflow:hidden;background: #fff;border: 1px solid #ebebeb;}
+    .mod_cont_main {float:left;width:100%;}
+    .mod_cont_fullmain {width:100%;}
+    .mod_cont_aside {float:right;margin-top:10px;width:100%;}
+@media (min-width:767px) and (max-width:991px) {
+    .mod_cont { padding: 30px; }
+    .mod_cont_main {float:none;margin:0 auto;width:80%;}
+    .mod_cont_aside {float:none;margin:10px auto 0;width:80%;}
+}
+@media (min-width:992px) {
+.mod_cont {margin:20px auto 0;padding: 30px;}
+    .mod_cont_main {width:72%;}
+    .mod_cont_aside {margin-top:0;width:25%;}
+} */

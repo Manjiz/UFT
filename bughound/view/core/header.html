@@ -20,25 +20,25 @@
                 <span class="nav_show_icon"></span>
             </a>
             <ul class="nav_navbar list-inline" ng-show="navBar">
-                <li ng-click="hideNav()" ng-show="!SessionService.isAnonymus" class="nav_navbar_schedule {{navidx=='schedule' && 'active' }}"><a ui-sref="schedule">排期</a></li>
-                <li ng-click="hideNav()" ng-show="!SessionService.isAnonymus && SessionService.session.isAdmin" class="{{navidx=='gallery' && 'active' }}"><a ui-sref="gallery">广场</a></li>
-                <!-- <li ng-click="hideNav()" ng-show="!SessionService.isAnonymus" class="{{navidx=='myapply' && 'active' }}"><a ui-sref="myapply">我的</a></li> -->
-                <li ng-click="hideNav()" ng-show="!SessionService.isAnonymus" class="{{navidx=='apply' && 'active' }}"><a ui-sref="apply">申请</a></li>
-                <li ng-click="hideNav()" ng-show="!SessionService.isAnonymus && SessionService.session.isAdmin" class="isAdminAudited {{navidx=='audited' && 'active' }}"><a ui-sref="audited">待审</a><i class="num">{{notAuditedNum}}</i></li>
+                <li ng-click="hideNav()" ng-show="!Session.isGuest()" class="nav_navbar_schedule {{navidx=='schedule' && 'active' }}"><a ui-sref="schedule">排期</a></li>
+                <li ng-click="hideNav()" ng-show="!Session.isGuest() && Session.isAdmin" class="{{navidx=='gallery' && 'active' }}"><a ui-sref="gallery">广场</a></li>
+                <!-- <li ng-click="hideNav()" ng-show="!Session.isGuest()" class="{{navidx=='myapply' && 'active' }}"><a ui-sref="myapply">我的</a></li> -->
+                <li ng-click="hideNav()" ng-show="!Session.isGuest()" class="{{navidx=='apply' && 'active' }}"><a ui-sref="apply">申请</a></li>
+                <li ng-click="hideNav()" ng-show="!Session.isGuest() && Session.isAdmin" class="isAdminAudited {{navidx=='audited' && 'active' }}"><a ui-sref="audited">待审</a><i class="num">{{notAuditedNum}}</i></li>
 
-                <li ng-if="!SessionService.isAnonymus" class="nav_navbar_mine {{ (navidx=='profile'  || navidx=='myapply') && 'active' }}">
+                <li ng-if="!Session.isGuest()" class="nav_navbar_mine {{ (navidx=='profile'  || navidx=='myapply') && 'active' }}">
                     <a href="javascript:;"  ng-click="hideMine()" class="nav_navbar_mine_link">我的</a>
                     <div class="nav_navbar_detail" ng-show="mine">
-                        <a ng-click="hideMineBar()" ng-if="!SessionService.isAnonymus" class="{{navidx=='profile' && 'active' }}" ui-sref="profile">我的信息</a>
-                        <a ng-click="hideMineBar()" ng-if="!SessionService.isAnonymus" class="{{navidx=='myapply' && 'active' }}" ui-sref="myapply">我的需求</a>
-                        <a ng-click="hideMineBar()" ng-if="!SessionService.isAnonymus" href="api/user/logout">退出</a>
+                        <a ng-click="hideMineBar()" ng-if="!Session.isGuest()" class="{{navidx=='profile' && 'active' }}" ui-sref="profile">我的信息</a>
+                        <a ng-click="hideMineBar()" ng-if="!Session.isGuest()" class="{{navidx=='myapply' && 'active' }}" ui-sref="myapply">我的需求</a>
+                        <a ng-click="hideMineBar()" ng-if="!Session.isGuest()" href="api/user/logout">退出</a>
                     </div>
 
                 </li>
-                <!-- <li ng-click="navBar = !navBar" ng-show="!SessionService.isAnonymus" class="{{navidx=='profile' && 'active' }}"><a class="profile" ui-sref="profile">{{loginprofile || profile}}</a></li> -->
-                <!-- <li ng-click="navBar = !navBar" ng-show="!SessionService.isAnonymus"><a href="api/user/logout">退出</a></li> -->
+                <!-- <li ng-click="navBar = !navBar" ng-show="!Session.isGuest()" class="{{navidx=='profile' && 'active' }}"><a class="profile" ui-sref="profile">{{loginprofile || profile}}</a></li> -->
+                <!-- <li ng-click="navBar = !navBar" ng-show="!Session.isGuest()"><a href="api/user/logout">退出</a></li> -->
 
-                <!-- <li ng-click="navBar = !navBar" ng-show="SessionService.isAnonymus" class="{{navidx=='login' && 'active' }}"><a ui-sref="login">绑定</a></li> -->
+                <!-- <li ng-click="navBar = !navBar" ng-show="Session.isGuest()" class="{{navidx=='login' && 'active' }}"><a ui-sref="login">绑定</a></li> -->
             </ul>
         </div>
     </div>

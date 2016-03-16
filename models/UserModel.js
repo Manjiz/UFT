@@ -131,28 +131,27 @@ exports.UserModel = {
 	/**
 	 * ======================================================
 	 *  登录
-	 *   @params erp
+	 *   @params erp password
 	 * ======================================================
 	 */
 	login: function(req, res) {
-		var erp = req.body.erp;
+		var erp = req.body.erp,
+			pass = req.body.password;
 		pool.getConnection(function(err, conn) {
-			conn.query('SELECT * FROM user WHERE erp=? AND status=0', [erp], function(err, rows, fields) {
+			conn.query('SELECT * FROM user WHERE erp=? AND status=0', [erp, pass], function(err, rows, fields) {
 				if(err) throw err;
 				if(rows.length>0) {
-					req.session.loginederp = rows[0].erp;		//session ERP
-					req.session.isAdmin  = rows[0].isAdmin;		//session 管理员
-					res.cookie('uerp', rows[0].erp);
-					res.cookie('uname', rows[0].name);
+					req.session.erp = rows[0].erp;
+					req.session.name = rows[0].name;
+					req.session.isAdmin  = rows[0].isAdmin;
 					conn.query('UPDATE user SET lastLogin=? WHERE erp=?', [new Date(), erp], function(err, result) {
 						if(err) throw err;
 						conn.release();
 					});
 				} else {
-					res.cookie('verp', erp);
 					conn.release();
 				}
-				res.send(req.session)
+				res.send(req.session);
 			})
 		});
 	},
@@ -162,7 +161,7 @@ exports.UserModel = {
 	 * ======================================================
 	 */
 	list: function(req, res) {
-		if(req.session.loginederp) {
+		if(req.session.erp) {
 			pool.getConnection(function(err, conn) {
 				conn.query('SELECT '
 					+ 'user.name, user.erp, CONCAT(user.name,"(", user.erp, ")") as nameConcatErp, user.email, user.depID, user.isAdmin, user.showMeInSchedule, '
@@ -285,7 +284,7 @@ exports.UserModel = {
 			uname = req.body.uname,
 			uemail = req.body.uemail,
 			udep = req.body.udep || null;
-		if(uerp && uerp==req.session.loginederp && uname && uemail) {
+		if(uerp && uerp==req.session.erp && uname && uemail) {
 			pool.getConnection(function(err, conn) {
 				conn.query('UPDATE user SET name=?, email=?, depID=? WHERE erp=? AND status=0', [uname, uemail, udep, uerp], function(err, result) {
 					if(err) throw err;
@@ -310,10 +309,10 @@ exports.UserModel = {
 	updateAvatar: function(req, res) {
 		var avatar = req.body.avatar,
 			cropContext = req.body.cropContext;
-		if(avatar && cropContext && req.session && req.session.loginederp) {
+		if(avatar && cropContext && req.session && req.session.erp) {
 			var data = 'data:image/jpg;base64,' + nodeimg(nodeimg(_confServer.tempPath+'/'+avatar), cropContext.left, cropContext.top, cropContext.width, cropContext.height).resize(100,100).encode('jpg', {operation:50}).toString('base64');
 			pool.getConnection(function(err, conn) {
-				conn.query('UPDATE user SET avatar=? WHERE erp=?', [data, req.session.loginederp], function(err, result) {
+				conn.query('UPDATE user SET avatar=? WHERE erp=?', [data, req.session.erp], function(err, result) {
 					if(err) throw err;
 					if(result.affectedRows>0) {
 						res.json({state:'success', avatar:data});
