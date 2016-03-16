@@ -1,5 +1,4 @@
-﻿var _conf = require('../conf.js')(),
-	_confServer = require('../conf-server.js')(),
+﻿var _confServer = require('../conf-server.js')(),
 	mysql = require('../mysql'),
 	pool = mysql.pool,
 	
@@ -25,7 +24,7 @@ exports.ScheduleModel = {
 			async.waterfall([
 				function getUsers(callback) {
 					conn.query('SELECT '
-						+ 'user.erp, user.name, user.depID, '
+						+ 'user.erp, user.name, user.depID, avatar, user.showMeInSchedule, '
 						+ 'dep.name as depName '
 						+ 'FROM user '
 						+ 'LEFT JOIN dep ON user.depID = dep.id '
@@ -39,11 +38,11 @@ exports.ScheduleModel = {
 					var len = rows.length;
 					async.forEachOf(rows, function(row, idx) {
 						conn.query('SELECT '
-								+ 'schedule.id, schedule.demandID, dictator, assignee, startDate, endDate, '
-								+ 'demand.name as demandName '
+								+ 'schedule.id, schedule.demandID, dictator, assignee, startDate, days, '
+								+ 'demand.name as demandName, submitter '
 								+ 'FROM schedule '
 								+ 'LEFT JOIN demand ON demand.demandID = schedule.demandID '
-								+ ' WHERE assignee=? ORDER BY startDate', [row.erp], function(err, rows, fields) {
+								+ ' WHERE assignee=? ORDER BY startDate, days DESC', [row.erp], function(err, rows, fields) {
 							if(err) throw err;
 							row.data = rows;
 							tmpArr.push(row);
@@ -73,5 +72,34 @@ exports.ScheduleModel = {
 				conn.release();
 			})
 		});
+	},
+	update: function(req, res) {
+		if(req.session.isAdmin) {
+			pool.getConnection(function(err, conn) {
+				var id = req.body.id,
+					date = new Date(parseInt(req.body.date)),
+					days = req.body.days,
+					assignee = req.body.assignee;
+				if(id && date!='Invalid Date') {
+					if(days && /^[0-9]+$/.test(days) && days>0) {
+						conn.query('UPDATE schedule SET startDate=?, days=? WHERE id=?', [date, days, id], function(err, result) {
+							if(err) throw err;
+							res.json({state:'success'})
+							conn.release();
+						});
+					} else if(assignee) {
+						conn.query('UPDATE schedule SET startDate=?, assignee=? WHERE id=?', [date, assignee, id], function(err, result) {
+							if(err) throw err;
+							res.json({state:'success'})
+							conn.release();
+						});
+					} else {
+						res.json({state:'fail', msg:'错误的排期天数'});
+					}
+				}
+			});
+		} else {
+			res.json({state:'fail', msg:'你不是管理员'});
+		}
 	}
 }

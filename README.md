@@ -45,50 +45,34 @@
 ### 组件
 
 * 色调：
-	* 主色：`#6190e8`
-	* 副色：`#008e59`
+	* 主色：`#E12228`
+	* 副色：`#6190E8`
 * 通用距离：10Npx
 * 按钮：
-	* 圆角：3px
+	* 圆角：2px
 	* 颜色：
-		* 主颜色：`#e12228`
+		* 主色(如确认按钮)：`border:1px solid #E12228;background: #E12228;color:#fff;`
+		* 普通（如取消按钮）：`color: #4d4d4d;border:1px solid #e6e6e6;background:#fff;`
 		* 不可用：`#e1aaa8`
-		* 加深色：`#d12228`（hover / active）
+		* 加深色：`#DC1218`（hover / active）
+		* 危险：`border: 1px solid #E12228;background: #FFF0F0;color: #E12228;`（hover / active）
 	* 尺寸：
 		* 标准按钮 30x100 —— .btn.btn-normal
 		* 大型按钮 35x100 —— .btn.btn-large
 * 输入 —— input.inp-text ：
 	* 正常：
-		* 圆角：3px
-		* 边框：`#ccc`
-		* 背景：`#fafafa`
+		* 圆角：2px
+		* 边框：`#ebebeb`
+		* 背景：`#fff`
 		* 阴影：`box-shadow:inset 0 1px 2px rgba(0,0,0,0.075);`
 		* 动效：`transition:border-color ease-in-out .15s, box-shadow ease-in-out .15s;`
 	* FOCUS：
 		* 边框：`#66afe9`
 		* 背景：`#fff`
 		* 阴影：`box-shadow:inset 0 1px 2px rgba(0,0,0,0.075),0 0 5px rgba(81,167,232,0.5);`
-		* 动效：`transition:0;`
+		* 动效：`transition:0s;`
 
 ### 响应式
 
 * 阶梯一：767px
 * 阶梯二：992px
-
-## 阶段优化
-
-* [151102](https://github.com/o2team/UFT/blob/master/Rs151102.md)
-* [151208](https://github.com/o2team/UFT/blob/master/Rs151208.md)
-
-**CheckList**
-
-- [ ] 广场游客用户和非管理员用户不能看到未审核需求
-- [ ] 拖动排期功能
-- [ ] 一键邮送排期表功能
-- [ ] 详情头部 UI 优化
-- [ ] 附件信息展示
-- [ ] 头像系统
-- [ ] Profile 响应式页面
-- [ ] 消息中心
-- [ ] 响应式头部导航
-- [ ] “我的”和“待审”响应式页面

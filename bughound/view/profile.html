@@ -1,45 +1,4 @@
-<style>
-.flash {padding:15px;-webkit-transition:0.5s ease;transition:0.5s ease; margin-top:-52px;}
-.flash.warn, .flash.success {margin-top:0px;}
-.flash.warn {border-bottom:1px solid #D2B2B2;background:#FCDEDE;color:#911;}
-.flash.success {border-bottom:1px solid #BAC6D3;background:#E2EEF9;color:#246;}
-    .flash_container {margin:0 auto;padding:0 20px;max-width:1050px;overflow:hidden;}
-        .flash_container_text {float:left;}
-        .flash_container_close {position:relative;float:right;width:21px;height:21px;cursor:pointer;}
-            .flash_container_close::before, .flash_container_close::after {content:'';position:absolute;top:50%;margin-top:-1px;left:4px;width:13px;height:2px;background:#911;opacity:0.7;}
-            .flash_container_close:hover::before, .flash_container_close:hover::after {opacity:1;}
-            .flash_container_close::before {-webkit-transform:rotate(45deg);transform:rotate(45deg);}
-            .flash_container_close::after {-webkit-transform:rotate(-45deg);transform:rotate(-45deg);}
-
-.profile {overflow:hidden;}
-    .profile_nav {float:left;width:25%;padding:0 10px;}
-        .profile_nav ul {margin:0;min-width:37px;border:1px solid #ccc;border-radius:3px;overflow:hidden;}
-            .profile_nav li {padding:8px 10px;border-bottom:1px solid #ddd;background:#fbfbfb;cursor:pointer;}
-            .profile_nav li:last-child {border-bottom:none;}
-            .profile_nav li:hover {background:#f8f8f8;}
-            .profile_nav li.active {border-left:2px solid #e12228;background:#fff;}
-    .profile_main {float:right;width:75%;padding:0 10px;}
-        .profile_main_wrap {margin-bottom:30px;border:1px solid #ccc;border-radius:3px;overflow:hidden;}
-            .profile_main_tit {padding:8px 10px;border-bottom:1px solid #ccc;background:#F5F5F5;}
-            .profile_main_wrap_cont {padding:10px 10px;}
-                .profile_main_wrap_cont dl {position:relative;margin:0 0 15px 0;padding:0;border:none;}
-                    .profile_main_wrap_cont dl dt {display:inline-block;margin-bottom:5px;font-weight:bold;color:#666;}
-                    .profile_main_wrap_cont dl dd {margin:0;}
-                        .profile_main_wrap_cont input {padding:6px 12px;width:300px;height:35px;}
-                /*sp: user info*/
-                        .profile_main_wrap_cont dl dd .avatar {float:left;width:70px;height:70px;border-radius:3px;}
-                        .profile_main_wrap_cont dl dd .avatar_upload {margin-left:90px;}
-                            .profile_main_wrap_cont dl dd .avatar_upload button {background:#e12228;color:#fafafa;}
-                            .profile_main_wrap_cont dl dd .avatar_upload button:hover {background:#d12228;}
-                /*sp: update pwd*/
-                        .profile_main_wrap_cont input.newpwd.ng-invalid:not(.ng-invalid-required) {background:url(public/img/error.png) no-repeat right 8px center;}
-                        .profile_main_wrap_cont input.newpwd.ng-valid {background:url(public/img/success.png) no-repeat right 8px center;}
-                        .profile_main_wrap_cont input.confirmnewpwd.notsame:not(.ng-invalid-required) {background:url(public/img/error.png) no-repeat right 8px center;}
-                        .profile_main_wrap_cont input.confirmnewpwd.ng-valid:not(.notsame):not(.ng-invalid-required) {background:url(public/img/success.png) no-repeat right 8px center;}
-                    .profile_main_wrap_cont p .updatepwd {display:inline-block;width:100px;border:1px solid transparent;border-radius:3px;background:#e12228;color:#fff;}
-                    .profile_main_wrap_cont p .updatepwd:hover {background:#d12228;}
-                    .profile_main_wrap_cont p .updatepwd:disabled {background:#e1aaa8;}
-</style>
+<style>@import url(public/css/app/profile.css);</style>
 
 <div class="flash {{flashType ? (flashType=='warn' ? 'warn' : 'success') : ''}}">
     <div class="flash_container">
@@ -53,41 +12,53 @@
         <div class="profile">
             <nav class="profile_nav">
                 <ul class="list-unstyled">
-                    <li>个人资料</li>
+                    <!-- <li>个人资料</li> -->
                     <li class="active">帐号设置</li>
-                    <li>待定</li>
+                    <!-- <li>待定</li> -->
                 </ul>
             </nav>
 
             <div class="profile_main">
-                <!-- <div class="profile_main_wrap">
+                <div class="profile_main_wrap">
                     <div class="profile_main_tit">用户信息</div>
-                    <div class="profile_main_wrap_cont">
+                    <form class="profile_main_wrap_cont" name="updateUserForm" ng-submit="updateUser(updateUserForm.$valid)" novalidate>
                         <dl>
                             <dt>头像</dt>
                             <dd class="clearfix">
-                                <img class="avatar" src="https://avatars1.githubusercontent.com/u/13447336?v=3&u=cdbbc9f5c90ed9e4c8bdd7e9fe1fde26017878fa&s=140" alt="">
+                                <img class="avatar" ng-src="{{myavatar || 'public/img/avatar.jpg'}}" alt="">
                                 <div class="avatar_upload">
-                                    <button class="btn btn-normal">上传图片</button>
+                                    <div class="avatar_upload_btn">
+                                        <button class="btn btn-normal">上传头像</button>
+                                        <input type="file" name="avatar" ng-model="avatarfile" cropper-source="avatar" cropper-file-types="jpg,jpeg,png" onchange="angular.element(this).scope().avatarChange(this.files)">
+                                    </div>
                                 </div>
                             </dd>
                         </dl>
                         <dl>
-                            <dt>姓名</dt>
-                            <dd>张太振</dd>
+                            <dt><label>ERP</label></dt>
+                            <dd><div style="padding-left:13px;">{{uerp}}</div></dd>
                         </dl>
                         <dl>
-                            <dt>ERP</dt>
-                            <dd>zhangtaizhen</dd>
+                            <dt><label for="uname">姓名</label></dt>
+                            <dd><input name="uname" class="inp-text" type="text" ng-model="uname" required ng-required="true"></dd>
                         </dl>
                         <dl>
-                            <dt>部门</dt>
-                            <dd>用户体验设计部</dd>
+                            <dt><label for="uemail">邮箱</label></dt>
+                            <dd><input name="uemail" class="inp-text" type="text" ng-model="uemail" required ng-required="true"></dd>
                         </dl>
-                    </div>
-                </div> -->
+                        <dl>
+                            <dt><label for="udep">部门</label></dt>
+                            <dd>
+                                <select kendo-drop-down-list k-options="depSelectOpts" ng-model="selectedDep"></select>
+                            </dd>
+                        </dl>
+                        <p>
+                            <input name="hehe" class="updatepwd" ng-click="updateUser" ng-disabled="updatePwdForm.$invalid" type="submit" value="更新信息">
+                        </p>
+                    </form>
+                </div>
 
-                <div class="profile_main_wrap">
+                <!-- <div class="profile_main_wrap">
                     <div class="profile_main_tit">密码设置</div>
                     <form class="profile_main_wrap_cont" name="updatePwdForm" ng-submit="updatePwd(updatePwdForm.$valid)" novalidate>
                         <dl>
@@ -108,12 +79,31 @@
                             <a href="#">忘记密码*暂未支持</a>
                         </p>
                     </form>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
 </div>
 
+<div class="crop {{isShowCrop && 'active'}}">
+    <div class="crop_container">
+        <h2 class="crop_container_tit">裁切图片<div ng-click="closeCrop()"></div></h2>
+        <div class="crop_container_stage" cropper="avatar" cropper-context="cropContext">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+        </div>
+        <!-- <div class="crop_container_preview" cropper-preview="avatar">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+        </div> -->
+        <input type="hidden" name="x" value="{{cropContext.left}}"/>
+        <input type="hidden" name="y" value="{{cropContext.top}}"/>
+        <input type="hidden" name="w" value="{{cropContext.width}}"/>
+        <input type="hidden" name="h" value="{{cropContext.height}}"/>
+        <div class="crop_container_handle">
+            <button class="btn btn-normal" ng-click="updateAvatar()">确定</button>
+        </div>
+    </div>
+</div>
+    
 
 <div class="mod_mask">
     <div class="mod_mask_wrap">

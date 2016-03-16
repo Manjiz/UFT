@@ -30,12 +30,12 @@
 
 <div class="pse_wrap">
 	<header class="mod_header">
-		<div class="mod_header_wrap clear">
+		<div class="mod_header_wrap clearfix">
 			<div class="logo">
 				<div class="logo_wrap">
 					<div class="logo_wrap_img"><img src="public/img/logo.png" alt="JDC前端需求提交平台"></div>
 					<div class="logo_wrap_tit">
-						<div class="cn">前端需求提交平台</div>
+						<div class="cn">需求提交平台</div>
 						<div class="en">UED-FD Task</div>
 					</div>
 				</div>
@@ -46,16 +46,16 @@
 	<div class="container">
 		
 		<!-- 绑定成功 S -->
-		<div class="bangsucc" style="display:none;">
+		<!-- <div class="bangsucc" style="display:none;">
 			<div class="tit">等待验证</div>
 			<div class="cont">已经发送邮件到您的邮箱，请<a href="//mail.jd.com">立即登录</a>验证您的身份，完成注册。</div>
-		</div>
+		</div> -->
 		<!-- 绑定成功 E -->
 		<!-- 验证成功 S -->
 		<div class="checksucc" style="display:none;">
-			<div class="tit">验证成功</div>
-			<div class="cont">您的帐号邮箱已通过验证，现在您可以<a href="login.html">登录</a>了。</div>
-			<div class="jump"><span>5</span>秒后跳转，点击<a href="/#/login">立即跳转</a></div>
+			<div class="tit">绑定成功</div>
+			<div class="cont">您的帐号已经绑定成功，现在您可以<a href="#/gallery">登录</a>了。</div>
+			<div class="jump"><span>5</span>秒后跳转，点击<a href="#/gallery">立即跳转</a></div>
 		</div>
 		<!-- 验证成功 E -->
 		<!-- 验证失败 S -->
@@ -105,7 +105,7 @@ if(type==='checksucc') {
 		setTimeout(function() {
 			document.querySelector('.checksucc .jump span').innerHTML = seconds;
 			if(seconds==0) {
-				location.href = '/#/login';
+				location.href = '/#/gallery';
 			}
 			jump(--seconds);
 		}, 1000)

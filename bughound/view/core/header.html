@@ -7,21 +7,38 @@
             <div class="logo_wrap">
                 <div class="logo_wrap_img"><img src="public/img/logo.png" alt="JDC前端需求提交平台"></div>
                 <div class="logo_wrap_tit">
-                    <div class="cn">凹凸需求提交平台</div>
-                    <div class="en">UED-FD Task</div>
+                    <div class="cn">需求提交平台</div>
+                    <!--<div class="en">UED-FD Task</div> -->
                 </div>
             </div>
         </div>
         <div class="nav">
-            <ul class="nav_navbar list-inline">
-                <li class="{{navidx=='gallery' && 'active' }}"><a ui-sref="gallery">广场</a></li>
-                <li ng-show="!SessionService.isAnonymus" class="{{navidx=='myapply' && 'active' }}"><a ui-sref="myapply">我的</a></li>
-                <li ng-show="!SessionService.isAnonymus" class="{{navidx=='apply' && 'active' }}"><a ui-sref="apply">申请</a></li>
-                <li ng-show="!SessionService.isAnonymus && SessionService.session.isAdmin" class="isAdminAudited {{navidx=='audited' && 'active' }}"><a ui-sref="audited">待审</a><i class="num">{{notAuditedNum}}</i></li>
-                <li ng-show="!SessionService.isAnonymus" class="{{navidx=='profile' && 'active' }}"><a class="profile" ui-sref="profile">{{profile}}</a></li>
-                <li ng-show="!SessionService.isAnonymus"><a href="api/user/logout">退出</a></li>
+            <a href="javascript:;" class="nav_cancel" ng-show="navBar" ng-click="hideNav()">
+                X
+            </a>
+            <a href="javascript:;" class="nav_show" ng-show="!navBar" ng-click="hideNav()">
+                <span class="nav_show_icon"></span>
+            </a>
+            <ul class="nav_navbar list-inline" ng-show="navBar">
+                <li ng-click="hideNav()" ng-show="!SessionService.isAnonymus" class="nav_navbar_schedule {{navidx=='schedule' && 'active' }}"><a ui-sref="schedule">排期</a></li>
+                <li ng-click="hideNav()" ng-show="!SessionService.isAnonymus && SessionService.session.isAdmin" class="{{navidx=='gallery' && 'active' }}"><a ui-sref="gallery">广场</a></li>
+                <!-- <li ng-click="hideNav()" ng-show="!SessionService.isAnonymus" class="{{navidx=='myapply' && 'active' }}"><a ui-sref="myapply">我的</a></li> -->
+                <li ng-click="hideNav()" ng-show="!SessionService.isAnonymus" class="{{navidx=='apply' && 'active' }}"><a ui-sref="apply">申请</a></li>
+                <li ng-click="hideNav()" ng-show="!SessionService.isAnonymus && SessionService.session.isAdmin" class="isAdminAudited {{navidx=='audited' && 'active' }}"><a ui-sref="audited">待审</a><i class="num">{{notAuditedNum}}</i></li>
 
-                <li ng-show="SessionService.isAnonymus" class="{{navidx=='login' && 'active' }}"><a ui-sref="login">登录</a></li>
+                <li ng-if="!SessionService.isAnonymus" class="nav_navbar_mine {{ (navidx=='profile'  || navidx=='myapply') && 'active' }}">
+                    <a href="javascript:;"  ng-click="hideMine()" class="nav_navbar_mine_link">我的</a>
+                    <div class="nav_navbar_detail" ng-show="mine">
+                        <a ng-click="hideMineBar()" ng-if="!SessionService.isAnonymus" class="{{navidx=='profile' && 'active' }}" ui-sref="profile">我的信息</a>
+                        <a ng-click="hideMineBar()" ng-if="!SessionService.isAnonymus" class="{{navidx=='myapply' && 'active' }}" ui-sref="myapply">我的需求</a>
+                        <a ng-click="hideMineBar()" ng-if="!SessionService.isAnonymus" href="api/user/logout">退出</a>
+                    </div>
+
+                </li>
+                <!-- <li ng-click="navBar = !navBar" ng-show="!SessionService.isAnonymus" class="{{navidx=='profile' && 'active' }}"><a class="profile" ui-sref="profile">{{loginprofile || profile}}</a></li> -->
+                <!-- <li ng-click="navBar = !navBar" ng-show="!SessionService.isAnonymus"><a href="api/user/logout">退出</a></li> -->
+
+                <!-- <li ng-click="navBar = !navBar" ng-show="SessionService.isAnonymus" class="{{navidx=='login' && 'active' }}"><a ui-sref="login">绑定</a></li> -->
             </ul>
         </div>
     </div>

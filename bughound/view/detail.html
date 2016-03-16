@@ -6,26 +6,33 @@
             <ol class="tophd_cont_main_breadcrumb">
                 <li><a ui-sref="gallery">广场</a></li>
                 <li>需求详情</li>
-                <li class="along">{{business}}</li>
-                <li class="along">{{dtype}}</li>
+                <li class="along">{{demand.businessName}}</li>
+                <li class="along">{{demand.dtypeName}}</li>
             </ol>
-            <h1 class="tophd_cont_main_tit">{{name}}</h1>
-            <h2 class="tophd_cont_main_vicetit">编号{{demandid}}</h2>
-            <div class="tophd_cont_main_author">
-                <a href="#">
-                    <div class="avatar">
-                        <img src="http://p3.gexing.com/touxiang/2012/5/11/201251101057506.jpg" alt="">
-                    </div>
-                    <strong data-erp="{{submitter}}">{{submitterName}}</strong>
-                </a>
-                {{submitDate}} · {{priority}}
-            </div>
+            <h1 class="tophd_cont_main_tit">{{demand.name}}</h1>
+            <h2 class="tophd_cont_main_vicetit">编号{{demand.demandid}}</h2>
         </div>
         <div class="tophd_cont_aside">
             <div class="tophd_cont_aside_wrap">
-                <div>{{stateName}}</div>
-                <div>预期执行人：<span id="executor" data-erp="{{executor}}">{{executorName}}</span></div>
-                <div>排期时间：<span>{{startDate | date:'yyyy/MM/dd'}} - {{endDate | date:'yyyy/MM/dd'}}</span></div>
+                <h2 class="blocks_tit">基本信息：</h2>
+                <ul class="tophd_cont_aside_list clearfix">
+                    <li class="tophd_cont_aside_author">
+                        <a href="#">
+                            
+                            <strong data-erp="{{demand.submitter}}"><b class="tophd_cont_aside_tt"><!-- <div class="avatar">
+                                <img src="http://p3.gexing.com/touxiang/2012/5/11/201251101057506.jpg" alt="">
+                            </div> -->提交人：</b>{{demand.submitterName}}</strong>
+                        </a>
+                        {{demand.submitDate}}<span ng-show="demand.assignee"> · 优先级>{{demand.priority}}</span>
+                    </li>
+                    <li><b class="tophd_cont_aside_tt">需求状态：</b>{{demand.stateName}}</li>
+                    <li><b class="tophd_cont_aside_tt">预期执行人：</b><span data-erp="{{demand.executor}}">{{demand.executorName}}</span></li>
+                    <li ng-show="demand.executeDate"><b class="tophd_cont_aside_tt">预期完成：</b><span>{{demand.executeDate | date:'yyyy/MM/dd'}}</span></li>
+                    <li ng-show="demand.assignee"><b class="tophd_cont_aside_tt">排期时间：</b><span>{{demand.startDate | date:'yyyy/MM/dd'}} - {{demand.endDate | date:'yyyy/MM/dd'}}</span></li>
+                    <li ng-show="demand.assignee"><b class="tophd_cont_aside_tt">排期受理人：</b><span data-erp="{{demand.assignee}}">{{demand.assigneeName}}（{{demand.dictatorName}} 指派）</span></li>
+                    <li class="tophd_cont_aside_desc"><b class="tophd_cont_aside_tt">需求描述：</b>{{demand.description}}<div ng-if="!demand.description" style="color:#ccc;">这家伙这么懒，什么都没说就提需求了！</div></li>
+                </ul>
+                
             </div>
         </div>
     </div>
@@ -34,25 +41,19 @@
     <div class="mod_cont_fullmain">
         <div class="mod_cont_main_wrap">
 
-            <section class="blocks">
-                <!-- <h2 class="blocks_tit">描述</h2> -->
-                <div ng-if="!description" style="text-align:center;color:#ccc;">这家伙这么懒，什么都没说就提需求了！</div>
-                <div>{{description}}</div>
-            </section>
-
             <section class="blocks files">
-                <h2 class="blocks_tit">附件</h2>
-                <div ng-if="files.length<=0" style="text-align:center;color:#ccc;">没有附件</div>
+                <h2 class="blocks_tit">附件：</h2>
+                <div ng-if="files.length<=0" style="margin-bottom: 10px;text-align:center;color:#4d4d4d;">没有附件哦~</div>
                 <ul class="files_list list-unstyled clearfix" id="files">
                     <li ng-repeat="x in files" title="{{x.originalname}}"><a href="attachment/{{x.filename}}/{{x.originalname}}">{{x.originalname}}</a></li>
                 </ul>
-                <input type="file" name="file" kendo-upload k-options="uploadOpts" ng-show="!SessionService.isAnonymus">
+                <input type="file" name="file" kendo-upload k-options="uploadOpts" ng-show="!identity.isAnonymus && demand.state!=0 && demand.state!=4">
             </section>
 
-            <section class="blocks solvemsg">
-                <h2 class="blocks_tit">动态</h2>
-                <div ng-if="solveMsg.length<=0" style="text-align:center;color:#ccc;">并没有动态哦~</div>
-                <article class="solvemsg_item" ng-repeat="x in solveMsg">
+            <section class="blocks solvemsg" ng-if="demand.state!=0">
+                <h2 class="blocks_tit">动态：</h2>
+                <div ng-if="demand.solveMsg.length<=0" style="margin-bottom: 10px;text-align:center;color:#4d4d4d;">没有动态哦~</div>
+                <article class="solvemsg_item" ng-repeat="x in demand.solveMsg">
                     <div class="solvemsg_item_vote">
                         <button class="solvemsg_item_vote_btn" style="display:none;"></button>
                         <span class="solvemsg_item_vote_num" style="display:none;">12</span>
@@ -85,8 +86,8 @@
                 </article>
             </section>
 
-            <section class="blocks handler" ng-show="state!=0 && !SessionService.isAnonymus">
-                <h2 class="blocks_tit">处理</h2>
+            <section class="blocks handler" ng-show="demand.state!=0 && !identity.isAnonymus && (canSolving || canSolved || canClosed || canReopen)">
+                <h2 class="blocks_tit">处理:</h2>
                 <!-- S: PageDown 编辑器 -->
                 <div class="editor editMode" id="editor">
                     <div class="editor-toolbar" id="wmd-button-bar-desc"></div>
@@ -101,25 +102,40 @@
                 <!-- 、E: PageDown 编辑器 -->
                 <div class="handler_btnwrap">
                     <div class="radio_wrap">
-                        <label ng-click="isEnableSmbtn = true"><input type="radio" name="state" class="solving" disabled value="solving"><span class="pseuradio"></span><span>处理中</span></label>
-                        <label ng-click="isEnableSmbtn = true"><input type="radio" name="state" class="solved" disabled value="solved"><span class="pseuradio"></span><span>待确认</span></label>
-                        <label ng-click="isEnableSmbtn = true"><input type="radio" name="state" class="closed" disabled value="closed"><span class="pseuradio"></span><span>确认</span></label>
-                        <label ng-click="isEnableSmbtn = true"><input type="radio" name="state" class="reopen" disabled value="reopen"><span class="pseuradio"></span><span>重启</span></label>
+                        <label ng-click="isEnableSmbtn = canSolving ? true : isEnableSmbtn">
+                            <input type="radio" name="state" class="solving" ng-disabled="!canSolving" value="solving">
+                            <span class="pseuradio"></span><span>处理中</span>
+                        </label>
+                        <label ng-click="isEnableSmbtn = canSolved ? true : isEnableSmbtn">
+                            <input type="radio" name="state" class="solved" ng-disabled="!canSolved" value="solved">
+                            <span class="pseuradio"></span><span>待确认</span>
+                        </label>
+                        <label ng-click="isEnableSmbtn = canClosed ? true : isEnableSmbtn">
+                            <input type="radio" name="state" class="closed" ng-disabled="!canClosed" value="closed">
+                            <span class="pseuradio"></span><span>确认</span>
+                        </label>
+                        <label ng-click="isEnableSmbtn = canReopen ? true : isEnableSmbtn">
+                            <input type="radio" name="state" class="reopen" ng-disabled="!canReopen" value="reopen">
+                            <span class="pseuradio"></span><span>重启</span>
+                        </label>
                     </div>
                     <button class="handler_btnwrap_smbtn btn btn-large {{isEnableSmbtn || 'disabled'}}" ng-disabled="!isEnableSmbtn" ng-click="smbtn()">确认提交</button>
                 </div>
             </section>
 
-            <section class="blocks audit" ng-show="state==0 && !SessionService.isAnonymus">
-                <h2 class="blocks_tit">处理</h2>
+            <div style="text-align:center;" ng-if="demand.state==0 && !identity.isAdmin">需求尚未审核，快提醒管理员审核哟~</div>
+
+            <section class="blocks audit" ng-show="demand.state==0 && identity.isAdmin">
+                <h2 class="blocks_tit">处理：</h2>
                 <input class="audit_user" kendo-auto-complete="" ng-model="userObjSelected" k-options="userObjSelectedOpts">
                 <div style="margin-top:10px;text-align:center;">
-                    切换日历排期：<input kendo-mobile-switch type="checkbox" ng-model="isUseCalendar" k-on-label="'ON'" k-off-label="'OFF'" />
+                    切换日历排期：
+                    <label class="audit_switch"><input kendo-mobile-switch type="checkbox" ng-model="isUseCalendar" k-on-label="'ON'" k-off-label="'OFF'" /><b ng-show="isUseCalendar==true"></b></label>
                 </div>
                 <div ng-show="isUseCalendar==true" style="margin:10px 0 30px;text-align:center;">
                     Start: <input onkeydown="javascript:this.blur()" 
                         kendo-date-picker="test"
-                        ng-model="startDate"
+                        ng-model="auditStartDate"
                         k-max="maxDate"
                         k-rebind="maxDate"
                         k-options="startDatepickerOptions"
@@ -127,7 +143,7 @@
                     />
                     End: <input onkeydown="javascript:this.blur()" 
                         kendo-date-picker
-                        ng-model="endDate"
+                        ng-model="auditEndDate"
                         k-min="minDate"
                         k-rebind="minDate"
                         k-options="endDatepickerOptions"
@@ -140,8 +156,7 @@
                         <input />
                     </div>
                 </div>
-                <button style="display:block;margin:0 auto;width:200px;height:50px;background:#e12228;border:none;border-radius:3px;color:#fff;cursor:pointer;" ng-click="btnAudited()" ng-show="isAdmin==true">点击审核</button>
-                <div style="text-align:center;" ng-show="isAdmin==false">需求尚未审核，快提醒管理员审核哟~</div>
+                <button style="display:block;margin:0 auto;width:200px;height:50px;background:#e12228;border:none;border-radius:3px;color:#fff;cursor:pointer;" ng-click="btnAudited()" ng-show="identity.isAdmin==true">点击审核</button>
             </section>
         </div>
     </div>

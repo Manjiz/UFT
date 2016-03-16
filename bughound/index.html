@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="public/css/kendo/kendo.rtl.min.css">
     <link rel="stylesheet" href="public/css/kendo/kendo.material.min.css">
     <link rel="stylesheet" href="public/css/kendo/kendo.material.mobile.min.css">
+<link rel="stylesheet" href="public/js/lib/image-cropper/cropper.css" /><!--图片裁切-->
 </head>
 <body ng-controller="customersCtrl">
 
@@ -35,7 +36,7 @@
     <a class="mod_guid_backtop" href="javascript:void(0)">回顶部</a>
     <div class="mod_guid_qrcode">
         <a class="mod_guid_qrcode_thumb" href="/app#qrcode"><span></span></a>
-        <img class="mod_guid_qrcode_pic" alt="UFT 前端需求提交平台" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAEYAQMAAAC9QHvPAAAABlBMVEX///8AAABVwtN+AAABlElEQVRo3u3ZsY3DMAwFUAYpXHqEjOLRktFuFI+QUkVgHr9ImbjmxBwOqT4LQ6BeGoGiHFkY/xB39cDgGZndnpfIv2jm5kt6xga3p1wNwywvyyAWmoq5qSKDAcJyhuXiK0/zjpHNM/rYdqH5m5GbNpuCWRtN1eR+j22uR/ZMQdBUjPbwnmmtMgceNFOTgaIdYUZG0BTMOHdsrl0hUL0YPPoUzcx4Y9RDLOetMg6gi+OFZm6QyVVFjHPHAs2TZm4sg4KEMXyIGY3THJhmZnK/p7ESXVWPMUUzNajV8dqzBoZR7RmaqcGU73dgbb1W5UfQlMwS+x0mSlQx2HaaipHRIbNWvXrHFM3U3K1DNl/wxOLNU2mKJm7DxqraOp93jJiiqZioTBl/peNXgWmKRmOdtZ87ngHWJjQzk4GeiUzeS3gXpZkYDDzA1nEvscYXBCRp5gaDvJXFIK90dpqaQSavZwNrRKOpm3N391ptMj5g0bxl9DzEtcm4uaWpGDzzjVFUI4OplaZi1MMvbAPnlyyh+d0wPhXfKnnSCX0sWK4AAAAASUVORK5CYII=">
+        <img class="mod_guid_qrcode_pic" alt="UFT 前端需求提交平台" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEXr6+thkOgRGyM+AAABCUlEQVQ4y53TsZHEIAwF0D9DoHAb0KzaIKOlDZ2ZjPBackYbeGiCgPE/fAXAeX/EC/6gQML/Y2S0COmBnEvhEiOP4iEL7TVWVnbPvBZGvpFKJdYak7kG3z1kLiOTbjVrIOcakdE8dDyeia2mgh7gF3p1YNOg/uRc+nGNTe+OLLRjs1apKGEuRzaLZMFbngi77tbcAX/mufRljWRTKTKXY5faiu9y+bmMNbLx/kOeSIGdyehYFsLHosUegDMv9NKNrEfHhbnsxyUXuycvP9eIWOPonfmJjEwd95YXmevvHhJkTOYX2msqUkCWsFTsACxbeyqjyy4bF4KLTK5peIe5jIzWSrDj8lN9m18EH/zMN3SZnQAAAABJRU5ErkJggg==">
         <p class="mod_guid_qrcode_txt">扫扫访问 UFT</p>
     </div>
 </div>
@@ -45,36 +46,38 @@
 <div ng-include src="'view/core/footer.html'"></div> 
 <!--# E 引入尾部 -->
 
-<script src="http://weinre.qiang.it/target/target-script-min.js#taizhen"></script><!-- 微信debug -->
-<script src="_conf"></script>
+<script id="tpl" type="text/x-template">
+<img src="dummy.png" title="{{title}}"/>
+</script>
+
+<!--<script src="http://weinre.qiang.it/target/target-script-min.js#taizhen"></script> 微信debug -->
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=53467417" charset="UTF-8"></script><!-- 页面统计 -->
+
 <script src="public/js/lib/jquery-1.10.2.js"></script>
 <script src="public/js/lib/angular.min.js"></script>
 <script src="public/js/lib/plugins/angular-ui-router.js"></script><!--NG 路由插件-->
-
 <script src="public/js/lib/md5.js"></script>
-
-<!-- kendo customly build - autocomplete dropdownlist datepicker slider || upload    [kendo-mobile-switch] -->
+<!-- kendo customly build - autocomplete dropdownlist datepicker slider draganddrop || upload angular   [kendo-mobile-switch] -->
 <script src="public/js/lib/plugins/kendo.custom.min.js"></script>
 <script src="public/js/lib/plugins/kendo.upload.min.js"></script>
 <script src="public/js/lib/plugins/kendo.angular.min.js"></script>
-
+<!-- <script src="http://kendo.cdn.telerik.com/2015.3.1111/js/kendo.all.min.js"></script> -->
 <script src="public/js/lib/plugins/ui-bootstrap-tpls-0.13.4.min.js"></script><!--NGUIBT 翻页插件-->
-
 <script type="text/javascript" src="public/js/lib/pagedown/Markdown.Converter.js"></script><!-- pagedown 编辑器 -->
 <script type="text/javascript" src="public/js/lib/pagedown/Markdown.Sanitizer.js"></script><!-- pagedown 编辑器 -->
 <script type="text/javascript" src="public/js/lib/pagedown/Markdown.Editor.js"></script><!-- pagedown 编辑器 -->
-
+<script src="public/js/lib/image-cropper/cropper.js"></script><!-- 图片裁切 -->
 <script src="public/js/lib/ua-parser.min.js"></script>
-<script src="public/js/app/common.js"></script>
-
+<script src="public/js/common.js"></script>
 <!-- STATE -->
-<script src="public/js/app/stateLogin.js"></script>
-<script src="public/js/app/stateApply.js"></script>
-<script src="public/js/app/stateMyapply.js"></script>
-<script src="public/js/app/stateGallery.js"></script>
-<script src="public/js/app/stateAudited.js"></script>
-<script src="public/js/app/stateDetail.js"></script>
-<script src="public/js/app/stateProfile.js"></script>
+<script src="state/stateLogin.js"></script>
+<script src="state/stateApply.js"></script>
+<script src="state/stateMyapply.js"></script>
+<script src="state/stateGallery.js"></script>
+<script src="state/stateSchedule.js"></script>
+<script src="state/stateAudited.js"></script>
+<script src="state/stateDetail.js"></script>
+<script src="state/stateProfile.js"></script>
 
 <script>
 $.noConflict();
@@ -82,7 +85,8 @@ var _conf = conf();
 angular.module('myapp', [
     'ui.router',
     'kendo.directives',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'cropper'
 ], angular.noop)
 
 .filter('reverse', function() {
@@ -113,13 +117,14 @@ angular.module('myapp', [
 .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
     $httpProvider.interceptors.push('UserInterceptor');
 
-    $urlRouterProvider.otherwise('gallery');  //无效路由
+    $urlRouterProvider.otherwise('schedule');  //无效路由
 
     $stateProvider
         .state('login', loginState)
         .state('apply', applyState)
         .state('myapply', myapplyState)
         .state('gallery', galleryState)
+        .state('schedule', scheduleState)
         .state('audited', auditedState)
         .state('detail', detailState)
         .state('profile', profileState);
@@ -131,6 +136,16 @@ angular.module('myapp', [
         token: '',
         isAnonymus: true,
         session: null
+    }
+})
+
+// 数据包
+.service('datalump', function() {
+    return {
+        userList: null,
+        depList: null,
+        dtypeList: null,
+        businessList: null
     }
 })
 
@@ -147,44 +162,74 @@ angular.module('myapp', [
 })
 
 .controller('customersCtrl', function($scope, $http, $state, SessionService) {
+    $scope.navBar = false;
+    $scope.mine = false;
+    $scope.mineBar = false;
+    $scope.hideNav = function () {
+        $scope.navBar = !$scope.navBar;
+        if($scope.mine){
+            $scope.mine = !$scope.mine;
+        }
+    };
+    $scope.hideMine = function () {
+        $scope.mine = !$scope.mine;
+    };
+    $scope.hideMineBar = function () {
+        $scope.mine = !$scope.mine;
+        $scope.navBar = !$scope.navBar;
+    };
+    $scope.notAuditedNum = 0;
     // 本地-服务器 身份验证
-    $scope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
+     $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+        $scope.navidx = toState.name;
         // 询问登录信息
-        $http.get('http://' + location.host + '/api/queryauth').success(function(data) {
-            console.log(data)
-            if(data.logined) {
+        $http.get('api/queryauth').success(function(data) {
+            if(data.loginederp) {
                 SessionService.isAnonymus = false;
             } else {
                 SessionService.isAnonymus = true;
             }
             SessionService.session = data;
             $scope.SessionService = SessionService; //------z
+
+            // 广播
+            $scope.$broadcast('authdone', SessionService.session.loginederp, SessionService.session.isAdmin);
+
+            $scope.uerp = Cookie.getCookie('uerp');
+            $scope.uname = decodeURI(escape(Cookie.getCookie('uname')));
+            $scope.profile = $scope.uname+'('+$scope.uerp+')';
+
+            if(SessionService.session.isAdmin) {
+                $http.get('api/demand/getnotauditedcount').success(function(data) {
+                    $scope.notAuditedNum = data['COUNT(*)'];
+                })
+            }
+
             // 跳登录页
             if(toState.name=='login') {
                 if(SessionService.isAnonymus==false) {
                     event.preventDefault();
-                    $state.go(fromState.name);
+                    $state.go(fromState.name || 'schedule');
                     return;
                 } else {
-                    return;
+                   return;
                 }
             }
-
-            // 游客可访问页面 [detail]暂未支持
-            if(toState.name=='gallery' || toState.name=='detail') {
-                return;
+            if( (toState.name=='gallery' || toState.name=='audited') && !SessionService.session.isAdmin) {
+                event.preventDefault();
+                $state.go(fromState.name || 'schedule');
             }
+            
             // 如果是匿名游客
             if(SessionService.isAnonymus){
                 event.preventDefault(); // 取消默认跳转行为
                 $state.go("login");     //跳转到登录界面
             }
+        }).error(function(data, status, headers, config) {
+            alert('Jump to temporary 500 page');
+            // location.href = 'http://www.jd.com';
         })
-    });
-
-    $scope.uerp = Cookie.getCookie('uerp');
-    $scope.uname = Cookie.getCookie('uname');
-    $scope.profile = $scope.uname+'('+$scope.uerp+')';
+     });
 });
 
 /*------------------------
@@ -225,21 +270,24 @@ document.querySelector('.mod_guid_backtop').addEventListener('click', function()
             'public/img/dbusiness.png',
             'public/img/dexecutedate.png',
             'public/img/dexecutor.png',
+            'public/img/dname.png',
             'public/img/dtype.png',
             'public/img/editor@2x.png',
             'public/img/favicon.ico',
-            // 'public/img/file.png',
+            'public/img/error.png',
             // 'public/img/ico_email.png',
             // 'public/img/ico_erp.png',
             'public/img/ico_eye.png',
             'public/img/ico_eye2.png',
             // 'public/img/ico_pwd.png',
             // 'public/img/ico_triangle.png',
-            // 'public/img/login_show.png',
+            'public/img/login_show.png',
             'public/img/logo.png',
             'public/img/radio.png',
             'public/img/radio_checked.png',
             'public/img/succ.png',
+            'public/img/success.png',
+            'public/img/white.jpg',
             'public/images/o2.jpg',
             'public/css/kendo/Material/loading.gif',
             'public/css/kendo/Material/slider-h.gif',
@@ -265,6 +313,8 @@ document.querySelector('.mod_guid_backtop').addEventListener('click', function()
         }
     }
 })();
+
+// Cookie.setCookie('erp1.jd.com', 'BCCB7FDE7E47BAA1CC698F2D78A47636BCCED5C1B962CD58B604464F93221B5078DFB825F116D7849B12467B6CEEECB12FA9F697773F4F6FA3516CE04FA74E3BDDCF0836C31BAB8C0CC3F4F4295A97F3');
 </script>
 </body>
 </html>

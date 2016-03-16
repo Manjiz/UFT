@@ -1,95 +1,61 @@
-<style>
-@charset "UTF-8";
+<style>@import url(public/css/app/login.css);</style>
 
-.mod_cont_fullmain {overflow:hidden;}
-
-.form {padding:20px 10px;width:100%;}
-.form.signin {float:right;}
-.form.signup {float:left;}
-    .form_tit {margin:0 0 20px 0;font-size:18px;font-weight:normal;color:#777;}
-    .form_inp {position:relative;margin-bottom:15px;}
-        .form_inp label {display:inline-block;margin-bottom:5px;font-weight:bold;}
-        .form_inp input {padding:6px 12px;width:100%;height:35px;}
-        /*sp:show/hide pwd*/
-        .form_inp .eye {position:absolute;z-index:1;display:block;width:33px;height:33px;right:1px;top:27px;}
-        .form_inp .eye {background:url(../public/img/ico_eye.png); background-size:100% auto;cursor:pointer;}
-        .form_inp .eye.active {background:url(../public/img/ico_eye2.png); background-size:100% auto;}
-        /*sp:Rember pwd*/
-        .signin .remember {padding:10px 0;}
-            .signin .remember input[type="checkbox"] {display:none;}
-            .signin .remember label span {vertical-align:middle;}
-            .signin .remember label span:nth-child(2) {margin-left:5px;}
-            .signin .remember input[type="checkbox"] + label .pseucheckbox {display:inline-block;width:17px;height:17px;background:url(../public/img/checkbox.png) center center no-repeat;color:#b3b3b3;vertical-align:middle;}
-            .signin .remember input[type="checkbox"]:checked + label .pseucheckbox {background:url(../public/img/checked.png) center center no-repeat;}
-            .signin .remember a {float:right;text-decoration:underline;color:#b3b3b3;}
-        .form_btn {display:block;width:100%;border:1px solid #BE3324;background:#E12228;color:#fff;}
-        .form_btn:hover {color:#fff;}
-@media (min-width:767px) {
-.pse_wrap {background:#F3F3F3;}
-.mod_cont_fullmain {padding:20px 10px;background:#fff;}
-.form {padding:10px 50px;width:50%;}
-.form.signup {border-right:1px solid #eee;}
-}
-@media (min-width:992px) {
-.mod_cont_fullmain {padding:30px 10px;}
-.form {padding:10px 100px;}
-}
-
-/**/
-.k-dropdown .k-dropdown-wrap {border-color:#ccc;background:#fff;}
-</style>
 <div class="mod_cont">
     <div class="mod_cont_fullmain">
 
-        <div class="form signin">
+        <div class="loginlogo"></div>
+
+        <div class="form signin" ng-hide="bind">
             <h2 class="form_tit">用户登录</h2>
             <div class="form_inp">
                 <label for="signin_erp">ERP 帐号</label>
-                <input id="signin_erp" class="inp-text" type="text" placeholder="输入 ERP 帐号">
+                <input id="signin_erp" class="inp-text" type="text" placeholder="">
             </div>
-            <div class="form_inp">
-                <label for="signin_pwd">密码</label>
+            <!-- <div class="form_inp">
+                <label for="signin_pwd">ERP 密码</label>
                 <input id="signin_pwd" class="inp-text" type="password" placeholder="输入密码">
-            </div>
+            </div> -->
             <div class="form_inp">
                 <div class="remember clear">
                     <input id="remember" type="checkbox">
                     <label for="remember">
                         <span class="pseucheckbox"></span>
-                        <span>记住密码</span>
+                        <span>记住用户</span>
                     </label>
-                    <a href="javascript:void(0);">忘记密码</a>
+                    <!-- <a href="javascript:void(0);">忘记密码</a> -->
                 </div>
+                <a href="javascript:void(0);" class="signin_bind" ng-click="bind = !bind">绑定erp才可以登录噢</a>
                 <a class="form_btn btn btn-large" href="#">立即登录</a>
+                
             </div>
         </div>
-
+        
         <div class="form signup">
-            <h2 class="form_tit">用户注册</h2>
+            <h2 class="form_tit">用户绑定</h2>
             <div class="form_inp">
                 <label for="signup_erp">ERP 帐号</label>
-                <input id="signup_erp" class="inp-text" type="text" placeholder="maoxiaoyu">
+                <input ng-model="verp" id="signup_erp" class="inp-text" type="text" placeholder="ERP 帐号" disabled>
             </div>
             <div class="form_inp">
                 <label for="signup_name">中文姓名</label>
-                <input id="signup_name" class="inp-text" type="text" placeholder="毛小雨">
+                <input id="signup_name" class="inp-text" type="text" placeholder="姓名">
             </div>
             <div class="form_inp">
                 <label for="signup_email">Email</label>
                 <input id="signup_email" class="inp-text" type="text" placeholder="example@jd.com">
             </div>
-            <div class="form_inp">
+            <!-- <div class="form_inp">
                 <label for="signup_pwd">密码</label>
                 <input id="signup_pwd" class="inp-text" type="{{isShowPwd ? 'text' : 'password'}}" placeholder="6至8个字符，字母、数字或者英文符号">
                 <div class="eye {{isShowPwd && 'active'}}" ng-click="isShowPwd=!isShowPwd"></div>
-            </div>
+            </div> -->
             <div class="form_inp">
                 <label for="signup_dep">部门</label>
-                <select ng-model="signupDep" kendo-drop-down-list k-options="depSelectOpts" style="display:block;width:100%;"></select>
+                <select id="signup_dep" ng-model="signupDep" kendo-drop-down-list k-options="depSelectOpts" style="display:block;width:100%;"></select>
             </div>
-            <a class="form_btn btn btn-large" href="#">注册</a>
+            <a class="form_btn btn btn-large" href="#">绑定</a>
         </div>
-
+        
     </div>
 </div>
 

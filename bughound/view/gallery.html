@@ -1,46 +1,5 @@
 <style>@import url(public/css/app/gallery.css);</style>
 
-<div class="schedule">
-    <h2 class="schedule_tit">周排期表</h2>
-    <div class="schedule_ctrl">
-        <select class="schedule_ctrl_sdep" ng-model="m_showThisDep" kendo-drop-down-list k-options="depSelectOpts"></select>
-        <div class="schedule_ctrl_cweek">
-            <div class="schedule_ctrl_cweek_btn" ng-click="changeWeek(-1)"></div>
-            <div class="schedule_ctrl_cweek_msg">{{ weekStep==0 ? '本周' : (weekStep>0 ? '后'+weekStep+'周' : '前'+(-weekStep)+'周') }}</div>
-            <div class="schedule_ctrl_cweek_btn" ng-click="changeWeek(1)"></div>
-        </div>
-    </div>
-    <div class="schedule_tbwrap">
-        <table class="schedule_tbwrap_tb">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>周日 <span>{{ wStart | date: 'MM/dd' }}</span></th>
-                    <th>周一 <span>{{ wStart+86400000*1 | date: 'MM/dd' }}</span></th>
-                    <th>周二 <span>{{ wStart+86400000*2 | date: 'MM/dd' }}</span></th>
-                    <th>周三 <span>{{ wStart+86400000*3 | date: 'MM/dd' }}</span></th>
-                    <th>周四 <span>{{ wStart+86400000*4 | date: 'MM/dd' }}</span></th>
-                    <th>周五 <span>{{ wStart+86400000*5 | date: 'MM/dd' }}</span></th>
-                    <th>周六 <span>{{ wStart+86400000*6 | date: 'MM/dd' }}</span></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="x in dschedule | filter:{depID:m_showThisDep}">
-                    <td>{{x.name}}</td>
-                    <td ng-repeat="y in x.schedule track by $index" colspan="{{y.block.length}}">
-                        <div class="infowrap" ng-if="!y.date" ui-sref="detail({ did: {{y.demandID}} })">
-                            <span class="infowrap_dame">{{y.demandName}}</span><br><span class="infowrap_dictator">- {{y.dictator}}</span>
-                        </div>
-                        <div class="emptywrap" ng-if="y.date" ui-sref="apply({ erp:'{{x.erp}}', date:{{y.date}} })"></div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<hr style="height:1px;background:#ddd;border-top:1px solid #ccc;border-bottom:2px solid #eee;">
-
 <div class="mod_cont">
     <div class="mod_cont_main">
         <div class="mod_cont_main_wrap dlist">
@@ -83,7 +42,7 @@
 
     <div class="mod_cont_aside">
         <div class="mod_cont_aside_wrap">
-            <a class="o2" href="https://github.com/o2team" style="display:block;margin-bottom:10px;height:150px;border:1px solid #dedede;text-align:center;background:#6190E8;"><img src="public/images/o2.jpg" alt="o2team" style="height:100%;"></a>
+            <!-- <div class="o2" style="display:block;margin-bottom:10px;text-align:center;overflow: hidden;"><img src="public/img/rank.jpg" alt="rank" style="width:100%;"></div> -->
             <h2 style="text-align:center;">需求提交榜</h2>
             <ol class="list-unstyled">
                 <li ng-repeat="x in topSubmitterList" style="overflow:hidden;border-bottom:1px dashed #ddd;">

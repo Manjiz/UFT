@@ -1,6 +1,6 @@
 <style>@import url(public/css/app/apply.css);</style>
 <div class="tophd">
-    <ul class="tophd_step step1" ng-show="pageState=='original'">
+    <ul class="tophd_step {{pageState=='original' ? 'step1' : 'step2'}}">
         <li>
             <div class="tophd_step_num">1</div>
             <div class="tophd_step_txt">需求申请</div>
@@ -17,16 +17,9 @@
 </div>
 
 <div class="mod_cont">
-    <div class="mod_cont_main">
+    <div class="mod_cont_fullmain">
         <div class="applyform" ng-show="pageState=='original'">
             
-            <fieldset class="applyform_it dname">
-                <h3><span>需求名称</span></h3>
-                <div class="applyform_it_main">
-                    <input ng-model="apply.name" type="text" placeholder="输入需求名称">
-                </div>
-            </fieldset>
-
             <fieldset class="applyform_it dtype icontit">
                 <h3><span>需求类型</span><img src="public/img/dtype.png" alt=""></h3>
                 <div class="applyform_it_main">
@@ -39,6 +32,13 @@
                             </label>
                         </li>
                     </ul>
+                </div>
+            </fieldset>
+            
+            <fieldset class="applyform_it dname icontit">
+                <h3><span>需求名称</span><img src="public/img/dname.png" alt=""></h3>
+                <div class="applyform_it_main">
+                    <input ng-model="apply.name" type="text" placeholder="输入需求名称">
                 </div>
             </fieldset>
 
@@ -80,7 +80,7 @@
             
             <div class="applyform_btnwrap">
                 <a class="applyform_btnwrap_yesbtn btn btn-large" ng-click="submit()">确认提交</a>
-                <a class="applyform_btnwrap_nobtn btn btn-large" ng-click="savedraft()">我再想想</a>
+                <!-- <a class="applyform_btnwrap_nobtn btn btn-large" ng-click="savedraft()">我再想想</a> -->
             </div>
         </div>
     
@@ -88,10 +88,8 @@
             <div class="applysucc_info">
                 <div class="applysucc_info_tit">提交成功，我们会尽快审核！</div>
                 <div class="applysucc_info_msg">
-                    <p>审核合格，您将收到 <span>[资源分配周知邮件]</span></p>
-                    <p>审核不合格，您将收到 <span>[审核不通过周知邮件]</span>，您可以根据反馈邮件补充材料重新提交申请。</p>
+                    审核成功后，您将会收到邮件通知。
                 </div>
-                <div class="applysucc_info_num">需求编号：<span>{{getDemandId}}</span></div>
                 <div class="applysucc_info_btnwrap">
                     <a class="applysucc_info_btnwrap_check btn btn-large" ng-if="getDemandId!=0" ui-sref="detail({ did:{{getDemandId}} })">查看当前需求</a>
                     <a class="applysucc_info_btnwrap_ahead btn btn-large" href="javascript:location.reload();">继续提需求</a>
@@ -99,11 +97,11 @@
             </div>
         </div>
     </div>
-    <div class="mod_cont_aside" ng-show="pageState=='original'">
+    <!-- <div class="mod_cont_aside" ng-show="pageState=='original'">
         <div class="mod_cont_aside_wrap">
             <a class="o2" href="https://github.com/o2team" style="display:block;margin-bottom:10px;height:150px;border:1px solid #dedede;text-align:center;background:#6190E8;"><img src="public/images/o2.jpg" alt="o2team" style="height:100%;"></a>
         </div>
-    </div>
+    </div> -->
 </div>
 
 
