@@ -122,14 +122,6 @@ app.get(/admin2/, function(req, res, next) {
 	}
 });
 
-// app.get('/api', function(req, res, next) {
-// 	if(req.session.erp) {
-// 		next();
-// 	} else {
-// 		res.sendStatus(401);
-// 	}
-// })
-
 // 发现这几行只能放在身份验证后面
 app.use(express.static(__dirname + '/bughound'));
 app.use('/upload', express.static(__dirname+'/'+_confServer.uploadPath));

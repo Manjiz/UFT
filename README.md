@@ -1,8 +1,8 @@
 # UFT 前端需求提交平台及管理后台
 
-## 整体规划
+**[看！开发日志](https://github.com/o2team/UFT/wiki/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97)**
 
-[看！开发日志](https://github.com/o2team/UFT/wiki/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97)
+## 整体规划
 
 ### 项目介绍
 
@@ -24,57 +24,32 @@
 
 ### 项目部署
 
-1. 安装 MySQL@5.6.*
-2. 安装 Node.js@0.12.*
-3. 导入数据库文件 uft.sql
-4. 配置 conf-server.js 文件
+**环境要求**
+
+- MySQL@^5.6
+- Node.js@^4.2.0（5.8.0依然正常）
+
+**部署**
+
+1. 导入数据库文件 uft.sql
+2. 配置 conf-server.js 文件（把文件名后面的.bak去掉）
 	* 邮箱配置信息
-	* 数据库配置信息（*）
 	* 异步文件临时目录（*）
 	* 上传文件存储目录（*）
-5. 配置 conf.js 文件（可选）
-6. >> npm install
-7. 启动服务：
-	* >> node server
-	* >> forever server.js（需先 >> npm i -g forever）
+3. >> npm install
+4. 启动：
+
+  ``` bash
+  >> node server
+  ```
 
 ### 源码
 
 * [源码](https://github.com/o2team/UFT)
 
-## 规范（移动优先）
-
-### 组件
-
-* 色调：
-	* 主色：`#E12228`
-	* 副色：`#6190E8`
-* 通用距离：10Npx
-* 按钮：
-	* 圆角：2px
-	* 颜色：
-		* 主色(如确认按钮)：`border:1px solid #E12228;background: #E12228;color:#fff;`
-		* 普通（如取消按钮）：`color: #4d4d4d;border:1px solid #e6e6e6;background:#fff;`
-		* 不可用：`#e1aaa8`
-		* 加深色：`#DC1218`（hover / active）
-		* 危险：`border: 1px solid #E12228;background: #FFF0F0;color: #E12228;`（hover / active）
-	* 尺寸：
-		* 标准按钮 30x100 —— .btn.btn-normal
-		* 大型按钮 35x100 —— .btn.btn-large
-* 输入 —— input.inp-text ：
-	* 正常：
-		* 圆角：2px
-		* 边框：`#ebebeb`
-		* 背景：`#fff`
-		* 阴影：`box-shadow:inset 0 1px 2px rgba(0,0,0,0.075);`
-		* 动效：`transition:border-color ease-in-out .15s, box-shadow ease-in-out .15s;`
-	* FOCUS：
-		* 边框：`#66afe9`
-		* 背景：`#fff`
-		* 阴影：`box-shadow:inset 0 1px 2px rgba(0,0,0,0.075),0 0 5px rgba(81,167,232,0.5);`
-		* 动效：`transition:0s;`
+## 移动优先
 
 ### 响应式
 
-* 阶梯一：767px
-* 阶梯二：992px
+* 767px
+* 992px

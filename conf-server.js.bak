@@ -15,8 +15,8 @@
 	 		nodemailer: {
 			    service: '163',
 			    auth: {
-			        user: 'jdc_fd@163.com',
-			        pass: 'uliientoslppnlzb'
+			        user: '******',
+			        pass: '******'
 			    }
 			},
 			tempPath: 'temp',
