@@ -127,7 +127,7 @@ angular.module('myapp', [
     }
 })
 
-.config(function($stateProvider, $urlRouterProvider, $httpProvider, USER_ROLES) {
+.config(function($stateProvider, $urlRouterProvider, USER_ROLES) {
     $urlRouterProvider.otherwise('login');  //无效路由
 
     $stateProvider
@@ -342,6 +342,11 @@ angular.module('myapp', [
     $scope.navBar = false;
     $scope.mine = false;
     $scope.mineBar = false;
+
+    // S 导航栏显示
+    // $scope.showNavSchedule = !!Session.isGuest();
+    // E 导航栏显示
+
     $scope.hideNav = function () {
         $scope.navBar = !$scope.navBar;
         if($scope.mine){
@@ -351,11 +356,17 @@ angular.module('myapp', [
     $scope.hideMine = function () {
         $scope.mine = !$scope.mine;
     };
-    $scope.hideMineBar = function () {
+    $scope.hideMineBar = function () {console.log('hide')
         $scope.mine = !$scope.mine;
         $scope.navBar = !$scope.navBar;
     };
     $scope.notAuditedNum = 0;
+
+    $scope.logout = function() {console.log(123)
+        $http.get('api/user/logout').then(function(res) {
+            console.log(res)
+        });
+    }
 });
 
 /*------------------------

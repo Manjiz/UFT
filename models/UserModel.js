@@ -6,7 +6,7 @@
 	fs = require('fs'),
 
 	nodemailer = require('nodemailer'),
-	nodeimg = require('images'),
+	sharp = require('sharp'),
 	request = require('request');
 
 // 邮箱配置
@@ -310,15 +310,46 @@ exports.UserModel = {
 		var avatar = req.body.avatar,
 			cropContext = req.body.cropContext;
 		if(avatar && cropContext && req.session && req.session.erp) {
-			var data = 'data:image/jpg;base64,' + nodeimg(nodeimg(_confServer.tempPath+'/'+avatar), cropContext.left, cropContext.top, cropContext.width, cropContext.height).resize(100,100).encode('jpg', {operation:50}).toString('base64');
-			pool.getConnection(function(err, conn) {
-				conn.query('UPDATE user SET avatar=? WHERE erp=?', [data, req.session.erp], function(err, result) {
-					if(err) throw err;
-					if(result.affectedRows>0) {
-						res.json({state:'success', avatar:data});
-					} else {
-						res.json({state:'fail'});
+			var images = sharp(_confServer.tempPath+'/'+avatar);
+			var dataPromise = images
+				.metadata()
+				.then(function(metadata) {
+					if(cropContext.top>=metadata.height) {
+						cropContext.top = metadata.height - 1;	// 最少是 1x1
+					} else if(cropContext.top<0) {
+						cropContext.top = 0;
 					}
+					if(cropContext.left>=metadata.width) {
+						cropContext.left = metadata.width - 1;
+					} else if(cropContext.left<0) {
+						cropContext.left = 0;
+					}
+					if(cropContext.width > metadata.width) {
+						cropContext.width = cropContext.height = metadata.width
+					}
+					if(cropContext.height > metadata.height) {
+						cropContext.width = cropContext.height = metadata.height
+					}
+					return images.extract(cropContext.top, cropContext.left, cropContext.width, cropContext.height)
+						.resize(100, 100)
+						.sharpen()
+						.quality(100)
+						.toBuffer();
+				});
+
+			pool.getConnection(function(err, conn) {
+				dataPromise.then(function(buffer) {
+					var data = 'data:image/jpg;base64,' + buffer.toString('base64');
+					conn.query('UPDATE user SET avatar=? WHERE erp=?', [data, req.session.erp], function(err, result) {
+						if(err) throw err;
+						if(result.affectedRows>0) {
+							res.json({state:'success', avatar:data});
+						} else {
+							res.json({state:'fail'});
+						}
+						conn.release();
+					});
+				}).catch(function() {
 					conn.release();
 				});
 			});

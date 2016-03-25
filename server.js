@@ -115,7 +115,7 @@ schedule.scheduleJob('* * */24 * * *', function() {
    身份验证
  ------------------------*/
 app.get(/admin2/, function(req, res, next) {
-	if(req.session.loginederp && req.session.isAdmin) {
+	if(req.session.erp && req.session.isAdmin) {
 		next();
 	} else {
 		res.sendStatus(401);
@@ -254,15 +254,14 @@ function requireAuth(req, res, next) {
 			} else {
 				res.json({state:'fail', msg: '文件不存在'});
 			}
-		})
+		});
 	});
 	/* 退出登录 */
 	app.get('/api/user/logout', function(req, res) {
-		req.session.loginederp = null;
+		req.session.erp = null;
+		req.session.name = null;
 		req.session.isAdmin = null;
-		res.clearCookie('isAdmin');
-		res.clearCookie('uerp');
-		res.clearCookie('uname');
+		res.sendStatus(200);
 	});
 	app.get('/api/auth', function(req, res) {
 		res.send({erp:req.session.erp, name:req.session.name, isAdmin:!!req.session.isAdmin})

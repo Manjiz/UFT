@@ -31,14 +31,13 @@
                     <div class="nav_navbar_detail" ng-show="mine">
                         <a ng-click="hideMineBar()" ng-if="!Session.isGuest()" class="{{navidx=='profile' && 'active' }}" ui-sref="profile">我的信息</a>
                         <a ng-click="hideMineBar()" ng-if="!Session.isGuest()" class="{{navidx=='myapply' && 'active' }}" ui-sref="myapply">我的需求</a>
-                        <a ng-click="hideMineBar()" ng-if="!Session.isGuest()" href="api/user/logout">退出</a>
+                        <a ng-click="hideMineBar();logout()" ng-if="!Session.isGuest()" href="">退出</a>
                     </div>
 
                 </li>
                 <!-- <li ng-click="navBar = !navBar" ng-show="!Session.isGuest()" class="{{navidx=='profile' && 'active' }}"><a class="profile" ui-sref="profile">{{loginprofile || profile}}</a></li> -->
                 <!-- <li ng-click="navBar = !navBar" ng-show="!Session.isGuest()"><a href="api/user/logout">退出</a></li> -->
-
-                <!-- <li ng-click="navBar = !navBar" ng-show="Session.isGuest()" class="{{navidx=='login' && 'active' }}"><a ui-sref="login">绑定</a></li> -->
+                <li ng-click="navBar = !navBar" ng-show="Session.isGuest()" class="{{navidx=='login' && 'active' }}"><a ui-sref="login">登录/注册</a></li>
             </ul>
         </div>
     </div>
