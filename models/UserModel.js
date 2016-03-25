@@ -27,60 +27,44 @@ exports.UserModel = {
 	add: function(req, res) {
 		var erp = req.query.erp,
 			email = req.query.email,
-			password = req.query.password || 123456,
+			password = req.query.password,
 			name = req.query.name,
-			depID = req.query.depID || null;
+			depID = req.query.depID;
 
-		if(erp && email && password && name) {
-
-			request({
-				method: 'POST',
-				url: _confServer.erpauth,
-				timeout: 1500,
-				gzip: true,
-				form: {
-					v: req.cookies['erp1.jd.com']
-				}
-			}, function (error, response, body) {
-				if (!error && response.statusCode == 200 && body && body.length<20 && erp==body) {
-
-					pool.getConnection(function(err, conn) {
-						conn.query('SELECT * FROM user WHERE erp=? AND status=0', [erp], function(err, rows, fields) {
+		if(erp && email && password && name && depID && (typeof depID === 'number')) {
+			pool.getConnection(function(err, conn) {
+				conn.query('SELECT * FROM user WHERE erp=? AND status=0', [erp], function(err, rows, fields) {
+					if(err) throw err;
+					if(rows.length>0) {
+						res.json({state: 'fail', msg: '用户已存在，请不要重复注册'});
+						conn.release();
+					} else {
+						// 先删除可能存在的已关闭的同ERP用户，% 这一步不一定能顺利完成 %
+						conn.query('DELETE FROM user WHERE erp=? AND status<>0', [erp], function(err, result) {
 							if(err) throw err;
-							if(rows.length>0) {
-								res.json({state: 'fail', msg: '用户已存在，请不要重复注册'});
+							conn.query('INSERT INTO user (erp, email, password, name, depID, status) VALUES (?,?,MD5(?),?,?,?)', [erp, email, password, name, depID, 0], function(err, result) {
+								if(err) throw err;
+								if(result.affectedRows>0) {
+									res.json({state: 'success', msg: '添加用户成功，等待用户邮箱验证', returnurl:_confServer.returnUrl + '#/gallery'});
+								} else {
+									res.json({state: 'fail', msg: '未知错误'});
+								}
 								conn.release();
-							} else {
-								// 先删除可能存在的已关闭的同ERP用户，% 这一步不一定能顺利完成 %
-								conn.query('DELETE FROM user WHERE erp=? AND status<>0', [erp], function(err, result) {
-									if(err) throw err;
-									conn.query('INSERT INTO user (erp, email, password, name, depID, status) VALUES (?,?,MD5(?),?,?,?)', [erp, email, 123456, name, depID, 0], function(err, result) {
-										if(err) throw err;
-										if(result.affectedRows>0) {
-											res.json({state: 'success', msg: '添加用户成功，等待用户邮箱验证', returnurl:_confServer.returnUrl + '#/gallery'});
-										} else {
-											res.json({state: 'fail', msg: '未知错误'});
-										}
-										conn.release();
-									});
-								});
-							}
+							});
 						});
-					});
-
-				} else {
-					res.json({state: 'fail', msg: '未知错误'});
-				}
+					}
+				});
 			});
-
 		} else if(!erp) {
-			res.json({state: 'fail', msg: 'ERP 不能为空'});conn.release();
+			res.json({state: 'fail', msg: 'ERP 不能为空'});
 		} else if (!email) {
-			res.json({state: 'fail', msg: '邮箱不能为空'});conn.release();
+			res.json({state: 'fail', msg: '邮箱不能为空'});
 		} else if (!name) {
-			res.json({state: 'fail', msg: '名字不能为空'});conn.release();
+			res.json({state: 'fail', msg: '名字不能为空'});
 		} else if (!password) {
-			res.json({state: 'fail', msg: '密码不能为空'});conn.release();
+			res.json({state: 'fail', msg: '密码不能为空'});
+		} else if (!depID || (typeof depID === 'number')) {
+			res.json({state: 'fail', msg: '未选择所属部门'});
 		}
 	},
 	/**
@@ -138,7 +122,7 @@ exports.UserModel = {
 		var erp = req.body.erp,
 			pass = req.body.password;
 		pool.getConnection(function(err, conn) {
-			conn.query('SELECT * FROM user WHERE erp=? AND status=0', [erp, pass], function(err, rows, fields) {
+			conn.query('SELECT * FROM user WHERE erp=? AND password=? AND status=0', [erp, pass], function(err, rows, fields) {
 				if(err) throw err;
 				if(rows.length>0) {
 					req.session.erp = rows[0].erp;
@@ -148,10 +132,11 @@ exports.UserModel = {
 						if(err) throw err;
 						conn.release();
 					});
+					res.send(req.session);
 				} else {
+					res.sendStatus(401);
 					conn.release();
 				}
-				res.send(req.session);
 			})
 		});
 	},

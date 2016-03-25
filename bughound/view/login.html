@@ -8,11 +8,11 @@
         <div class="form signin">
             <h2 class="form_tit">用户登录</h2>
             <div class="form_inp">
-                <label for="signin_erp">ERP 帐号</label>
+                <label>ERP 帐号</label>
                 <input ng-model="signInErp" ng-keyup="EnterForSignIn($event)" class="inp-text" type="text" placeholder="请输入 ERP 帐号">
             </div>
             <div class="form_inp">
-                <label for="signin_pwd">ERP 密码</label>
+                <label>ERP 密码</label>
                 <input ng-model="signInPwd" ng-keyup="EnterForSignIn($event)" class="inp-text" type="password" placeholder="输入密码">
             </div>
             <div class="form_inp">
@@ -21,7 +21,7 @@
                         <input ng-checked="signInRemember" type="checkbox" ng-model="signInRemember">
                         <span></span><span>记住用户</span>
                     </label>
-                    <a href="javascript:void(0);">忘记密码</a>
+                    <a ng-click="findBack()" href="">忘记密码</a>
                 </div>
                 <a class="form_btn btn btn-large" href="#" ng-click="signIn()">立即登录</a>
             </div>
@@ -30,27 +30,27 @@
         <div class="form signup">
             <h2 class="form_tit">用户绑定</h2>
             <div class="form_inp">
-                <label for="signup_erp">ERP 帐号</label>
-                <input ng-model="verp" id="signup_erp" class="inp-text" type="text" placeholder="ERP 帐号">
+                <label>ERP 帐号</label>
+                <input ng-model="signUpErp" class="inp-text" type="text" placeholder="ERP 帐号">
             </div>
             <div class="form_inp">
-                <label for="signup_name">中文姓名</label>
-                <input id="signup_name" class="inp-text" type="text" placeholder="姓名">
+                <label>中文姓名</label>
+                <input ng-model="signUpName" class="inp-text" type="text" placeholder="姓名">
             </div>
             <div class="form_inp">
-                <label for="signup_email">Email</label>
-                <input id="signup_email" class="inp-text" type="text" placeholder="example@jd.com">
+                <label>Email</label>
+                <input ng-model="signUpEmail" class="inp-text" type="text" placeholder="example@jd.com">
             </div>
             <div class="form_inp">
-                <label for="signup_pwd">密码</label>
-                <input id="signup_pwd" class="inp-text" type="{{isShowPwd ? 'text' : 'password'}}" placeholder="6至8个字符，字母、数字或者英文符号">
+                <label>密码</label>
+                <input ng-model="signUpPwd" class="inp-text" type="{{isShowPwd ? 'text' : 'password'}}" placeholder="6至8个字符，字母、数字或者英文符号">
                 <div class="eye {{isShowPwd && 'active'}}" ng-click="isShowPwd=!isShowPwd"></div>
             </div>
             <div class="form_inp">
-                <label for="signup_dep">部门</label>
-                <select id="signup_dep" ng-model="signupDep" kendo-drop-down-list k-options="depSelectOpts" style="display:block;width:100%;"></select>
+                <label>部门</label>
+                <select ng-model="signUpDep" kendo-drop-down-list k-options="depSelectOpts" style="display:block;width:100%;"></select>
             </div>
-            <a class="form_btn btn btn-large" href="#">绑定</a>
+            <a ng-click="signUp()" class="form_btn btn btn-large" href="">绑定</a>
         </div>
         
     </div>

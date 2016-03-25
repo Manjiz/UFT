@@ -48,9 +48,9 @@
 
 <!-- <div login-dialog ng-include="'view/login.html'" ng-show="isPopupLogin"></div> -->
 
-<script id="tpl" type="text/x-template">
+<!-- <script id="tpl" type="text/x-template">
 <img src="dummy.png" title="{{title}}"/>
-</script>
+</script> -->
 
 <!--<script src="http://weinre.qiang.it/target/target-script-min.js#taizhen"></script> 微信debug -->
 <!-- <script type="text/javascript" src="http://tajs.qq.com/stats?sId=53467417" charset="UTF-8"></script>页面统计 -->
@@ -261,7 +261,7 @@ angular.module('myapp', [
     var authService = {};
 
     authService.login = function(credentials) {
-        return $http.post('api/user/login', credentials).then(function(res) {
+        return $http.post('api/user/login', credentials).then(function(res) {console.log(res)
             var role = USER_ROLES.guest;
             if(res.data.isAdmin) {
                 role = USER_ROLES.admin;
@@ -356,15 +356,18 @@ angular.module('myapp', [
     $scope.hideMine = function () {
         $scope.mine = !$scope.mine;
     };
-    $scope.hideMineBar = function () {console.log('hide')
+    $scope.hideMineBar = function () {
         $scope.mine = !$scope.mine;
         $scope.navBar = !$scope.navBar;
     };
     $scope.notAuditedNum = 0;
 
-    $scope.logout = function() {console.log(123)
+    $scope.logout = function() {
         $http.get('api/user/logout').then(function(res) {
-            console.log(res)
+            if(res.status==200) {
+                Session.destory();
+                $state.go('login');
+            }
         });
     }
 });
