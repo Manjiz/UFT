@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "UED-FD Task",
   "main": "server.js",
+  "engines": {"node": ">=4.4.4"},
   "dependencies": {
     "async": "^1.4.2",
     "body-parser": "^1.13.3",
