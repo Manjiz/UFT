@@ -171,7 +171,8 @@ function requireAuth(req, res, next) {
 	/* 登录 */
 	app.post('/api/user/login', function(req, res) { _userModel.login(req, res); });
 	/* 找回密码 */
-	app.get('/api/user/findback/:erp/:random?', function(req, res) { _userModel.findBack(req, res) });
+	// app.get('/api/user/findback/:erp/:random?', function(req, res) { _userModel.findBack(req, res) });
+	app.get('/api/user/findback/:account/:newpwd/:findid?', function(req, res) { _userModel.findBack2(req, res) });
 	/* 更新用户信息 */
 	app.post('/api/user/update', requireAuth, function(req, res) { _userModel.update(req, res) });
 	/* 更新个人资料 */

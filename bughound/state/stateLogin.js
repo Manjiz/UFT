@@ -106,17 +106,17 @@ var loginState = function($scope, $http, $rootScope, $state, AUTH_EVENTS, AuthSe
     }
 
     $scope.findBack = function() {
-        var erp = $scope.signInErp.replace(/\s+/g, '');
-        if(erp) {
-            $http.get('api/user/findback/' + erp).then(function(res) {
-                if(res.data.state=='success') {
-                    location.href="state.html#findback_continue";
-                } else {
-                    Popup(res.data.msg)
-                }
-            });
-        } else {
-            Popup('请先输入要找回密码的ERP帐号')
-        }
+        // var erp = $scope.signInErp.replace(/\s+/g, '');
+        // if(erp) {
+        //     $http.get('api/user/findback/' + erp).then(function(res) {
+        //         if(res.data.state=='success') {
+        //             location.href="state.html#findback_continue";
+        //         } else {
+        //             Popup(res.data.msg)
+        //         }
+        //     });
+        // } else {
+        //     Popup('请先输入要找回密码的ERP帐号')
+        // }
     }
 }

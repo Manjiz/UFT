@@ -11,7 +11,7 @@
 	 var root = this;
 	 var conf = function(obj) {
 	 	return {
-	 		port: 8088,
+	 		port: 80,
 	 		nodemailer: {
 			    service: '163',
 			    auth: {

@@ -21,7 +21,7 @@
                         <input ng-checked="signInRemember" type="checkbox" ng-model="signInRemember">
                         <span></span><span>记住用户</span>
                     </label>
-                    <a ng-click="findBack()" href="">忘记密码</a>
+                    <a ng-click="findBack()" ui-sref="piecemeal-findback">忘记密码</a>
                 </div>
                 <a class="form_btn btn btn-large" href="#" ng-click="signIn()">立即登录</a>
             </div>
@@ -55,8 +55,6 @@
         
     </div>
 </div>
-
-
 
 <div class="mod_mask">
     <div class="mod_mask_wrap">

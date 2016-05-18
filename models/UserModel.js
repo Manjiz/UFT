@@ -7,7 +7,8 @@
 
 	nodemailer = require('nodemailer'),
 	sharp = require('sharp'),
-	request = require('request');
+	request = require('request'),
+	md5 = require('md5');
 
 // 邮箱配置
 var transporter = nodemailer.createTransport(_confServer.nodemailer);
@@ -168,64 +169,87 @@ exports.UserModel = {
 	 *  找回密码
 	 * ======================================================
 	 */
-	findBack: function(req, res) {
+	findBack2: function(req, res) {
 		var that = this;
-		pool.getConnection(function(err, conn) {
-			var erp = req.params.erp,
-				random = req.params.random,
-				randomCode = Math.floor(Math.random()*10000000);
-			conn.query('SELECT * FROM user WHERE erp=? AND status=0', [erp], function(err, rows, fields) {
+		var account = req.params.account;
+		var newpwd = req.params.newpwd;	//MD5密码，不用再次加密
+		var findid = req.params.findid;	//如果有findid说明是邮箱验证这一步了
+		if( account && newpwd ) {
+			pool.getConnection(function(err, conn) {
 				if(err) throw err;
-				if(rows.length>0) {
-					if(!random) {
-						if(that.findbackList[erp]) {
-							res.json({state:'fail', msg:'你最近进行过找回密码操作，请尽快完成'});
-						} else {
-							that.findbackList[erp] = randomCode;
-							transporter.sendMail({
-									from: 'JDC多终端研发部<jdc_fd@163.com>',
-							    	to: rows[0].email,
-							    	subject: '【找回密码】'+erp,
-							    	html: '如果不是您的操作，请忽略该邮件：<br>请尽快 <a href="http://'+req.headers.host+'/api/user/findback/'+erp+'/'+randomCode+'">点击链接</a> 找回您的密码！'
-								}, function(error, info){
-							    	if(error){
-							    	    return console.log(error);
-							    	}
-							    	console.log('Message sent: ' + info.response);
-							    	res.send({state:'success', msg:'验证邮件已发'})
-							});
-						}
+				conn.query('SELECT * FROM user WHERE (erp=? OR email=?) AND status=0 LIMIT 1', [account, account], function(err, rows, fields) {
+					if(err) throw err;
+					if(rows.length<=0) {
 						conn.release();
-					} else {
-						if(that.findbackList[erp] == random) {
-							var newPwd = Math.random().toString(16).substr(2).substring(0, 6);
-							conn.query('UPDATE user SET password=MD5(?) WHERE erp=?', [newPwd, erp], function(err, result) {
-								if(err) throw err;
-								if(result.affectedRows>0) {
-									transporter.sendMail({
-											from: 'JDC多终端研发部<jdc_fd@163.com>',
-									    	to: rows[0].email,
-									    	subject: '【找回密码】'+erp,
-									    	html: '<div>' + erp + '，您好！您的密码已经重置为：</div>' + '<div style="text-indent:10em;font-size:36px;font-weight:bold;background:#ccc;">'+newPwd+'</div><div>请尽快登录修改密码。</div>'
-										}, function(error, info){
-									    	if(error){
-									    	    return console.log(error);
-									    	}
-									    	console.log('Message sent: ' + info.response);
-									    	delete that.findbackList[erp];
-									    	res.redirect('../../../../state.html#findback_succ');
-									});
-								}
-								conn.release();
-							})
-						} else {
-							res.send({state:'fail', msg:'链接失效'});
-							conn.release();
-						}
+						return res.json({state:'fail', msg:'查无此人'});
 					}
-				}
+					var user = rows[0];
+					if(!user.email) {
+						conn.release();
+						return res.json({state:'fail', msg:'按理说，邮箱应该是必需字段'});
+					}
+					// 可能为NaN
+					var shadowTime = new Date().getTime() - parseInt(user.regpid); 
+
+					// 4小时内验证
+					if(shadowTime && shadowTime<=14400000) {
+						if(findid) {
+							//-------------------------------------------------- 下
+							// 暗号对合
+							if(findid==user.regpid) {
+								conn.query('UPDATE user SET password=?, regpid=null WHERE erp=?', [newpwd, user.erp], function(err, result) {
+									if(err) throw err;
+									if(result.affectedRows>0) {
+										res.json({state:'success', msg:'修改成功'});
+									} else {
+										res.json({state:'fail', msg:'未知错误'});
+									}
+									conn.release();
+								});
+							} else {
+								conn.release();
+								return res.json({state:'fail', msg:'错误的验证链接'});
+							}
+							//-------------------------------------------------- 上
+						} else {
+							conn.release();
+							return res.json({state:'fail', msg:'请不要频繁申请修改密码'});
+						}
+					} else if(shadowTime>14400000 && findid) {
+						//-------------------------------------------------- 下
+						conn.release();
+						res.json({state:'fail', msg:'链接已过期'});
+						//-------------------------------------------------- 上
+					} else {
+						// 这里是  regpid为null / shadowTime超时&&无findid
+						var newRegpid = new Date().getTime();
+						conn.query('UPDATE user SET regpid=? WHERE erp=?', [newRegpid, user.erp], function(err, result) {
+							if(err) throw err;
+							if(result.affectedRows>0) {
+								transporter.sendMail({
+										from: 'JDC多终端研发部<jdc_fd@163.com>',
+								    	to: user.email,
+								    	subject: '【找回密码】'+user.erp,
+								    	html: '如果不是您的操作，请忽略该邮件：'+
+								    	'<br>请于4小时内 '+
+								    	'<a href="http://'+req.headers.host+'/api/user/findback/'+user.erp+'/'+md5(newpwd)+'/'+newRegpid+'">点击链接</a> 确认修改密码！'
+									}, function(err, info){
+								    	if(err){ return console.log(err); }
+								    	console.log('Mail To: '+user.email);
+								    	console.log('Message sent: ' + info.response);
+								    	res.json({state:'success', msg:'验证邮件已发', url:'http://'+req.headers.host+'/api/user/findback/'+user.erp+'/'+md5(newpwd)+'/'+newRegpid})
+								});
+							} else {
+								res.json({state:'fail', msg:'未知错误'});
+							}
+							conn.release();
+						});
+					}
+				});
 			});
-		});
+		} else {
+			res.json({state:'fail', msg:'参数缺失'});
+		}
 	},
 	/**
 	 * ======================================================

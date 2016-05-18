@@ -81,6 +81,7 @@
 <script src="state/stateAudited.js"></script>
 <script src="state/stateDetail.js"></script>
 <script src="state/stateProfile.js"></script>
+<script src="state/statePiecemealFindback.js"></script>
 
 <script>
 $.noConflict();
@@ -116,7 +117,7 @@ angular.module('myapp', [
     };
 })
 
-// 数据包
+// 暂存数据（避免频繁请求）
 .service('datalump', function() {
     return {
         userList: null,
@@ -127,7 +128,7 @@ angular.module('myapp', [
 })
 
 .config(function($stateProvider, $urlRouterProvider, USER_ROLES) {
-    $urlRouterProvider.otherwise('login');  //无效路由
+    $urlRouterProvider.otherwise('login');
 
     $stateProvider
         .state('login', {
@@ -177,6 +178,12 @@ angular.module('myapp', [
             templateUrl: 'view/profile.html',
             data: { acceptRoles: [USER_ROLES.normal, USER_ROLES.admin] },
             controller: profileState
+        })
+        .state('piecemeal-findback', {
+            url: '/piecemeal-findback',
+            templateUrl: 'view/piecemeal-findback.html',
+            data: { acceptRoles: [USER_ROLES.guest] },
+            controller: piecemealFindbackState
         });
 })
 
@@ -414,12 +421,8 @@ document.querySelector('.mod_guid_backtop').addEventListener('click', function()
             'public/img/editor@2x.png',
             'public/img/favicon.ico',
             'public/img/error.png',
-            // 'public/img/ico_email.png',
-            // 'public/img/ico_erp.png',
             'public/img/ico_eye.png',
             'public/img/ico_eye2.png',
-            // 'public/img/ico_pwd.png',
-            // 'public/img/ico_triangle.png',
             'public/img/login_show.png',
             'public/img/logo.png',
             'public/img/radio.png',
