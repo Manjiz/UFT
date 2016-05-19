@@ -1,55 +1,35 @@
 # UFT 前端需求提交平台及管理后台
 
-**[看！开发日志](https://github.com/o2team/UFT/wiki/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97)**
-
-## 整体规划
-
-### 项目介绍
-
 随着前端需求的增多，团队需要一个平台来管理需求进程，让需求动态及时触达相关人员，给需求相关人员统一的沟通交流方式，让需求数据更直观地被展示出来，同时也有利于需求的归档查询。UFT ，为需求而生。
 
-### 架构
+- [架构图](http://naotu.baidu.com/file/15371b9a7691fbd529d6cb8d744ba7e7?token=55e245a819077ea9)
 
-* [点击查看架构图](http://naotu.baidu.com/file/15371b9a7691fbd529d6cb8d744ba7e7?token=55e245a819077ea9)
+- [开发日志](https://github.com/o2team/UFT/wiki/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97)
 
-### 参与人员
+## 部署指引
 
-张太振、王彩暖
+``` bash
+# 安装NodeJS（>=4.4.4）
+# 安装MySQL（>=5.6）
 
-### 当前进度
+git clone https://github.com/o2team/UFT.git
+cd UFT
+npm install
+mv conf-server.dev.js conf-server.js
 
-目前 UFT 趋于稳定，可以满足基本的前端工作流程需要，细节方面仍需调整，用户体验方面有待提升。
+# 配置 ./conf-server.js
 
-## 技术概要
+# 导入 ./归档/uft.sql
 
-### 项目部署
+# 启动服务器
+node server
+```
 
-**环境要求**
+## 参与人员
 
-- MySQL@^5.6
-- Node.js@^4.2.0（5.8.0依然正常）
-
-**部署**
-
-1. 导入数据库文件 uft.sql
-2. 配置 conf-server.js 文件（把文件名后面的.bak去掉）
-	* 邮箱配置信息
-	* 异步文件临时目录（*）
-	* 上传文件存储目录（*）
-3. >> npm install
-4. 启动：
-
-  ``` bash
-  >> node server
-  ```
-
-### 源码
-
-* [源码](https://github.com/o2team/UFT)
+张太振、王彩暖、李怡欣
 
 ## 移动优先
-
-### 响应式
 
 * 767px
 * 992px
