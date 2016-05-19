@@ -1,4 +1,10 @@
-var piecemealFindbackState = function($scope, $http) {
+var piecemealFindbackState = function($scope, $http, $stateParams) {
+    if($stateParams.issucc) {
+        $scope.issucc = true;
+        console.log(12)
+    }
+
+
     $scope.go = function(valid) {
         if(valid) {
             console.log($scope.account, $scope.newpwd)

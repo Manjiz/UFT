@@ -11,14 +11,16 @@
 	 var root = this;
 	 var conf = function(obj) {
 	 	return {
-	 		port: 8088,
+	 		port: process.env.PORT|| 80,
 	 		nodemailer: {
 			    service: '163',
 			    auth: {
-			        user: '******',
-			        pass: '******'
+			        user: '***',
+			        pass: '***'
 			    }
 			},
+			// 攸关邮件链接等
+			suri: 'http://localhost',
 			tempPath: 'temp',
 			uploadPath: 'upload',
 			returnUrl: 'http://localhost:8088/',

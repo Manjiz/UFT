@@ -180,7 +180,7 @@ angular.module('myapp', [
             controller: profileState
         })
         .state('piecemeal-findback', {
-            url: '/piecemeal-findback',
+            url: '/piecemeal-findback/:issucc?',
             templateUrl: 'view/piecemeal-findback.html',
             data: { acceptRoles: [USER_ROLES.guest] },
             controller: piecemealFindbackState
