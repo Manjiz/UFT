@@ -2,7 +2,6 @@ var profileState = function($rootScope, $scope, $http, $timeout, $stateParams, d
     $scope.isShowCrop = false;
     $scope.cropContext = {};
     $scope.uerp = Session.userErp;
-    $scope.uname = Session.userName;
 
     $http.get('api/user/getbyerp', {
         params: {
@@ -11,6 +10,7 @@ var profileState = function($rootScope, $scope, $http, $timeout, $stateParams, d
     }).success(function(data) {
         console.log(Session)
         if(data) {
+            $scope.uname = data.name;
             $scope.uemail = data.email;
             $scope.udep = data.depID;
             $scope.myavatar = data.avatar;
@@ -59,6 +59,8 @@ var profileState = function($rootScope, $scope, $http, $timeout, $stateParams, d
                         $rootScope.newlyprofile = $scope.uname+'('+$scope.uerp+')';
                         $scope.flashType = 'success';
                         $scope.flashText = '修改用户信息成功';
+                    } else {
+                        Popup(data.msg);
                     }
                 })
             } else {

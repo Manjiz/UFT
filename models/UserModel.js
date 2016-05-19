@@ -294,16 +294,28 @@ exports.UserModel = {
 			uname = req.body.uname,
 			uemail = req.body.uemail,
 			udep = req.body.udep || null;
-		if(uerp && uerp==req.session.erp && uname && uemail) {
+
+		if(uerp!=req.session.erp) { return res.json({state:'fail', msg:'恶意请求'}); }
+
+		if(uerp && uname && uemail) {
 			pool.getConnection(function(err, conn) {
-				conn.query('UPDATE user SET name=?, email=?, depID=? WHERE erp=? AND status=0', [uname, uemail, udep, uerp], function(err, result) {
+				conn.query('SELECT erp FROM user WHERE email=? AND erp<>?', [uemail, uerp], function(err, rows, fields) {
 					if(err) throw err;
-					if(result.affectedRows>0) {
-						res.cookie('uerp', uerp);
-						res.cookie('uname', uname);
-						res.json({state:'success', msg:'用户信息修改成功'});
+					if(rows.length>0) {
+						conn.release();
+						res.json({state:'fail', msg:'邮箱不能重复'});
 					} else {
-						res.json({state:'fail', msg:'未知错误'});
+						conn.query('UPDATE user SET name=?, email=?, depID=? WHERE erp=? AND status=0', [uname, uemail, udep, uerp], function(err, result) {
+							if(err) throw err;
+							if(result.affectedRows>0) {
+								res.cookie('uerp', uerp);
+								res.cookie('uname', uname);
+								res.json({state:'success', msg:'用户信息修改成功'});
+							} else {
+								res.json({state:'fail', msg:'未知错误'});
+							}
+							conn.release();
+						});
 					}
 				});
 			});
