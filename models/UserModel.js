@@ -236,7 +236,7 @@ exports.UserModel = {
 									}, function(err, info){
 								    	if(err){ return console.log(err); }
 								    	console.log('Mail To: '+user.email);
-								    	console.log('Message sent: ' + info.response);
+								    	console.log('Sent: ' + info.response);
 								    	res.json({state:'success', msg:'验证邮件已发', url:'http://'+req.headers.host+'/api/user/findback/'+user.erp+'/'+md5(newpwd)+'/'+newRegpid})
 								});
 							} else {
