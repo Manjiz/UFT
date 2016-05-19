@@ -1,15 +1,16 @@
-var profileState = function($rootScope, $scope, $http, $timeout, $stateParams, datalump) {
+var profileState = function($rootScope, $scope, $http, $timeout, $stateParams, datalump, Session) {
     $scope.isShowCrop = false;
     $scope.cropContext = {};
+    $scope.uerp = Session.userErp;
+    $scope.uname = Session.userName;
 
     $http.get('api/user/getbyerp', {
         params: {
-            erp: Cookie.getCookie('uerp')
+            erp: Session.userErp
         }
     }).success(function(data) {
+        console.log(Session)
         if(data) {
-            $scope.uerp = Cookie.getCookie('uerp');
-            $scope.uname = data.name;
             $scope.uemail = data.email;
             $scope.udep = data.depID;
             $scope.myavatar = data.avatar;
@@ -92,23 +93,4 @@ var profileState = function($rootScope, $scope, $http, $timeout, $stateParams, d
             datalump.depList = obj.sender.dataSource.data();
         }
     };
-
-    // $('.remember a').on('click', function() {
-    //     var erp = $('#signin_erp').get(0).value.replace(/\s+/g, '');
-    //     if(erp) {
-    //         $.ajax({
-    //             type: 'GET',
-    //             url: 'api/user/findback/' + erp,
-    //             success: function(data) {
-    //                 if(data.state=='success') {
-    //                     location.href="state.html#findback_continue";
-    //                 } else {
-    //                     Popup(data.msg)
-    //                 }
-    //             }
-    //         })
-    //     } else {
-    //         Popup('请先输入要找回密码的ERP帐号')
-    //     }
-    // })
 }

@@ -201,7 +201,7 @@ exports.UserModel = {
 									if(err) throw err;
 									if(result.affectedRows>0) {
 										// res.json({state:'success', msg:'修改成功'});
-										res.redirect(_confServer.suri+'/#/piecemeal-findback/succ');
+										res.redirect(_confServer.referer+'/#/piecemeal-findback/succ');
 									} else {
 										res.json({state:'fail', msg:'未知错误'});
 									}
@@ -233,7 +233,7 @@ exports.UserModel = {
 								    	subject: '【找回密码】'+user.erp,
 								    	html: '如果不是您的操作，请忽略该邮件：'+
 								    	'<br>请于4小时内 '+
-								    	'<a href="'+_confServer.suri+'/api/user/findback/'+user.erp+'/'+md5(newpwd)+'/'+newRegpid+'">点击链接</a> 确认修改密码！'
+								    	'<a href="'+_confServer.referer+'/api/user/findback/'+user.erp+'/'+md5(newpwd)+'/'+newRegpid+'">点击链接</a> 确认修改密码！'
 									}, function(err, info){
 								    	if(err){ return console.log(err); }
 								    	console.log('Mail To: '+user.email);
