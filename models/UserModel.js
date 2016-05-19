@@ -340,7 +340,7 @@ exports.UserModel = {
 					if(cropContext.height > metadata.height) {
 						cropContext.width = cropContext.height = metadata.height
 					}
-					return images.extract(cropContext.top, cropContext.left, cropContext.width, cropContext.height)
+					return images.extract({top:cropContext.top, left:cropContext.left, width:cropContext.width, height:cropContext.height})
 						.resize(100, 100)
 						.sharpen()
 						.quality(100)
@@ -360,6 +360,7 @@ exports.UserModel = {
 						conn.release();
 					});
 				}).catch(function() {
+					res.json({state:'fail'});
 					conn.release();
 				});
 			});
