@@ -25,6 +25,15 @@ mv conf-server.dev.js conf-server.js
 node server
 ```
 
+## 主要技术组成
+
+- 前端
+    + AngularJS + UIRouter
+    + Kendo
+- 后端
+    + NodeJS + Express
+    + MySql
+
 ## 参与人员
 
 张太振、王彩暖、李怡欣
