@@ -80,14 +80,12 @@ exports.UserModel = {
 		} else if (!depID || (typeof depID === 'number')) {
 			res.json({state: 'fail', msg: '未选择所属部门'});
 		} else {
-			console.log(erp, email, password, name, depID)
 			res.json({state: 'fail', msg: '未知错误'});
 		}
 	},
 	addCheck: function(req, res) {
 		var erp = req.params.erp,
 			mailcheck = req.params.mailcheck;
-		console.log(req)
 		if(erp && mailcheck) {
 			pool.getConnection(function(err, conn) {
 				if(err) throw err;

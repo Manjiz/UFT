@@ -23,7 +23,6 @@
 			referer: 'http://localhost/',
 			tempPath: 'temp',
 			uploadPath: 'upload',
-			returnUrl: 'http://localhost:8088/',
 	 	};
 	 }
 

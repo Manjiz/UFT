@@ -274,7 +274,7 @@ exports.DemandModel = {
 						conn.query('INSERT INTO schedule (demandID, dictator, assignee, startDate, days) VALUES (?,?,?,?,?)', [demandid, handler, assignee, new Date(startDate), days], function(err, result) {
 							if(err) throw err;
 							if(result.affectedRows>0) {
-								demandStateEmail(demandid, handler+'审核通过了需求，请处理人受理', _confServer.returnUrl + '#/detail/'+demandid);
+								demandStateEmail(demandid, handler+'审核通过了需求，请处理人受理', _confServer.referer + '#/detail/'+demandid);
 								res.json({state:'success', msg:'需求审核通过'});
 							}
 							conn.release();
@@ -344,7 +344,7 @@ exports.DemandModel = {
 							conn.query('UPDATE demand SET state=4, solveMsg=CONCAT_WS("", solveMsg, ?), solver=? WHERE demandID=?', [solveMsg, handler, demandid], function(err, result) {
 								if(err) throw err;
 								if(result.affectedRows>0) {
-									demandStateEmail(demandid, '需求被'+handler+'关闭，周知', _confServer.returnUrl + '#/detail/'+demandid);
+									demandStateEmail(demandid, '需求被'+handler+'关闭，周知', _confServer.referer + '#/detail/'+demandid);
 									console.log('>>> \x1b[36mdemand/closed\x1b[0m::需求关闭成功');
 									res.json({state:'success', msg:'需求已关闭'});
 								}
@@ -359,7 +359,7 @@ exports.DemandModel = {
 									conn.query('UPDATE demand SET state=4, solveMsg=CONCAT_WS("", solveMsg, ?), solver=? WHERE demandID=?', [solveMsg, handler, demandid], function(err, result) {
 										if(err) throw err;
 										if(result.affectedRows>0) {
-											demandStateEmail(demandid, '需求被'+handler+'关闭，周知', _confServer.returnUrl + '#/detail/'+demandid);
+											demandStateEmail(demandid, '需求被'+handler+'关闭，周知', _confServer.referer + '#/detail/'+demandid);
 											console.log('>>> \x1b[36mdemand/closed\x1b[0m::需求关闭成功');
 											res.json({state:'success', msg:'需求已关闭'});
 										}
@@ -380,7 +380,7 @@ exports.DemandModel = {
 							conn.query('UPDATE demand SET state=1, solveMsg=CONCAT_WS("", solveMsg, ?), solver=? WHERE demandID=?', [solveMsg, handler, demandid], function(err, result) {
 								if(err) throw err;
 								if(result.affectedRows>0) {
-									demandStateEmail(demandid, '需求被'+handler+'重启，周知', _confServer.returnUrl + '#/detail/'+demandid);
+									demandStateEmail(demandid, '需求被'+handler+'重启，周知', _confServer.referer + '#/detail/'+demandid);
 									console.log('>>> \x1b[36mdemand/reopen\x1b[0m::需求重启成功');
 									res.json({state:'success', msg:'需求已重启'});
 								}
@@ -395,7 +395,7 @@ exports.DemandModel = {
 									conn.query('UPDATE demand SET state=1, solveMsg=CONCAT_WS("", solveMsg, ?), solver=? WHERE demandID=?', [solveMsg, handler, demandid], function(err, result) {
 										if(err) throw err;
 										if(result.affectedRows>0) {
-											demandStateEmail(demandid, '需求被'+handler+'重启，周知', _confServer.returnUrl + '#/detail/'+demandid);
+											demandStateEmail(demandid, '需求被'+handler+'重启，周知', _confServer.referer + '#/detail/'+demandid);
 											console.log('>>> \x1b[36mdemand/reopen\x1b[0m::需求重启成功');
 											res.json({state:'success', msg:'需求已重启'});
 										}
@@ -417,7 +417,7 @@ exports.DemandModel = {
 								conn.query('UPDATE demand SET state=2, solveMsg=CONCAT_WS("", solveMsg, ?), solver=? WHERE demandID=? AND state<>0 AND state<>4', [solveMsg, handler, demandid], function(err, result) {
 									if(err) throw err;
 									if(result.affectedRows>0) {
-										demandStateEmail(demandid, '需求已被'+handler+'受理', _confServer.returnUrl + '#/detail/'+demandid);
+										demandStateEmail(demandid, '需求已被'+handler+'受理', _confServer.referer + '#/detail/'+demandid);
 										console.log('>>> \x1b[36mdemand/solving\x1b[0m::需求处理中');
 										res.json({state:'success', msg:'需求处理中'});
 									}
@@ -440,7 +440,7 @@ exports.DemandModel = {
 								conn.query('UPDATE demand SET state=3, solveMsg=CONCAT_WS("", solveMsg, ?), solver=?, solveDate=? WHERE demandID=? AND state<>0 AND state<>4', [solveMsg, handler, new Date, demandid], function(err, result) {
 									if(err) throw err;
 									if(result.affectedRows>0) {
-										demandStateEmail(demandid, handler+'已完成需求', _confServer.returnUrl + '#/detail/'+demandid);
+										demandStateEmail(demandid, handler+'已完成需求', _confServer.referer + '#/detail/'+demandid);
 										console.log('>>> \x1b[36mdemand/solved\x1b[0m::需求处理完成');
 										res.json({state:'success', msg:'需求处理完成'});
 									}
@@ -466,7 +466,7 @@ exports.DemandModel = {
 									conn.query('UPDATE demand SET solveMsg=CONCAT_WS("", solveMsg, ?), solver=?, executor=? WHERE demandID=?', [solveMsg, handler, designated, demandid], function(err, result) {
 										if(err) throw err;
 										if(result.affectedRows>0) {
-											demandStateEmail(demandid, handler+'指派'+designated, _confServer.returnUrl + '#/detail/'+demandid);
+											demandStateEmail(demandid, handler+'指派'+designated, _confServer.referer + '#/detail/'+demandid);
 											console.log('>>> \x1b[36mdemand/designated\x1b[0m::需求指派成功');
 											res.json({state:'success', msg:'需求指派成功'});
 										}
