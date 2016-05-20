@@ -59,12 +59,23 @@ exports.DepModel = {
 	 * ======================================================
 	 */
 	list: function(req, res) {
+		var excludedemander = req.params.excludedemander;
 		pool.getConnection(function(err, conn) {
-			conn.query('SELECT * FROM dep WHERE status=0', function(err, rows, fields) {
-				if(err) throw err;
-				res.send(JSON.stringify(rows));
-				conn.release();
-			});
+			if(!excludedemander) {	
+				// 所有部门			
+				conn.query('SELECT * FROM dep WHERE status=0', function(err, rows, fields) {
+					if(err) throw err;
+					res.send(JSON.stringify(rows));
+					conn.release();
+				});
+			} else {
+				// 不包括需求方部门
+				conn.query('SELECT * FROM dep WHERE status=0 AND demander=0', function(err, rows, fields) {
+					if(err) throw err;
+					res.send(JSON.stringify(rows));
+					conn.release();
+				});
+			}
 		});
 	},
 	/**

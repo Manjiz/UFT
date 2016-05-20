@@ -3,7 +3,7 @@
 <div class="schedule">
     <h2 class="schedule_tit">周排期表</h2>
     <div class="schedule_ctrl">
-        <select class="schedule_ctrl_sdep" kendo-drop-down-list k-options="depSelectOpts" ng-model="m_showThisDep"></select>
+        <select class="schedule_ctrl_sdep" kendo-drop-down-list k-options="depSelectOpts" k-ng-model="m_showThisDep" k-value-primitive="true"></select>
         <div class="schedule_ctrl_cweek">
             <div class="schedule_ctrl_cweek_btn" ng-click="changeWeek(-1)"></div>
             <div class="schedule_ctrl_cweek_msg">{{ weekStep==0 ? '本周' : (weekStep>0 ? '后'+weekStep+'周' : '前'+(-weekStep)+'周') }}</div>

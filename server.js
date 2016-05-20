@@ -194,7 +194,7 @@ function requireAuth(req, res, next) {
 	/* 删除部门 */
 	app.post('/api/dep/del', requireAuth, function(req, res) { _depModel.del(req, res) });
 	/* 部门列表 */
-	app.get('/api/dep/list', function(req, res) { _depModel.list(req, res) });
+	app.get('/api/dep/list/:excludedemander?', function(req, res) { _depModel.list(req, res) });
 	/* 更新部门 */
 	app.post('/api/dep/update', requireAuth, function(req, res) { _depModel.update(req, res) });
 //-----dtype-----

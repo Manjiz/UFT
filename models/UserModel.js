@@ -167,7 +167,7 @@ exports.UserModel = {
 		var erp = req.query.erp || '';
 		if(erp) {
 			pool.getConnection(function(err, conn) {
-				conn.query('SELECT user.name, email, avatar, depID, dep.name as depName from user LEFT JOIN dep ON user.depID=dep.id WHERE erp=? AND user.status=0', [erp], function(err, rows, fields) {
+				conn.query('SELECT user.name, email, avatar, depID, dep.name as depName, dep.demander as depDemander from user LEFT JOIN dep ON user.depID=dep.id WHERE erp=? AND user.status=0', [erp], function(err, rows, fields) {
 					if(err) throw err;
 					res.send(rows.length>0 ? rows[0] : null);
 					conn.release();

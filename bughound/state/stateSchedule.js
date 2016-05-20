@@ -2,21 +2,25 @@ var scheduleState = function($rootScope, $scope, $http, $state, datalump, Sessio
     var dataList,   //排期数据
         thisWeekStart;  //周起始日期
 
+    // 优先显示用户所在部门
     $http.get('api/user/getbyerp', {
         params: {
             erp: Session.userErp
         }
     }).success(function(data) {
-        $scope.m_showThisDep = data.depID;
+        if(data.depDemander != 1)  {
+            $scope.m_showThisDep = data.depID;
+        }
     });
 
     // 选择要显示部门 配置项
     $scope.depSelectOpts = {
-        dataSource: datalump.depList || {
+        // dataSource: datalump.depList || {
+        dataSource: {
             transport: {
                 read: {
                     dataType: "json",
-                    url: 'api/dep/list',
+                    url: 'api/dep/list/true',
                 }
             }
         },
@@ -30,6 +34,7 @@ var scheduleState = function($rootScope, $scope, $http, $state, datalump, Sessio
                     + '# } #'
                     + '{{dataItem.name}}</span>',
         dataBound: function(obj) {
+            obj.sender.trigger('change');
             // datalump.depList && ($scope.m_showThisDep = datalump.depList[0].id);
             // datalump.depList = obj.sender.dataSource.data();
         }
