@@ -1,5 +1,5 @@
 ﻿var _confServer = require('../conf-server.js')(),
-	mysql = require('../mysql'),
+	mysql = require('./mysql'),
 	pool = mysql.pool;
 
 /**

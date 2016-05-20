@@ -1,6 +1,4 @@
-﻿var mysql = require('mysql'),
-	async = require('async'),
-	fs = require('fs');
+﻿var mysql = require('mysql');
 
 var pool = exports.pool = mysql.createPool({
 	connectionLimit: 100,

@@ -20,7 +20,7 @@
 			    }
 			},
 			// 攸关邮件链接等
-			referer: 'http://localhost',
+			referer: 'http://localhost/',
 			tempPath: 'temp',
 			uploadPath: 'upload',
 			returnUrl: 'http://localhost:8088/',

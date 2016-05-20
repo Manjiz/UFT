@@ -1,5 +1,5 @@
 ﻿var _confServer = require('../conf-server.js')(),
-	mysql = require('../mysql'),
+	mysql = require('./mysql'),
 	pool = mysql.pool,
 	
 	async = require('async'),
@@ -26,13 +26,13 @@ exports.UserModel = {
 	 * ======================================================
 	 */
 	add: function(req, res) {
-		var erp = req.query.erp,
-			email = req.query.email,
-			password = req.query.password,
-			name = req.query.name,
-			depID = req.query.depID;
+		var erp = req.body.erp,
+			email = req.body.email,
+			password = req.body.password,
+			name = req.body.name,
+			depID = parseInt(req.body.depID);
 
-		if(erp && email && password && name && depID && (typeof depID === 'number')) {
+		if(erp && email && password && name && depID && depID>0) {
 			pool.getConnection(function(err, conn) {
 				conn.query('SELECT * FROM user WHERE erp=? AND status=0', [erp], function(err, rows, fields) {
 					if(err) throw err;
@@ -43,10 +43,23 @@ exports.UserModel = {
 						// 先删除可能存在的已关闭的同ERP用户，% 这一步不一定能顺利完成 %
 						conn.query('DELETE FROM user WHERE erp=? AND status<>0', [erp], function(err, result) {
 							if(err) throw err;
-							conn.query('INSERT INTO user (erp, email, password, name, depID, status) VALUES (?,?,MD5(?),?,?,?)', [erp, email, password, name, depID, 0], function(err, result) {
+							var regpid = new Date().getTime();
+							conn.query('INSERT INTO user (erp, email, password, name, depID, regpid, status) VALUES (?,?,MD5(?),?,?,?,?)', [erp, email, password, name, depID, regpid, 1], function(err, result) {
 								if(err) throw err;
 								if(result.affectedRows>0) {
-									res.json({state: 'success', msg: '添加用户成功，等待用户邮箱验证', returnurl:_confServer.returnUrl + '#/gallery'});
+									transporter.sendMail({
+										from: 'JDC多终端研发部<jdc_fd@163.com>',
+								    	to: email,
+								    	subject: '【用户注册】'+erp,
+								    	html: '如果不是您的操作，请忽略该邮件：'+
+								    	'<br>请于4小时内 '+
+								    	'<a href="'+_confServer.referer+'api/user/add/'+erp+'/'+regpid+'">点击链接</a> 确认身份！'
+									}, function(err, info){
+								    	if(err){ return console.log(err); }
+								    	console.log('Mail To: '+email);
+								    	console.log('Sent: ' + info.response);
+								    	res.json({state:'success', msg:'验证邮件已发'});
+									});
 								} else {
 									res.json({state: 'fail', msg: '未知错误'});
 								}
@@ -66,6 +79,59 @@ exports.UserModel = {
 			res.json({state: 'fail', msg: '密码不能为空'});
 		} else if (!depID || (typeof depID === 'number')) {
 			res.json({state: 'fail', msg: '未选择所属部门'});
+		} else {
+			console.log(erp, email, password, name, depID)
+			res.json({state: 'fail', msg: '未知错误'});
+		}
+	},
+	addCheck: function(req, res) {
+		var erp = req.params.erp,
+			mailcheck = req.params.mailcheck;
+		console.log(req)
+		if(erp && mailcheck) {
+			pool.getConnection(function(err, conn) {
+				if(err) throw err;
+				conn.query('SELECT * FROM user WHERE erp=? AND regpid=?', [erp, mailcheck], function(err, rows) {
+					if(err) throw err;
+					if(rows.length>0) {
+						var user = rows[0];
+						var shadowTime = new Date().getTime() - parseInt(user.regpid);
+						if(shadowTime) {
+							// 4小时的有效验证时间
+							if(shadowTime>=14400000) {
+								conn.release();
+								// 160520 - 启用错误码识别 ecode (error code)
+								res.json({state: 'fail', ecode:3, msg: '链接失效'});
+							} else {
+								conn.query('UPDATE user SET regpid=null, status=0', function(err, result) {
+									if(err) throw err;
+									if(result.affectedRows>0) {
+										// 160519 - 启用短的成功验证符 succ
+										// res.json({state:'succ', msg: '验证成功'});
+
+										req.session.erp = user.erp;
+										req.session.name = user.name;
+										req.session.isAdmin  = user.isAdmin;
+
+										res.redirect(_confServer.referer);
+									} else {
+										res.json({state:'fail', ecode:4, msg: '未知错误'});
+									}
+									conn.release();
+								});
+							}
+						} else {
+							conn.release();
+							res.json({state: 'fail', ecode:2, msg: '链接错误'});
+						}
+					} else {
+						conn.release();
+						res.json({state: 'fail', ecode:1, msg: '链接错误'});
+					}
+				});
+			});
+		} else {
+			res.json({state: 'fail', ecode:0, msg: '链接错误'});
 		}
 	},
 	/**
@@ -201,7 +267,7 @@ exports.UserModel = {
 									if(err) throw err;
 									if(result.affectedRows>0) {
 										// res.json({state:'success', msg:'修改成功'});
-										res.redirect(_confServer.referer+'/#/piecemeal-findback/succ');
+										res.redirect(_confServer.referer+'#/piecemeal-findback/succ');
 									} else {
 										res.json({state:'fail', msg:'未知错误'});
 									}
@@ -233,7 +299,7 @@ exports.UserModel = {
 								    	subject: '【找回密码】'+user.erp,
 								    	html: '如果不是您的操作，请忽略该邮件：'+
 								    	'<br>请于4小时内 '+
-								    	'<a href="'+_confServer.referer+'/api/user/findback/'+user.erp+'/'+md5(newpwd)+'/'+newRegpid+'">点击链接</a> 确认修改密码！'
+								    	'<a href="'+_confServer.referer+'api/user/findback/'+user.erp+'/'+md5(newpwd)+'/'+newRegpid+'">点击链接</a> 确认修改密码！'
 									}, function(err, info){
 								    	if(err){ return console.log(err); }
 								    	console.log('Mail To: '+user.email);

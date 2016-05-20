@@ -31,11 +31,9 @@
 
 	express = require('express'),
 	app = express(),
-	mysql = require('./mysql.js'),
 
 	nodemailer = require('nodemailer'),
 	transporter = nodemailer.createTransport(_confServer.nodemailer),
-	md5 = require('./md5').md5,
 	EMAIL_SECRET_KEY = 'jdcmobile',
 
 	_demandModel = require('./models/DemandModel.js').DemandModel,
@@ -161,7 +159,8 @@ function requireAuth(req, res, next) {
 	app.get('/api/demand/gettopsubmitter', function(req, res) { _demandModel.getTopSubmitter(req, res) });
 //-----user-----
 	/* 注册用户 */
-	app.get('/api/user/add', function(req, res) { _userModel.add(req, res); });
+	app.post('/api/user/add', function(req, res) { _userModel.add(req, res); });
+	app.get('/api/user/add/:erp/:mailcheck', function(req, res) { _userModel.addCheck(req, res); });
 	/* 删除用户 */
 	app.post('/api/user/del', requireAuth, function(req, res) { _userModel.del(req, res) });
 	/* 获取用户信息 */

@@ -16,7 +16,7 @@ var loginState = function($scope, $http, $rootScope, $state, AUTH_EVENTS, AuthSe
         index: -1,
         dataBound: function(obj) {
             datalump.depList = obj.sender.dataSource.data();
-        }
+        },
         // headerTemplate: '<div class="dropdown-header k-widget k-header">选择部门</div>'
     };
 
@@ -65,58 +65,49 @@ var loginState = function($scope, $http, $rootScope, $state, AUTH_EVENTS, AuthSe
         })
     }
 
+    $scope.signUpErp = '';
+    $scope.signUpName = '';
+    $scope.signUpEmail = '';
+    $scope.signUpPwd = '';
     $scope.signUp = function() {
         var erp = $scope.signUpErp.replace(/\s+/g, ''),
             name = $scope.signUpName.replace(/\s+/g, ''),
-            email = $scope.signUpEmail.val().replace(/\s+/g, ''),
+            email = $scope.signUpEmail.replace(/\s+/g, ''),
             pwd = $scope.signUpPwd.replace(/\s+/g, ''),
-            dep = $scope.signUpDep.val();
-
+            dep = $scope.signUpDep;
         if(!erp) { 
             Popup('ERP帐号不能为空'); return;
-        } else if(!reg_erp.test(erp)) { 
+        } else if(!regErp.test(erp)) { 
             Popup('ERP 格式有误'); return; 
         }
         if(!name) { 
             Popup('姓名不能为空'); return;
-        } else if(!reg_name.test(name)) { 
+        } else if(!regName.test(name)) { 
             Popup('姓名格式有误'); return; 
         }
         if(!email) {
             Popup('公司邮箱不能为空'); return;
+        } else if(!regEmail.test(email)) {
+            Popup('邮箱格式不正确'); return;
         }
         if(!pwd) {
             Popup('密码不能为空'); return; 
-        } else if (!reg_pwd.test(pwd)) {
+        } else if (!regPwd.test(pwd)) {
             Popup('密码长度为6-8位'); return; 
         }
         if(!dep) {
             Popup('未选择所属部门'); return; 
         }
-
-        $http.get('api/user/add', {
+        console.log(erp, email, pwd, name, dep)
+        $http.post('api/user/add', {
             erp: erp, email: email, password: pwd, name: name, depID: dep
         }).then(function(res) {
             if(res.data.state=='success') {
-                location.href="state.html#checksucc";
+                // location.href="state.html#checksucc";
+                Popup('注册成功，请到邮箱验证身份');
             } else {
                 Popup(res.data.msg)
             }
         });
-    }
-
-    $scope.findBack = function() {
-        // var erp = $scope.signInErp.replace(/\s+/g, '');
-        // if(erp) {
-        //     $http.get('api/user/findback/' + erp).then(function(res) {
-        //         if(res.data.state=='success') {
-        //             location.href="state.html#findback_continue";
-        //         } else {
-        //             Popup(res.data.msg)
-        //         }
-        //     });
-        // } else {
-        //     Popup('请先输入要找回密码的ERP帐号')
-        // }
     }
 }
