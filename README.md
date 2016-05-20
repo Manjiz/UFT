@@ -19,7 +19,7 @@ mv conf-server.dev.js conf-server.js
 
 # 配置 ./conf-server.js
 
-# 导入 ./归档/uft.sql
+# 导入 ./uft.sql
 
 # 启动服务器
 node server

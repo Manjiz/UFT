@@ -1,7 +1,6 @@
 # .gitignore
 node_modules/
 归档/uftdict.xlsx
-归档/uft.sql
 temp/*
 upload/*
 sftp-config.json
