@@ -174,8 +174,7 @@ var applyState = function($rootScope, $scope, $http, $timeout, $stateParams, dat
      ---------------------------------*/
     $scope.userObjSelectedOpts = {
         placeholder: '指派用户',
-        template: '<div style="line-height:21px;text-align:center;">#: data.erp #</div>' + 
-                    '<div style="margin-bottom:4px;line-height:21px;text-align:center;">#: data.depName #</div>',
+        template: '<div style="line-height:21px;text-align:center;">#: data.erp # - #: data.name #</div>',
         dataTextField: "nameConcatErp",
         filter: "contains",
         height: 520,

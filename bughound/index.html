@@ -155,12 +155,12 @@ angular.module('myapp', [
             data: { acceptRoles: [USER_ROLES.all] },
             controller: galleryState
         })
-        .state('schedule', {
-            url:'/schedule',
-            templateUrl: 'view/schedule.html',
-            data: { acceptRoles: [USER_ROLES.normal, USER_ROLES.admin] },
-            controller: scheduleState
-        })
+        // .state('schedule', {
+        //     url:'/schedule',
+        //     templateUrl: 'view/schedule.html',
+        //     data: { acceptRoles: [USER_ROLES.normal, USER_ROLES.admin] },
+        //     controller: scheduleState
+        // })
         .state('audited', {
             url:'/audited',
             templateUrl: 'view/audited.html',
@@ -179,12 +179,12 @@ angular.module('myapp', [
             data: { acceptRoles: [USER_ROLES.normal, USER_ROLES.admin] },
             controller: profileState
         })
-        .state('piecemeal-findback', {
-            url: '/piecemeal-findback/:issucc?',
-            templateUrl: 'view/piecemeal-findback.html',
-            data: { acceptRoles: [USER_ROLES.guest] },
-            controller: piecemealFindbackState
-        });
+        // .state('piecemeal-findback', {
+        //     url: '/piecemeal-findback/:issucc?',
+        //     templateUrl: 'view/piecemeal-findback.html',
+        //     data: { acceptRoles: [USER_ROLES.guest] },
+        //     controller: piecemealFindbackState
+        // });
 })
 
 // S ---拦截器---
@@ -334,6 +334,10 @@ angular.module('myapp', [
     });
     $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
         $rootScope.navidx = toState.name;
+        // notAuditedNum
+        $http.get('api/demand/getnotauditedcount').success(function(data) {
+            $rootScope.notAuditedNum = data['COUNT(*)'];
+        });
     });
 
     // 比如 服务器重启时清除本地信息（结合拦截器）
@@ -367,7 +371,7 @@ angular.module('myapp', [
         $scope.mine = !$scope.mine;
         $scope.navBar = !$scope.navBar;
     };
-    $scope.notAuditedNum = 0;
+    // $scope.notAuditedNum = 0;
 
     $scope.logout = function() {
         $http.get('api/user/logout').then(function(res) {

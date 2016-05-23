@@ -11,17 +11,17 @@
                 <label>ERP 帐号</label>
                 <input ng-model="signInErp" ng-keyup="EnterForSignIn($event)" class="inp-text" type="text" placeholder="请输入 ERP 帐号">
             </div>
-            <div class="form_inp">
+            <!-- <div class="form_inp">
                 <label>ERP 密码</label>
                 <input ng-model="signInPwd" ng-keyup="EnterForSignIn($event)" class="inp-text" type="password" placeholder="输入密码">
-            </div>
+            </div> -->
             <div class="form_inp">
                 <div class="remember clear">
                     <label>
                         <input ng-checked="signInRemember" type="checkbox" ng-model="signInRemember">
                         <span></span><span>记住用户</span>
                     </label>
-                    <a ng-click="findBack()" ui-sref="piecemeal-findback">忘记密码</a>
+                    <!-- <a ng-click="findBack()" ui-sref="piecemeal-findback">忘记密码</a> -->
                 </div>
                 <a class="form_btn btn btn-large" href="#" ng-click="signIn()">立即登录</a>
             </div>
@@ -41,26 +41,17 @@
                 <label>Email</label>
                 <input ng-model="signUpEmail" class="inp-text" type="text" placeholder="example@jd.com">
             </div>
-            <div class="form_inp">
+            <!-- <div class="form_inp">
                 <label>密码</label>
                 <input ng-model="signUpPwd" class="inp-text" type="{{isShowPwd ? 'text' : 'password'}}" placeholder="6至8个字符，字母、数字或者英文符号">
                 <div class="eye {{isShowPwd && 'active'}}" ng-click="isShowPwd=!isShowPwd"></div>
-            </div>
-            <div class="form_inp">
+            </div> -->
+            <!-- <div class="form_inp">
                 <label>部门</label>
                 <select ng-model="signUpDep" kendo-drop-down-list k-options="depSelectOpts" style="display:block;width:100%;"></select>
-            </div>
+            </div> -->
             <a ng-click="signUp()" class="form_btn btn btn-large" href="">绑定</a>
         </div>
         
     </div>
-</div>
-
-<div class="mod_mask">
-    <div class="mod_mask_wrap">
-        <div class="mod_mask_wrap_cont">
-            <div class="mod_mask_wrap_cont_msg">哈哈</div>
-        </div>
-    </div>
-    <!--[if lt IE 8]><span></span><![endif]-->
 </div>

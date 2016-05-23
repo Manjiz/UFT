@@ -119,7 +119,7 @@ var detailState = function($rootScope, $scope, $http, $sce, $stateParams, $timeo
                     designated: null, //指派人ERP
                     files: JSON.stringify(files)    //上传文件列表
                 } }).success(function (data) {
-                    Popup('提交成功');
+                    _POP_.toast('提交成功');
                     location.reload();
             });
         }
@@ -135,13 +135,13 @@ var detailState = function($rootScope, $scope, $http, $sce, $stateParams, $timeo
                         startDate: new Date($scope.auditStartDate),
                         endDate: new Date($scope.auditEndDate)
                     }).success(function (data) {
-                        Popup('审核成功');
+                        _POP_.toast('审核成功');
                         setTimeout(function(){
                             location.reload();
                         }, 1000)
                 });
             } else {
-                Popup('日期有误');
+                _POP_.toast('日期有误');
             }
         } else {
             var range = $scope.scedule ? $scope.scedule.toString().split(',') : undefined;
@@ -159,13 +159,13 @@ var detailState = function($rootScope, $scope, $http, $sce, $stateParams, $timeo
                         startDate: new Date((wStart + parseInt(range[0]))*86400000),
                         endDate: new Date((wStart + (range[1]-1))*86400000)
                     }).success(function (data) {
-                        Popup('审核成功');
+                        _POP_.toast('审核成功');
                         setTimeout(function(){
                             location.reload();
                         }, 1000)
                 });
             } else {
-                Popup('请选择排期时间');
+                _POP_.toast('请选择排期时间');
             }
         }
     }
@@ -321,8 +321,7 @@ var detailState = function($rootScope, $scope, $http, $sce, $stateParams, $timeo
     $scope.userObjSelectedOpts = {
         placeholder: '指派用户',
         // headerTemplate: '',
-        template: '<div style="line-height:21px;text-align:center;">#: data.erp #</div>' + 
-                    '<div style="margin-bottom:4px;line-height:21px;text-align:center;">#: data.depName #</div>',
+        template: '<div style="line-height:21px;text-align:center;">#: data.erp # - #: data.name #</div>',
         dataTextField: "nameConcatErp",
         filter: "contains",
         height: 520,

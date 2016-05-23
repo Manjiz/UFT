@@ -30,9 +30,9 @@ exports.UserModel = {
 			email = req.body.email,
 			password = req.body.password,
 			name = req.body.name,
-			depID = parseInt(req.body.depID);
+			depID = req.body.depID ? parseInt(req.body.depID) : null;
 
-		if(erp && email && password && name && depID && depID>0) {
+		if(erp && email && name) {
 			pool.getConnection(function(err, conn) {
 				conn.query('SELECT * FROM user WHERE erp=? AND status=0', [erp], function(err, rows, fields) {
 					if(err) throw err;
@@ -75,10 +75,6 @@ exports.UserModel = {
 			res.json({state: 'fail', msg: '邮箱不能为空'});
 		} else if (!name) {
 			res.json({state: 'fail', msg: '名字不能为空'});
-		} else if (!password) {
-			res.json({state: 'fail', msg: '密码不能为空'});
-		} else if (!depID || (typeof depID === 'number')) {
-			res.json({state: 'fail', msg: '未选择所属部门'});
 		} else {
 			res.json({state: 'fail', msg: '未知错误'});
 		}
@@ -187,7 +183,7 @@ exports.UserModel = {
 		var erp = req.body.erp,
 			pass = req.body.password;
 		pool.getConnection(function(err, conn) {
-			conn.query('SELECT * FROM user WHERE erp=? AND password=? AND status=0', [erp, pass], function(err, rows, fields) {
+			conn.query('SELECT * FROM user WHERE erp=? AND status=0', [erp], function(err, rows, fields) {
 				if(err) throw err;
 				if(rows.length>0) {
 					req.session.erp = rows[0].erp;

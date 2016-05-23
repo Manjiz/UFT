@@ -8,7 +8,6 @@ var profileState = function($rootScope, $scope, $http, $timeout, $stateParams, d
             erp: Session.userErp
         }
     }).success(function(data) {
-        console.log(Session)
         if(data) {
             $scope.uname = data.name;
             $scope.uemail = data.email;
@@ -53,14 +52,14 @@ var profileState = function($rootScope, $scope, $http, $timeout, $stateParams, d
                     uerp: $scope.uerp,
                     uname: $scope.uname,
                     uemail: $scope.uemail,
-                    udep: $scope.selectedDep
+                    // udep: $scope.selectedDep
                 }).success(function(data) {
                     if(data.state=='success') {
                         $rootScope.newlyprofile = $scope.uname+'('+$scope.uerp+')';
                         $scope.flashType = 'success';
                         $scope.flashText = '修改用户信息成功';
                     } else {
-                        Popup(data.msg);
+                        _POP_.toast(data.msg);
                     }
                 })
             } else {

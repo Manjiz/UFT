@@ -20,10 +20,10 @@
                 <span class="nav_show_icon"></span>
             </a>
             <ul class="nav_navbar list-inline" ng-show="navBar">
-                <li ng-click="hideNav()" ng-show="!Session.isGuest()" class="nav_navbar_schedule {{navidx=='schedule' && 'active' }}"><a ui-sref="schedule">排期</a></li>
-                <li ng-click="hideNav()" ng-show="!Session.isGuest() && Session.isAdmin" class="{{navidx=='gallery' && 'active' }}"><a ui-sref="gallery">广场</a></li>
+                <!-- <li ng-click="hideNav()" ng-show="!Session.isGuest()" class="nav_navbar_schedule {{navidx=='schedule' && 'active' }}"><a ui-sref="schedule">排期</a></li> -->
+                <li ng-click="hideNav()" ng-show="!Session.isGuest()" class="{{navidx=='gallery' && 'active' }}"><a ui-sref="gallery">广场</a></li>
                 <li ng-click="hideNav()" ng-show="!Session.isGuest()" class="{{navidx=='apply' && 'active' }}"><a ui-sref="apply">申请</a></li>
-                <li ng-click="hideNav()" ng-show="!Session.isGuest() && Session.isAdmin" class="isAdminAudited {{navidx=='audited' && 'active' }}"><a ui-sref="audited">待审</a><i class="num">{{notAuditedNum}}</i></li>
+                <li ng-click="hideNav()" ng-show="!Session.isGuest() && Session.isAdmin()" class="isAdminAudited {{navidx=='audited' && 'active' }}"><a ui-sref="audited">待审</a><i class="num">{{notAuditedNum}}</i></li>
 
                 <li ng-if="!Session.isGuest()" class="nav_navbar_mine {{ (navidx=='profile'  || navidx=='myapply') && 'active' }}">
                     <a href="javascript:;"  ng-click="hideMine()" class="nav_navbar_mine_link">{{Session.userName}}</a>
