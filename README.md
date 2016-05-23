@@ -6,6 +6,11 @@
 
 - [开发日志](https://github.com/o2team/UFT/wiki/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97)
 
+**版本**
+
+- V2版：[https://github.com/o2team/UFT/releases/tag/v2.0.2](https://github.com/o2team/UFT/releases/tag/v2.0.2)
+- V3版：目前master维护版本
+
 ## 部署指引
 
 ``` bash

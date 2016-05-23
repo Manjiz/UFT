@@ -11,7 +11,7 @@
 	 var root = this;
 	 var conf = function(obj) {
 	 	return {
-	 		port: process.env.PORT|| 80,
+	 		port: 80 || process.env.PORT,
 	 		nodemailer: {
 			    service: '163',
 			    auth: {
