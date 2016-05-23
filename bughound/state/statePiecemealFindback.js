@@ -13,11 +13,11 @@ var piecemealFindbackState = function($scope, $http, $stateParams) {
                 if(res.data.state=='success') {
                     // location.href="state.html#findback_continue";
                 } else {
-                    Popup(res.data.msg)
+                    _POP_.toast(res.data.msg)
                 }
             });
         } else {
-            Popup('输入错误');
+            _POP_.toast('输入错误');
         }
     }
 }

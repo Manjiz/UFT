@@ -40,8 +40,8 @@ var loginState = function($scope, $http, $rootScope, $state, AUTH_EVENTS, AuthSe
         // MD5 32位
         var pwd = $scope.signInPwd.length==32 ? $scope.signInPwd : md5($scope.signInPwd);
 
-        if(!regErp.test(erp)) { Popup('ERP 输入有误'); return; }
-        if(!regPwd.test(pwd)) { Popup('密码长度不对'); return; }
+        if(!regErp.test(erp)) { _POP_.toast('ERP 输入有误'); return; }
+        if(!regPwd.test(pwd)) { _POP_.toast('密码长度不对'); return; }
 
         AuthService.login({
             erp: erp,
@@ -61,7 +61,7 @@ var loginState = function($scope, $http, $rootScope, $state, AUTH_EVENTS, AuthSe
             $state.go('apply');
         }).catch(function(res) {
             $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-            Popup('登录失败')
+            _POP_.toast('登录失败')
         })
     }
 
@@ -76,27 +76,27 @@ var loginState = function($scope, $http, $rootScope, $state, AUTH_EVENTS, AuthSe
             pwd = $scope.signUpPwd.replace(/\s+/g, ''),
             dep = $scope.signUpDep;
         if(!erp) { 
-            Popup('ERP帐号不能为空'); return;
+            _POP_.toast('ERP帐号不能为空'); return;
         } else if(!regErp.test(erp)) { 
-            Popup('ERP 格式有误'); return; 
+            _POP_.toast('ERP 格式有误'); return; 
         }
         if(!name) { 
-            Popup('姓名不能为空'); return;
+            _POP_.toast('姓名不能为空'); return;
         } else if(!regName.test(name)) { 
-            Popup('姓名格式有误'); return; 
+            _POP_.toast('姓名格式有误'); return; 
         }
         if(!email) {
-            Popup('公司邮箱不能为空'); return;
+            _POP_.toast('公司邮箱不能为空'); return;
         } else if(!regEmail.test(email)) {
-            Popup('邮箱格式不正确'); return;
+            _POP_.toast('邮箱格式不正确'); return;
         }
         if(!pwd) {
-            Popup('密码不能为空'); return; 
+            _POP_.toast('密码不能为空'); return; 
         } else if (!regPwd.test(pwd)) {
-            Popup('密码长度为6-8位'); return; 
+            _POP_.toast('密码长度为6-8位'); return; 
         }
         if(!dep) {
-            Popup('未选择所属部门'); return; 
+            _POP_.toast('未选择所属部门'); return; 
         }
         console.log(erp, email, pwd, name, dep)
         $http.post('api/user/add', {
@@ -104,9 +104,9 @@ var loginState = function($scope, $http, $rootScope, $state, AUTH_EVENTS, AuthSe
         }).then(function(res) {
             if(res.data.state=='success') {
                 // location.href="state.html#checksucc";
-                Popup('注册成功，请到邮箱验证身份');
+                _POP_.toast('注册成功，请到邮箱验证身份');
             } else {
-                Popup(res.data.msg)
+                _POP_.toast(res.data.msg)
             }
         });
     }

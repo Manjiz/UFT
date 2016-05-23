@@ -189,7 +189,7 @@ var scheduleState = function($rootScope, $scope, $http, $state, datalump, Sessio
                         dataList = JSON.parse(data.data);
                         weekScheduleV2(dataList, thisWeekStart);
                     });
-                    Popup('更新成功');
+                    _POP_.toast('更新成功');
                 }
                 $scope.isShowCdays = false;
             });

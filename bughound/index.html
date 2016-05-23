@@ -334,6 +334,9 @@ angular.module('myapp', [
     });
     $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
         $rootScope.navidx = toState.name;
+        $http.get('api/demand/getnotauditedcount').success(function(data) {
+            $rootScope.notAuditedNum = data['COUNT(*)'];
+        });
     });
 
     // 比如 服务器重启时清除本地信息（结合拦截器）
@@ -367,7 +370,6 @@ angular.module('myapp', [
         $scope.mine = !$scope.mine;
         $scope.navBar = !$scope.navBar;
     };
-    $scope.notAuditedNum = 0;
 
     $scope.logout = function() {
         $http.get('api/user/logout').then(function(res) {

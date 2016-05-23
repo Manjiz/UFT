@@ -60,7 +60,7 @@ var profileState = function($rootScope, $scope, $http, $timeout, $stateParams, d
                         $scope.flashType = 'success';
                         $scope.flashText = '修改用户信息成功';
                     } else {
-                        Popup(data.msg);
+                        _POP_.toast(data.msg);
                     }
                 })
             } else {

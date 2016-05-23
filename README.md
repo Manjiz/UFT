@@ -8,8 +8,8 @@
 
 **版本**
 
-- V2版：[https://github.com/o2team/UFT/releases/tag/v2.0.2](https://github.com/o2team/UFT/releases/tag/v2.0.2)
-- V3版：目前master维护版本
+- V2版：正常版本[https://github.com/o2team/UFT/releases/tag/v2.0.2](https://github.com/o2team/UFT/releases/tag/v2.0.2)
+- V3版：简化版本
 
 ## 部署指引
 
