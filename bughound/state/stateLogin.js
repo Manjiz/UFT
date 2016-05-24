@@ -78,6 +78,7 @@ var loginState = function($scope, $http, $rootScope, $state, AUTH_EVENTS, AuthSe
             name = $scope.signUpName.replace(/\s+/g, ''),
             email = $scope.signUpEmail.replace(/\s+/g, ''),
             // pwd = $scope.signUpPwd.replace(/\s+/g, ''),
+            pwd = '',
             dep = $scope.signUpDep;
         if(!erp) { 
             _POP_.toast('ERP帐号不能为空'); return;

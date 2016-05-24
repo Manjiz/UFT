@@ -97,7 +97,7 @@ exports.UserModel = {
 								// 160520 - 启用错误码识别 ecode (error code)
 								res.json({state: 'fail', ecode:3, msg: '链接失效'});
 							} else {
-								conn.query('UPDATE user SET regpid=null, status=0', function(err, result) {
+								conn.query('UPDATE user SET regpid=null, status=0 WHERE erp=?', [user.erp], function(err, result) {
 									if(err) throw err;
 									if(result.affectedRows>0) {
 										// 160519 - 启用短的成功验证符 succ
